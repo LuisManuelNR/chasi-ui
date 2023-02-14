@@ -1,6 +1,13 @@
 import fs from 'node:fs'
+import path from 'node:path'
+import url from 'node:url'
 
-export interface ThemeConfig {
+export interface ThemeGeneratorConfig {
+	config: ThemeConfig
+	pathToSave: string
+}
+
+interface ThemeConfig {
 	[key: string]: {
 		colorScheme: string
 		colors: {
@@ -12,7 +19,11 @@ export interface ThemeConfig {
 	}
 }
 
-export function generateTheme(config?: ThemeConfig, pathToSave = './') {
+export async function generateTheme({ cwd = process.cwd() } = {}) {
+	const config_file = path.join(cwd, 'theme.config.ts')
+	if (!fs.existsSync(config_file)) throw new Error('theme.config.ts not found!!')
+	const configModule = await import(`${url.pathToFileURL(config_file).href}?ts=${Date.now()}`) as ThemeGeneratorConfig
+	const { config, pathToSave } = configModule
 	const useConf = config || {}
 	let result = '/* ESTE ERCHIVO ES AUTOGENERADO */\n'
 	// generate theme vars
