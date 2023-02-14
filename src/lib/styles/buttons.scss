@@ -1,130 +1,108 @@
-@layer button {
-	.btn {
-		--btn-shadow: var(--shadow-2), inset 0 -2px #00000021;
-		-webkit-tap-highlight-color: transparent;
-		-webkit-touch-callout: none;
-		background-color: var(--secondary);
-		border-radius: var(--size-1);
-		box-shadow: var(--btn-shadow);
-		display: inline-flex;
-		align-items: center;
-		gap: var(--size-2);
-		justify-content: center;
-		padding-inline: 3.75ch;
-		text-align: center;
-		user-select: none;
-		text-transform: uppercase;
-		min-width: 12ch;
-		height: 42px;
-		line-height: 0;
-		transition: scale 50ms cubic-bezier(0.5, -0.3, 0.1, 1.5);
-		will-change: scale;
-		position: relative;
-		outline-color: var(--secondary);
-		color: var(--n-500);
-		font-size: .875rem;
-		font-weight: 500;
-		letter-spacing: .0892857143em;
-		vertical-align: bottom;
-		text-decoration: none;
+:where(.btn) {
+	--btn-shadow: var(--shadow-2), inset 0 -2px #00000021;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	align-items: center;
+	background-color: var(--n-100);
+	border-radius: var(--size-1);
+	box-shadow: var(--btn-shadow);
+	display: inline-flex;
+	font-weight: 700;
+	gap: var(--size-2);
+	justify-content: center;
+	padding-inline: 1.75ch;
+	text-align: center;
+	user-select: none;
+	text-transform: capitalize;
+	min-width: 12ch;
+	height: 42px;
+	line-height: 0;
+	transition:
+		scale 50ms cubic-bezier(.5, -.3, .1, 1.5);
+	will-change: scale;
+	position: relative;
+	outline-color: var(--n-100);
+	vertical-align: bottom;
 
-		&::after {
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		outline-color: inherit;
+	}
+
+	&.fab {
+		position: fixed;
+		bottom: var(--size-3);
+		left: var(--size-3);
+		z-index: 4;
+
+		&.rigth {
+			right: var(--size-3);
+			left: auto;
+		}
+
+		&.top {
+			top: var(--size-3);
+			bottom: auto;
+		}
+	}
+
+	&.icon {
+		border-radius: 50%;
+		overflow: hidden;
+		width: 48px;
+		height: 48px;
+		padding: 0;
+		min-width: auto;
+	}
+
+	&.outlined {
+		outline-width: 2px;
+		outline-style: solid;
+		outline-offset: -2px;
+		background-color: var(--n-400);
+	}
+
+	&:where(.outlined) {
+		outline-color: var(--n-100);
+	}
+
+	&.tonal {
+		background-color: transparent;
+		box-shadow: none;
+		outline-color: currentColor;
+
+		&::before {
 			content: '';
 			position: absolute;
 			inset: 0;
+			opacity: 0.15;
+			background-color: currentColor;
 			border-radius: inherit;
-			outline-color: inherit;
+			pointer-events: none;
+			transition: opacity 150ms;
 		}
 
-		&.icon {
-			border-radius: 50%;
-			width: 48px;
-			height: 48px;
-			padding: 0;
-			min-width: auto;
+		&:active::before {
+			opacity: 0.05;
 		}
+	}
 
-		&.tonal {
-			background-color: transparent;
-			box-shadow: none;
-			outline-color: currentColor;
+	&:focus-visible {
+		outline: 2px solid var(--info);
+	}
 
-			&::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				opacity: 0.15;
-				background-color: currentColor;
-				border-radius: inherit;
-				pointer-events: none;
-				transition: opacity 150ms;
-			}
+	&:active {
+		--btn-shadow: var(--shadow-1), inset 0 -2px #00000021;
+		scale: .99;
 
-			&:active::before {
-				opacity: 0.05;
-			}
-		}
+		@media (hover: none) {
+			scale: 1;
 
-		&.type-1 {
-			background-color: var(--brand);
-			color: var(--n-100);
-		}
-
-		&.type-2 {
-			color: var(--n-500);
-		}
-
-		&.type-3 {
-			background-color: var(--accent);
-			color: var(--n-100);
-		}
-
-		&.type-4 {
-			outline-color: var(--n-500);
-			color: var(--n-500);
-			outline-width: 1px;
-			outline-style: solid;
-			outline-offset: -2px;
-			background-color: transparent;
-		}
-
-		&.type-5 {
-			outline-color: var(--brand);
-			color: var(--brand);
-			@extend .type-4;
-		}
-
-		&.type-6 {
-			outline-color: var(--secondary);
-			color: var(--secondary);
-			@extend .type-4;
-		}
-
-		&.type-7 {
-			outline-color: var(--accent);
-			color: var(--accent);
-			@extend .type-4;
-		}
-
-		&.type-8 {
-			background-color: var(--infantil);
-			color: var(--n-100);
-		}
-
-		&:focus-visible {
-			outline: 2px solid var(--info);
-		}
-
-		&:active {
-			--btn-shadow: var(--shadow-1), inset 0 -2px #00000021;
-			scale: 0.99;
-
-			@media (hover: none) {
-				scale: 1;
-
-				&::after {
-					animation: dropWave 350ms forwards;
-				}
+			&::after {
+				animation: dropWave 350ms forwards;
 			}
 		}
 	}

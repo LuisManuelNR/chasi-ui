@@ -1,12 +1,6 @@
-.c-card {
+.card {
+	background-color: var(--n-300);
+	border: 1px solid var(--n-200);
 	border-radius: var(--size-1);
-	padding: var(--size-2);
-	// .card-body {
-	//   overflow-x: hidden;
-	//   overflow-y: auto;
-	// }
-	// .card-title,
-	// .card-footer {
-	//   display: flex;
-	// }
+	padding: var(--size-3);
 }

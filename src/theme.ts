@@ -1,16 +1,16 @@
 import type { ThemeGeneratorConfig } from '$lib/scripts/theme'
 
 const theme: ThemeGeneratorConfig = {
-  pathToSave: './',
+  pathToSave: './src/lib/styles',
   config: {
     light: {
       colorScheme: 'light',
       colors: {
         brand: '#ff6047',
-        'n-100': '#f0f1f4',
-        'n-200': '#e1e4ea',
-        'n-300': '#d3d7df',
-        'n-400': '#c4c9d4',
+        'n-100': '#F8F9FA',
+        'n-200': '#E9ECEF',
+        'n-300': '#DEE2E6',
+        'n-400': '#CED4DA',
         error: '#D72638',
         success: '#169873',
         info: '#FFD3BA'
@@ -20,10 +20,10 @@ const theme: ThemeGeneratorConfig = {
       colorScheme: 'dark',
       colors: {
         brand: '#D64933',
-        'n-100': '#555e77',
-        'n-200': '#495269',
-        'n-300': '#404859',
-        'n-400': '#363c4a',
+        'n-100': '#ADB5BD',
+        'n-200': '#6C757D',
+        'n-300': '#495057',
+        'n-400': '#343A40',
         error: '#D72638',
         success: '#169873',
         info: '#FFD3BA'

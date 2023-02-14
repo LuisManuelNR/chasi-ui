@@ -20,10 +20,10 @@ interface ThemeConfig {
 }
 
 export async function generateTheme({ cwd = process.cwd() } = {}) {
-	const config_file = path.join(cwd, 'theme.config.ts')
-	if (!fs.existsSync(config_file)) throw new Error('theme.config.ts not found!!')
-	const configModule = await import(`${url.pathToFileURL(config_file).href}?ts=${Date.now()}`) as ThemeGeneratorConfig
-	const { config, pathToSave } = configModule
+	const config_file = path.join(cwd, 'src/theme.js')
+	if (!fs.existsSync(config_file)) throw new Error('theme.js not found!!')
+	const configModule = await import(`${url.pathToFileURL(config_file).href}?ts=${Date.now()}`) as { default: ThemeGeneratorConfig }
+	const { config, pathToSave } = configModule.default
 	const useConf = config || {}
 	let result = '/* ESTE ERCHIVO ES AUTOGENERADO */\n'
 	// generate theme vars
@@ -44,6 +44,7 @@ export async function generateTheme({ cwd = process.cwd() } = {}) {
 	}
 	result += generateColorClasses(useConf)
 	fs.writeFileSync(`${pathToSave}/theme.scss`, result)
+	console.log(`File generated in ${pathToSave}/theme.scss`)
 }
 
 function generateAllVars(useConf: ThemeConfig) {
@@ -84,3 +85,5 @@ function generateColorClasses(useConf: ThemeConfig) {
 	}
 	return result
 }
+
+generateTheme()

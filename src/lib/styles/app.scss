@@ -13,9 +13,9 @@
 @use './utils.scss';
 
 :root {
-	accent-color: var(--secondary);
-	background-color: var(--n-100);
-	color: var(--n-500);
+	accent-color: var(--brand);
+	background-color: var(--n-500);
+	color: var(--n-100);
 	block-size: 100%;
 	min-height: 100vh;
 	scrollbar-gutter: stable;
@@ -55,7 +55,7 @@
 		&::-webkit-scrollbar-thumb {
 			width: 4px;
 			height: 4px;
-			background-color: var(--n-500);
+			background-color: var(--n-100);
 		}
 	}
 }
