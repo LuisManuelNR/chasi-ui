@@ -65,8 +65,9 @@
 	const formValidator: Array<typeof validate> = getContext('validators')
 	if (formValidator) formValidator.push(validatorFunc)
 
+	const initialValue = value
 	async function resetInput() {
-		value = ''
+		value = initialValue
 		await tick()
 		hint = ''
 	}

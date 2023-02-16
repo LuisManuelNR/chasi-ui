@@ -84,18 +84,19 @@
 			rules={[required]}
 		/>
 		<pre>Select some foods: {foods}</pre>
-		<div class="d-flex">
+		<div class="d-flex flex-wrap">
 			<CToggle label="Fish" bind:group={foods} value="Fish" />
 			<CToggle label="Meat" bind:group={foods} value="Meat" />
 			<CToggle label="Pizza" rules={[required]} bind:group={foods} value="Pizza" />
-			<CToggle label="Salad" bind:group={foods} value="Salad" />
+			<CToggle label="Salad" disabled bind:group={foods} value="Salad" />
 		</div>
 		<pre>Select one restaurant: {restaurant}</pre>
-		<div class="d-flex">
+		<div class="d-flex flex-wrap">
 			<CToggle label="Chinese" type="radio" bind:group={restaurant} value="Chinese" />
 			<CToggle label="Italian" type="radio" bind:group={restaurant} value="Italian" />
 			<CToggle label="Cuban" type="radio" bind:group={restaurant} value="Cuban" />
 			<CToggle label="Indi" type="radio" bind:group={restaurant} value="Indi" />
+			<CToggle label="American" disabled type="radio" bind:group={restaurant} value="American" />
 		</div>
 		<CInput label="About you" type="textarea" />
 		<CToggle label="Accept terms and conditions" rules={[required]} />
@@ -103,3 +104,9 @@
 		<button type="reset"> reset!! </button>
 	</CForm>
 </Section>
+
+<style>
+	pre {
+		white-space: pre-wrap;
+	}
+</style>
