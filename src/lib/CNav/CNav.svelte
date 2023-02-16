@@ -14,7 +14,7 @@
 </script>
 
 <slot name="action">
-	<button class="btn" on:click={open}> open dialog </button>
+	<button on:click={open}> open dialog </button>
 </slot>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

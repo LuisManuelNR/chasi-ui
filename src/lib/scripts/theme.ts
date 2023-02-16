@@ -9,7 +9,7 @@ export interface ThemeGeneratorConfig {
 
 interface ThemeConfig {
 	[key: string]: {
-		colorScheme: string
+		colorScheme: 'light' | 'dark'
 		colors: {
 			brand: string
 			error: string
@@ -18,6 +18,9 @@ interface ThemeConfig {
 		}
 	}
 }
+
+const LIGHT_COLOR = '#d8dee3'
+const DARK_COLOR = '#212529'
 
 export async function generateTheme({ cwd = process.cwd() } = {}) {
 	const config_file = path.join(cwd, 'src/theme.js')
@@ -56,6 +59,7 @@ function generateAllVars(useConf: ThemeConfig) {
 				const isHex = /^#([0-9a-f]{3}){1,2}$/i.test(color)
 				if (!isHex) throw new Error('Colors must be in hex representation')
 				result += `\t--${colorName}-${theme}: ${color};\n`
+				result += `\t--on-${colorName}-${theme}: ${contrast(color)};\n`
 			}
 		}
 		result += '\n'
@@ -68,6 +72,7 @@ function generateLocalTheme(theme: ThemeConfig[string], themeName: string, selec
 	let result = `${selector} {\n\tcolor-scheme: ${theme.colorScheme};\n`
 	for (const colorName in theme.colors) {
 		result += `\t--${colorName}: var(--${colorName}-${themeName});\n`
+		result += `\t--on-${colorName}: var(--on-${colorName}-${themeName});\n`
 	}
 	result += '}\n'
 	return result
@@ -79,11 +84,20 @@ function generateColorClasses(useConf: ThemeConfig) {
 	for (const theme in useConf) {
 		for (const colorName in useConf[theme].colors) {
 			if (processedColors[colorName]) continue
-			result += `\n.${colorName} {\n\tbackground-color: var(--${colorName});\n\toutline-color: var(--${colorName});\n\tborder-color: var(--${colorName});\n}\n\n.${colorName}-text {\n\tcolor: var(--${colorName})\n}\n`
+			result += `\n.${colorName} {\n\tbackground-color: var(--${colorName});\n\toutline-color: var(--${colorName});\n\tborder-color: var(--${colorName});\n\color: var(--on-${colorName});\n}\n\n.${colorName}-text {\n\tcolor: var(--${colorName})\n}\n`
 			processedColors[colorName] = true
 		}
 	}
 	return result
+}
+
+function contrast(hexColor: string) {
+	const hex = hexColor.replace('#', '')
+	const R = parseInt(hex.substring(0, 2), 16)
+	const G = parseInt(hex.substring(2, 4), 16)
+	const B = parseInt(hex.substring(4, 6), 16)
+	const brightness = (Math.round(R * 299) + Math.round(G * 587) + Math.round(B * 114)) / 1000
+	return brightness >= 128 ? DARK_COLOR : LIGHT_COLOR
 }
 
 generateTheme()

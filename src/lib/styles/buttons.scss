@@ -1,9 +1,11 @@
-:where(.btn) {
+button,
+.btn {
 	--btn-shadow: var(--shadow-2), inset 0 -2px #00000021;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	align-items: center;
 	background-color: var(--n-100);
+	color: var(--on-n-100);
 	border-radius: var(--size-1);
 	box-shadow: var(--btn-shadow);
 	display: inline-flex;
@@ -63,10 +65,14 @@
 		outline-style: solid;
 		outline-offset: -2px;
 		background-color: var(--n-400);
+
+		&:not(.tonal) {
+			color: var(--on-n-400);
+		}
 	}
 
 	&:where(.outlined) {
-		outline-color: var(--n-100);
+		outline-color: var(--on-n-400);
 	}
 
 	&.tonal {

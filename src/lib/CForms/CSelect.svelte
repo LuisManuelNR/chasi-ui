@@ -228,11 +228,11 @@
 				pointer-events: none;
 			}
 			&.hovered::before,
-			:global(&.active):before {
+			&:global(.active):before {
 				opacity: 0.15;
 			}
 			&.hovered {
-				color: var(--n-500);
+				color: var(--n-400);
 			}
 		}
 		.filter-input {

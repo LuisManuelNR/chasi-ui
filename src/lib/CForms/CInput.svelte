@@ -129,10 +129,10 @@
 <style lang="scss">
 	@layer CInput {
 		.c-input {
-			border: 1px solid var(--border-color-input, var(--n-500));
+			border: 1px solid var(--border-color-input, var(--n-400));
 			border-radius: var(--size-1);
 			transition: all 0.2s;
-			color: var(--text-color-input, var(--n-500));
+			color: var(--text-color-input, var(--n-400));
 			margin-bottom: var(--size-4);
 			position: relative;
 			label {
@@ -150,13 +150,13 @@
 				font-size: 1.1rem;
 				font-family: inherit;
 				background-color: transparent;
-				color: var(--n-500);
+				color: var(--n-400);
 				&:-webkit-autofill,
 				&:-webkit-autofill:hover,
 				&:-webkit-autofill:focus {
 					border: none;
 					box-shadow: none;
-					-webkit-text-fill-color: var(--n-500);
+					-webkit-text-fill-color: var(--n-400);
 					transition: background-color 5000s ease-in-out 0s;
 				}
 				&::placeholder {

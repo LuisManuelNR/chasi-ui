@@ -9,7 +9,7 @@
 </script>
 
 <slot name="action">
-	<button class="btn" on:click={open}> open dialog </button>
+	<button on:click={open}> open dialog </button>
 </slot>
 
 <dialog bind:this={dialogElement}>
