@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Section from './Section.svelte'
-	import { CInput, CSelect, CForm } from '$lib'
+	import { CInput, CSelect, CForm, CToggle } from '$lib'
 
 	let items = [
 		{ state: 'Florida', abbr: 'FL' },
@@ -35,8 +35,8 @@
 		{ state: 'New York', abbr: 'NY' }
 	]
 
-	const required = (v: string) =>
-		v === undefined || v === null || v === '' ? 'Este campo es requerido' : false
+	const required = (v: string | boolean) =>
+		v === undefined || v === null || v === '' || v === false ? 'Este campo es requerido' : false
 	const requiredEmail = (v: string) =>
 		/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) ? false : 'El email debe ser válido'
 
@@ -45,6 +45,8 @@
 	}
 
 	let name = 'Predefinido'
+	let foods = []
+	let restaurant = 'Cuban'
 </script>
 
 <Section title="Forms">
@@ -81,6 +83,22 @@
 			filter
 			rules={[required]}
 		/>
+		<pre>Select some foods: {foods}</pre>
+		<div class="d-flex">
+			<CToggle label="Fish" bind:group={foods} value="Fish" />
+			<CToggle label="Meat" bind:group={foods} value="Meat" />
+			<CToggle label="Pizza" rules={[required]} bind:group={foods} value="Pizza" />
+			<CToggle label="Salad" bind:group={foods} value="Salad" />
+		</div>
+		<pre>Select one restaurant: {restaurant}</pre>
+		<div class="d-flex">
+			<CToggle label="Chinese" type="radio" bind:group={restaurant} value="Chinese" />
+			<CToggle label="Italian" type="radio" bind:group={restaurant} value="Italian" />
+			<CToggle label="Cuban" type="radio" bind:group={restaurant} value="Cuban" />
+			<CToggle label="Indi" type="radio" bind:group={restaurant} value="Indi" />
+		</div>
+		<CInput label="About you" type="textarea" />
+		<CToggle label="Accept terms and conditions" rules={[required]} />
 		<button type="submit"> submit </button>
 		<button type="reset"> reset!! </button>
 	</CForm>

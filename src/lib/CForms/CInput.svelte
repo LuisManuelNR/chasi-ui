@@ -7,7 +7,7 @@
 	type InputRules<R> = Array<(inputValue: R) => string | boolean>
 	type SuportedInputs =
 		| {
-				type: 'text' | 'email' | 'tel' | 'password' | 'date'
+				type: 'text' | 'email' | 'tel' | 'password' | 'date' | 'textarea'
 				rules: InputRules<string>
 				value: string
 		  }
@@ -21,7 +21,7 @@
 	export let placeholder = ''
 	export let rules: SuportedInputs['rules'] | InputRules<T> = []
 	export let type: SuportedInputs['type'] = 'text'
-	export let value: SuportedInputs['value'] = ''
+	export let value: SuportedInputs['value'] | T = ''
 	export let disabled = false
 	export let loading = false
 
@@ -37,7 +37,7 @@
 	$: {
 		hint = validate(value)
 	}
-	function validate(v: SuportedInputs['value']) {
+	function validate(v: typeof value) {
 		let ilegal: string | boolean = ''
 		if (initialState && rules.length) {
 			for (let i = 0; i < rules.length; i++) {
@@ -111,15 +111,26 @@
 	<label>
 		<div class="label-text">{label}</div>
 		<slot>
-			<input
-				{disabled}
-				{type}
-				{value}
-				{placeholder}
-				on:input={onInput}
-				on:transitionstart={onTransitionStart}
-				on:change
-			/>
+			{#if type === 'textarea'}
+				<textarea
+					rows="5"
+					{disabled}
+					{placeholder}
+					on:input={onInput}
+					on:transitionstart={onTransitionStart}
+					on:change>{value}</textarea
+				>
+			{:else}
+				<input
+					{disabled}
+					{type}
+					{value}
+					{placeholder}
+					on:input={onInput}
+					on:transitionstart={onTransitionStart}
+					on:change
+				/>
+			{/if}
 		</slot>
 	</label>
 	{#if hint}
@@ -189,6 +200,7 @@
 				position: absolute;
 				bottom: -1.2rem;
 				transform: translateZ(0);
+				white-space: nowrap;
 			}
 			&:focus-within,
 			&.active {
@@ -196,8 +208,8 @@
 				--scale-label: 0.8;
 			}
 			&:focus-within {
-				--text-color-input: var(--success);
-				--border-color-input: var(--success);
+				--text-color-input: var(--brand);
+				--border-color-input: var(--brand);
 			}
 			&.error-state {
 				--text-color-input: var(--error);

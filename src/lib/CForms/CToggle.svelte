@@ -50,11 +50,11 @@
 </script>
 
 <div class="c-toggle" class:checked>
-	<CInput {rules} {label} value={checked} {disabled} {loading}>
+	<CInput {rules} {label} bind:value={checked} {disabled} {loading}>
 		{#if type === 'radio'}
-			<input type="radio" {value} bind:group disabled={disabled || loading} />
+			<input type="radio" {value} bind:group {disabled} />
 		{:else}
-			<input type="checkbox" {value} bind:checked disabled={disabled || loading} />
+			<input type="checkbox" {value} bind:checked {disabled} />
 		{/if}
 		<svelte:fragment slot="prepend">
 			{#if checked}
@@ -79,7 +79,7 @@
 			opacity: 0;
 		}
 		:global(.c-input) {
-			padding-left: 0;
+			background-color: transparent;
 		}
 		:global(.label-text) {
 			transform: translate(0, 0) scale(1);
@@ -88,13 +88,14 @@
 		}
 		:global(:focus-within:not(.error-state)) {
 			--border-color-input: transparent;
+			--text-color-input: initial;
 		}
 		.icon {
 			display: flex;
 			pointer-events: none;
 		}
 		&.checked .icon {
-			color: var(--secondary);
+			color: var(--success);
 		}
 	}
 </style>

@@ -7,7 +7,7 @@ const theme = {
     light: {
       colorScheme: 'light',
       colors: {
-        brand: '#ff6047',
+        brand: '#603ad1',
         error: '#D72638',
         success: '#169873',
         info: '#FFD3BA',
@@ -20,7 +20,7 @@ const theme = {
     dark: {
       colorScheme: 'dark',
       colors: {
-        brand: '#D64933',
+        brand: '#603ad1',
         error: '#D72638',
         success: '#169873',
         info: '#FFD3BA',
