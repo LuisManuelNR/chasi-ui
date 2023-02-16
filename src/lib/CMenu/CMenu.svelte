@@ -38,7 +38,8 @@
 	</slot>
 	{#if visible}
 		<div
-			transition:slide={{ duration: 150 }}
+			in:slide={{ duration: 150 }}
+			out:slide={{ duration: 150 }}
 			tabindex="-1"
 			class="c-menu-content {orientation}"
 			on:click={onContentClick}

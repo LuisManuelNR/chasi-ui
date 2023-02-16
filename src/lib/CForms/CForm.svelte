@@ -2,6 +2,8 @@
 	import { createEventDispatcher, setContext } from 'svelte'
 	const validator: Array<() => string | true> = []
 	setContext('validators', validator)
+	const resets: Array<() => void> = []
+	setContext('resets', resets)
 	const dispatch = createEventDispatcher<{ submit: SubmitEvent }>()
 	export function onSubmit(e: SubmitEvent) {
 		const submiter = e.submitter
@@ -24,8 +26,11 @@
 			})
 		}
 	}
+	function onReset() {
+		resets.forEach((resest) => resest())
+	}
 </script>
 
-<form novalidate on:submit|preventDefault={onSubmit}>
+<form novalidate on:submit|preventDefault={onSubmit} on:reset|preventDefault={onReset}>
 	<slot />
 </form>

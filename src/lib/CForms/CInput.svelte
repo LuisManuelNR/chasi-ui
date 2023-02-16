@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, onMount } from 'svelte'
+	import { getContext, onMount, tick } from 'svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiCloseCircle } from '@mdi/js'
 
@@ -16,15 +16,10 @@
 				value: number
 				rules: InputRules<number>
 		  }
-		| {
-				type: 'select'
-				value: T
-				rules: InputRules<T>
-		  }
 
 	export let label = ''
 	export let placeholder = ''
-	export let rules: SuportedInputs['rules'] = []
+	export let rules: SuportedInputs['rules'] | InputRules<T> = []
 	export let type: SuportedInputs['type'] = 'text'
 	export let value: SuportedInputs['value'] = ''
 	export let disabled = false
@@ -69,6 +64,15 @@
 	// if this input is inside a form register this rules, so when the form is submitted can be validated
 	const formValidator: Array<typeof validate> = getContext('validators')
 	if (formValidator) formValidator.push(validatorFunc)
+
+	async function resetInput() {
+		value = ''
+		await tick()
+		hint = ''
+	}
+	// if this input is inside a form register reset function, so when the form is reseted the value can be reseted too
+	const formResets: Array<typeof resetInput> = getContext('resets')
+	if (formResets) formResets.push(resetInput)
 	$: activeLabel = active || placeholder || (value !== null && value !== undefined && value !== '')
 
 	// on browser autofill input trigger a transitionstart event, so we can animate label to not overlap the autofill text
@@ -98,7 +102,7 @@
 	class:active={activeLabel}
 	class:error-state={hint}
 	class:shake-animation={shake}
-	class:disabled={disabled || loading}
+	class:disabled
 	class:loading-inline={loading}
 	on:click
 	on:keydown
@@ -108,7 +112,7 @@
 		<div class="label-text">{label}</div>
 		<slot>
 			<input
-				disabled={disabled || loading}
+				{disabled}
 				{type}
 				{value}
 				{placeholder}
@@ -129,10 +133,11 @@
 <style lang="scss">
 	@layer CInput {
 		.c-input {
-			border: 1px solid var(--border-color-input, var(--n-400));
+			border-bottom: 2px solid var(--border-color-input, hsla(0, 0%, 50%, 0.5));
+			background-color: hsla(0, 0%, 50%, 0.1);
+			color: var(--text-color-input, inherit);
 			border-radius: var(--size-1);
 			transition: all 0.2s;
-			color: var(--text-color-input, var(--n-400));
 			margin-bottom: var(--size-4);
 			position: relative;
 			label {
@@ -150,44 +155,45 @@
 				font-size: 1.1rem;
 				font-family: inherit;
 				background-color: transparent;
-				color: var(--n-400);
+				color: var(--on-n-400);
 				&:-webkit-autofill,
 				&:-webkit-autofill:hover,
 				&:-webkit-autofill:focus {
 					border: none;
 					box-shadow: none;
-					-webkit-text-fill-color: var(--n-400);
 					transition: background-color 5000s ease-in-out 0s;
 				}
 				&::placeholder {
-					color: var(--n-300);
+					color: hsla(0, 0%, 50%, 0.5);
 				}
 			}
 			.label-text {
 				user-select: none;
 				pointer-events: none;
-				transform: translate(var(--translate-label, 0, 13px)) scale(var(--scale-label, 1.3));
+				transform: translate(var(--translate-label, 0, 13px)) scale(var(--scale-label, 1));
 				transition: all 170ms;
-				color: var(--text-color-input, var(--n-400));
+				color: var(--text-color-input, hsl(0, 0%, 55%));
 				transform-origin: left center;
 				cursor: text;
 				white-space: nowrap;
-				font-size: 0.8rem;
-				letter-spacing: 0.009375em;
+				// font-size: 0.8rem;
+				letter-spacing: 0.05rem;
+				// font-weight: 600;
 				width: fit-content;
+				will-change: transform;
 			}
 			.hint {
-				font-size: 0.9rem;
 				color: var(--text-color-input);
 				user-select: none;
 				line-height: 1;
 				position: absolute;
-				bottom: -1.1rem;
+				bottom: -1.2rem;
+				transform: translateZ(0);
 			}
 			&:focus-within,
 			&.active {
 				--translate-label: 0px, 3px;
-				--scale-label: 1;
+				--scale-label: 0.8;
 			}
 			&:focus-within {
 				--text-color-input: var(--success);
@@ -199,8 +205,8 @@
 			}
 			:disabled,
 			&.disabled {
-				pointer-events: none;
-				color: var(--n-300);
+				cursor: not-allowed;
+				color: hsla(0, 0%, 50%, 0.5);
 				--text-color-input: currentColor;
 				--border-color-input: currentColor;
 				&::before {
@@ -208,6 +214,7 @@
 					position: absolute;
 					inset: 0;
 					background-color: rgba(0, 0, 0, 0.082);
+					border-radius: inherit;
 				}
 			}
 		}

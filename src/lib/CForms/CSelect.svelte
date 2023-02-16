@@ -18,6 +18,7 @@
 	export let filter = false
 	export let disabled = false
 	export let loading = false
+	export let noDataText = 'No hay datos disponibles'
 
 	let filteredItems: typeof items = items
 	let visibleMenu = false
@@ -29,13 +30,11 @@
 	let dirty = false
 
 	$: {
-		if (value) {
-			const currentValue = itemValue && value instanceof Object ? value[itemValue] : value
-			selectText = `${
-				//@ts-ignore
-				itemText && currentValue instanceof Object ? currentValue[itemText] : currentValue
-			}`
-		}
+		const currentValue = itemValue && value instanceof Object ? value[itemValue] : value
+		selectText = `${
+			//@ts-ignore
+			itemText && currentValue instanceof Object ? currentValue[itemText] : currentValue
+		}`
 	}
 	$: {
 		if (!visibleMenu) {
@@ -86,6 +85,7 @@
 
 	function handleKeyDown(isFilter = false) {
 		return async (e: KeyboardEvent) => {
+			if (disabled) return
 			const kUp = e.code === 'ArrowUp'
 			const kDown = e.code === 'ArrowDown'
 			const kSpace = e.code === 'Space'
@@ -126,18 +126,14 @@
 	function scrollItemSelectIntoView() {
 		const element = selectElement.querySelector('.c-select-item.hovered')
 		if (!element) return
-		if ('scrollIntoViewIfNeeded' in window) {
+		if ('scrollIntoViewIfNeeded' in element) {
 			//@ts-ignore
 			element.scrollIntoViewIfNeeded({ block: 'end' })
-		} else {
-			element.scrollIntoView({ block: 'end' })
 		}
 	}
-	function handlePopState(e: PopStateEvent) {
-		console.log(e)
+	function handlePopState() {
 		if (visibleMenu) {
 			visibleMenu = false
-			// window.history.back()
 		}
 	}
 </script>
@@ -149,48 +145,54 @@
 	<CMenu let:toggle bind:visible={visibleMenu} closeOnClick>
 		<svelte:fragment slot="action">
 			<CInput
-				type="select"
 				{label}
 				{rules}
-				{value}
+				bind:value
 				{disabled}
 				{loading}
-				on:click={toggle}
+				on:click={!disabled && toggle}
 				on:keydown={handleKeyDown()}
 			>
 				<slot slot="prepend" name="prepend" />
-				<input readonly value={selectText} disabled={disabled || loading} type="button" />
+				<input readonly value={selectText} {disabled} />
 				<svelte:fragment slot="append">
 					<CIcon icon={mdiChevronDown} />
 				</svelte:fragment>
 			</CInput>
 		</svelte:fragment>
 		{#if filter}
-			<div class="px-3 pt-2 pb-1 filter-input" on:click|stopPropagation on:keydown>
+			<div class="px-3 pt-2 pb-1 filter-input">
 				<CInput>
 					<!-- svelte-ignore a11y-autofocus -->
 					<input
 						autofocus
 						placeholder="Filtrar Lista"
+						on:click|stopPropagation
 						on:input={onFilter}
 						on:keydown={handleKeyDown(true)}
 					/>
 				</CInput>
 			</div>
 		{/if}
-		{#each filteredItems as item, i}
-			<div
-				class="c-select-item"
-				class:hovered={hoveredItem === i}
-				on:click={onSelectItem(item)}
-				on:mouseenter={() => (hoveredItem = i)}
-				on:keydown|stopPropagation
-			>
-				<slot name="item" {item} index={i}>
-					{itemText ? item[itemText] : item}
-				</slot>
+		{#if !filteredItems.length}
+			<div class="c-select-item">
+				{noDataText}
 			</div>
-		{/each}
+		{:else}
+			{#each filteredItems as item, i}
+				<div
+					class="c-select-item"
+					class:hovered={hoveredItem === i}
+					on:click={onSelectItem(item)}
+					on:mouseenter={() => (hoveredItem = i)}
+					on:keydown|stopPropagation
+				>
+					<slot name="item" {item} index={i}>
+						{itemText ? item[itemText] : item}
+					</slot>
+				</div>
+			{/each}
+		{/if}
 	</CMenu>
 </div>
 
@@ -212,6 +214,9 @@
 			cursor: initial;
 			display: flex;
 			user-select: none;
+			&:focus-visible {
+				outline: none;
+			}
 		}
 		:global(label) {
 			pointer-events: none;
@@ -228,12 +233,11 @@
 				border-radius: inherit;
 				pointer-events: none;
 			}
-			&.hovered::before,
-			&:global(.active):before {
+			&.hovered::before {
 				opacity: 0.15;
 			}
 			&.hovered {
-				color: var(--n-400);
+				color: var(--info);
 			}
 		}
 		.filter-input {

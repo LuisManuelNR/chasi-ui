@@ -14,6 +14,11 @@ interface ThemeConfig {
 			brand: string
 			error: string
 			success: string
+			info: string
+			'n-100': string
+			'n-200': string
+			'n-300': string
+			'n-400': string
 			[key: string]: string | undefined
 		}
 	}
@@ -25,7 +30,9 @@ const DARK_COLOR = '#212529'
 export async function generateTheme({ cwd = process.cwd() } = {}) {
 	const config_file = path.join(cwd, 'src/theme.js')
 	if (!fs.existsSync(config_file)) throw new Error('theme.js not found!!')
-	const configModule = await import(`${url.pathToFileURL(config_file).href}?ts=${Date.now()}`) as { default: ThemeGeneratorConfig }
+	const configModule = (await import(
+		`${url.pathToFileURL(config_file).href}?ts=${Date.now()}`
+	)) as { default: ThemeGeneratorConfig }
 	const { config, pathToSave } = configModule.default
 	const useConf = config || {}
 	let result = '/* ESTE ERCHIVO ES AUTOGENERADO */\n'
