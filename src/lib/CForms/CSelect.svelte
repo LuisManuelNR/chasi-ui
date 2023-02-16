@@ -32,6 +32,7 @@
 		if (value) {
 			const currentValue = itemValue && value instanceof Object ? value[itemValue] : value
 			selectText = `${
+				//@ts-ignore
 				itemText && currentValue instanceof Object ? currentValue[itemText] : currentValue
 			}`
 		}
