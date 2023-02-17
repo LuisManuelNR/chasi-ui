@@ -12,7 +12,7 @@
 	export let label: string = ''
 	export let rules: Array<(inputValue: boolean) => string | boolean> = []
 	export let type: 'checkbox' | 'radio' = 'checkbox'
-	export let group: any = ''
+	export let group: any = type === 'radio' ? '' : []
 	export let value: any = undefined
 	export let checked = false
 	export let disabled = false
@@ -28,9 +28,7 @@
 	}
 
 	function updateChekbox(g: typeof group, v: typeof value) {
-		if (type === 'checkbox' && g) {
-			checked = g.indexOf(v) >= 0
-		}
+		checked = g.indexOf(v) >= 0
 	}
 
 	function updateGroup(c: typeof checked, v: typeof value) {

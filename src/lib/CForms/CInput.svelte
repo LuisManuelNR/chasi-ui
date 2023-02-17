@@ -146,7 +146,7 @@
 	@layer CInput {
 		.c-input {
 			border-bottom: 2px solid var(--border-color-input, hsla(0, 0%, 50%, 0.5));
-			background-color: hsla(0, 0%, 50%, 0.1);
+			background-color: var(--n-400);
 			color: var(--text-color-input, inherit);
 			border-radius: var(--size-1);
 			transition: all 0.2s;
@@ -184,15 +184,14 @@
 				pointer-events: none;
 				transform: translate(var(--translate-label, 0, 13px)) scale(var(--scale-label, 1));
 				transition: all 170ms;
-				color: var(--text-color-input, hsl(0, 0%, 55%));
+				color: var(--on-n-400);
 				transform-origin: left center;
 				cursor: text;
 				white-space: nowrap;
-				// font-size: 0.8rem;
-				letter-spacing: 0.05rem;
-				// font-weight: 600;
+				// letter-spacing: 0.05rem;
 				width: fit-content;
 				will-change: transform;
+				backface-visibility: hidden;
 			}
 			.hint {
 				color: var(--text-color-input);

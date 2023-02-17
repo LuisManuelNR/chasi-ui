@@ -59,7 +59,7 @@
 				max-width: 98vw;
 				position: absolute;
 				left: 0;
-				background-color: var(--n-100);
+				background-color: var(--n-200);
 				box-shadow: var(--shadow-3);
 				border-radius: var(--size-1);
 				padding: var(--size-3);

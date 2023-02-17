@@ -14,7 +14,6 @@ interface ThemeConfig {
 			brand: string
 			error: string
 			success: string
-			info: string
 			'n-100': string
 			'n-200': string
 			'n-300': string

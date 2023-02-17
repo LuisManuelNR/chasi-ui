@@ -237,13 +237,13 @@
 				opacity: 0.15;
 			}
 			&.hovered {
-				color: var(--info);
+				color: var(--brand);
 			}
 		}
 		.filter-input {
 			position: sticky;
 			top: 0;
-			background-color: var(--n-100);
+			background-color: inherit;
 			z-index: 1;
 			:global(.c-input) {
 				margin: 0;

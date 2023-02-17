@@ -54,7 +54,7 @@ function error({
 }
 
 function info({ title = '', text = '', timeout = DEFAULT_TIMEOUT, target }: CNotifierParams): void {
-	send({ title, text, timeout, type: 'info', target })
+	send({ title, text, timeout, type: 'brand', target })
 }
 
 function success({
