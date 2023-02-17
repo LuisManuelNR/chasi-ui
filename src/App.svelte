@@ -4,17 +4,18 @@
 	import Dialogs from './sections/Dialogs.svelte'
 	import Expands from './sections/Expands.svelte'
 	import Sidebar from './sections/Sidebar.svelte'
+	import ImageUplodaer from './sections/ImageUplodaer.svelte'
 	import { CSidebar, CIcon } from '$lib'
 	import { mdiMenu } from '@mdi/js'
 </script>
 
 <CSidebar openState let:open>
-	<a href="#d" class="list-item">Lorem ipsum dolor sit amet.</a>
-	<a href="#d" class="list-item">Lorem, ipsum dolor.</a>
-	<a href="#d" class="list-item">Lorem ipsum dolor sit amet consectetur.</a>
-	<a href="#d" class="list-item">Lorem, ipsum.</a>
-	<a href="#d" class="list-item">Lorem ipsum dolor sit amet.</a>
-	<a href="#d" class="list-item">Lorem, ipsum dolor.</a>
+	<a href="#Buttons" class="list-item">Buttons</a>
+	<a href="#Forms" class="list-item">Forms</a>
+	<a href="#Dialogs" class="list-item">Dialogs</a>
+	<a href="#Expands" class="list-item">Expands</a>
+	<a href="#Sidebar" class="list-item">Sidebar</a>
+	<a href="#ImageUplodaer" class="list-item">ImageUplodaer</a>
 	<button slot="action" class="fab icon" on:click={open}>
 		<CIcon icon={mdiMenu} />
 	</button>
@@ -26,6 +27,7 @@
 	<Dialogs />
 	<Expands />
 	<Sidebar />
+	<ImageUplodaer />
 </div>
 
 <style lang="scss">

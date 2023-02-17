@@ -1,9 +1,9 @@
 <script lang="ts">
 	let dialogElement: HTMLDialogElement
-	function open() {
+	export function open() {
 		dialogElement.showModal()
 	}
-	function close() {
+	export function close() {
 		dialogElement.close()
 	}
 </script>
@@ -19,6 +19,7 @@
 <style lang="scss">
 	dialog {
 		max-width: var(--dialog-max-width, 70ch);
+		width: auto;
 		margin: auto;
 		animation: scale 0.1s ease;
 		box-shadow: var(--shadow-3);
