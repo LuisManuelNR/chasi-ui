@@ -12,7 +12,7 @@ export class Draggable {
     outerHeight: number,
     outerWidth: number
   }
-  constructor (el: HTMLElement) {
+  constructor(el: HTMLElement) {
     this.bound = getBound(el)
     const centerX = this.bound.left + this.bound.width / 2
     const centerY = this.bound.top + this.bound.height / 2
@@ -20,7 +20,7 @@ export class Draggable {
     this.element = el
   }
 
-  translate (deltaX: number, deltaY: number) {
+  translate(deltaX: number, deltaY: number) {
     this.position.x += deltaX
     this.position.y += deltaY
     this.position.centerX += deltaX
@@ -44,7 +44,7 @@ export class Draggable {
     this.element.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`
   }
 
-  release (deltaX: number, deltaY: number): Promise<void> {
+  release(deltaX: number, deltaY: number): Promise<void> {
     return new Promise(resolve => {
       this.element.style.transition = ''
       // this.element.style.transform = ''
@@ -63,7 +63,7 @@ export class Draggable {
     })
   }
 
-  private dispose () {
+  private dispose() {
     this.element.style.width = ''
     this.element.style.height = ''
     this.element.style.pointerEvents = ''
@@ -82,7 +82,7 @@ export class Draggable {
   }
 }
 
-export function getBound (element: HTMLElement) {
+export function getBound(element: HTMLElement) {
   const { top, bottom, left, right, height, width } = element.getBoundingClientRect()
   const { marginTop, marginBottom, marginLeft, marginRight } = window.getComputedStyle(element)
   const _top = top - parseInt(marginTop)
@@ -103,7 +103,7 @@ export function getBound (element: HTMLElement) {
   }
 }
 
-export function isInside (point: [number, number], vs: [number, number][]) {
+export function isInside(point: [number, number], vs: [number, number][]) {
   const x = point[0]
   const y = point[1]
   let inside = false
@@ -114,34 +114,34 @@ export function isInside (point: [number, number], vs: [number, number][]) {
     const yj = vs[j][1]
 
     const intersect = ((yi > y) !== (yj > y)) &&
-    (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
+      (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
     if (intersect) inside = !inside
   }
   return inside
 }
 
-export function draw (callback: (requestId: number) => void, fps = 30) {
-  const interval = 1000/fps
+export function draw(callback: (requestId: number) => void, fps = 30) {
+  const interval = 1000 / fps
   let now: number
   let then = Date.now()
   let delta: number
-  
-  function update () {
+
+  function update() {
     const requestId = requestAnimationFrame(update)
-    
+
     now = Date.now()
     delta = now - then
-    
+
     if (delta > interval) {
-      then = now - (delta % interval);
-        
+      then = now - (delta % interval)
+
       callback(requestId)
     }
   }
   return update
 }
 
-function onTransitionEnd (el: HTMLElement, callback: (e: TransitionEvent) => void) {
+function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void) {
   const getTransitionName = () => {
     const transitions = {
       transition: 'transitionend',
@@ -159,24 +159,3 @@ function onTransitionEnd (el: HTMLElement, callback: (e: TransitionEvent) => voi
   }
   el.addEventListener(getTransitionName(), callback, { once: true })
 }
-
-// export function findScrollableParent (node: HTMLElement): HTMLElement {
-//   // more minimal version of https://github.com/olahol/scrollparent.js/blob/master/scrollparent.js
-//   const regex = /(auto|scroll)/;
-
-//   const style = (node: HTMLElement, prop: string) =>
-//     getComputedStyle(node, null).getPropertyValue(prop)
-
-//   const scroll = (node: HTMLElement) =>
-//     regex.test(
-//       style(node, 'overflow') +
-//       style(node, 'overflow-y') +
-//       style(node, 'overflow-x'))
-
-//   return !node || node === document.body
-//     ? document.body
-//     : scroll(node)
-//       ? node
-//       : findScrollableParent(node.parentNode as HTMLElement)
-// }
-
