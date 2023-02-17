@@ -6,7 +6,6 @@
 
 @use './buttons.scss';
 @use './layout.scss';
-@use './cards.scss';
 
 @use './theme.scss';
 @use './utils.scss';
@@ -57,4 +56,8 @@
 			background-color: var(--n-100);
 		}
 	}
+}
+
+img {
+	background-color: var(--brand);
 }

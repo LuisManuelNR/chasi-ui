@@ -63,9 +63,19 @@
 	}
 }
 
-@keyframes slideX {
+@keyframes slideToLeft {
 	0% {
 		translate: -100%;
+	}
+
+	100% {
+		translate: 0;
+	}
+}
+
+@keyframes slideToRight {
+	0% {
+		translate: 100%;
 	}
 
 	100% {

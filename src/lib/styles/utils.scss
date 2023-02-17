@@ -1,4 +1,11 @@
-@for $i from 1 through 6 {
+.card {
+	background-color: var(--n-300);
+	border: 1px solid var(--n-200);
+	border-radius: var(--size-1);
+	padding: var(--size-3);
+}
+
+@for $i from 0 through 6 {
 	.mb-#{$i} {
 		margin-bottom: var(--size-#{$i});
 	}
@@ -88,7 +95,7 @@
 	margin-bottom: auto;
 }
 
-@for $i from 1 through 6 {
+@for $i from 0 through 6 {
 	.pb-#{$i} {
 		padding-bottom: var(--size-#{$i});
 	}
