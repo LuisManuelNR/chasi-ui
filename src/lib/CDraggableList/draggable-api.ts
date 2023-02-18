@@ -41,7 +41,7 @@ export class Draggable {
     this.element.style.zIndex = '9999'
     this.element.style.top = `${this.bound.top}px`
     this.element.style.left = `${this.bound.left}px`
-    this.element.style.transform = `translate(${this.position.x}px, ${this.position.y}px)`
+    this.element.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`
   }
 
   release(deltaX: number, deltaY: number): Promise<void> {

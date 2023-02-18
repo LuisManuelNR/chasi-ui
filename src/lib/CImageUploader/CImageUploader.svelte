@@ -1,7 +1,6 @@
 <script lang="ts">
 	import CDialog from '../CDialog/CDialog.svelte'
 	import { pannable, zoomable } from '../Actions'
-	import { tick } from 'svelte'
 
 	export let uploadFunction: (file: File) => Promise<void>
 	export let aspectRatio: string | number = '4/3'
@@ -245,6 +244,7 @@
 			box-shadow: inset 0 0 0 var(--padding) #0000006e;
 			overflow: hidden;
 			cursor: grab;
+			user-select: none;
 			.cropp-zone {
 				border: 2px solid white;
 				position: relative;

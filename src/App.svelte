@@ -5,6 +5,7 @@
 	import Expands from './sections/Expands.svelte'
 	import Sidebar from './sections/Sidebar.svelte'
 	import ImageUplodaer from './sections/ImageUplodaer.svelte'
+	import Draggable from './sections/Draggable.svelte'
 	import { CSidebar, CIcon } from '$lib'
 	import { mdiMenu } from '@mdi/js'
 </script>
@@ -14,8 +15,9 @@
 	<a href="#Forms" class="list-item">Forms</a>
 	<a href="#Dialogs" class="list-item">Dialogs</a>
 	<a href="#Expands" class="list-item">Expands</a>
-	<a href="#Sidebar" class="list-item">Sidebar</a>
+	<a href="#Sidebars" class="list-item">Sidebars</a>
 	<a href="#ImageUplodaer" class="list-item">ImageUplodaer</a>
+	<a href="#Draggable" class="list-item">Draggable</a>
 	<button slot="action" class="fab icon" on:click={open}>
 		<CIcon icon={mdiMenu} />
 	</button>
@@ -28,6 +30,7 @@
 	<Expands />
 	<Sidebar />
 	<ImageUplodaer />
+	<Draggable />
 </div>
 
 <style lang="scss">
