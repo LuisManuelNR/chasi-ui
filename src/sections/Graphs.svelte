@@ -1,23 +1,17 @@
 <script lang="ts">
 	import Section from './Section.svelte'
-	import { CGraph, CPath, CCircle, CAxisX, CAxisY, min, max, CRect } from '$lib/CGraph'
-	import { onMount } from 'svelte'
+	import { CGraph, CPath, CAxisX, CAxisY, min, max } from '$lib/CGraph'
 	let sineWave = Array.from({ length: 50 }, (v, i) => Math.sin(i * 0.2))
-	onMount(() => {
-		setInterval(() => {
-			sineWave = [...sineWave, Math.sin(sineWave.length * 0.2)]
-			if (sineWave.length > 250) {
-				// es un array.pop() pero reactivo
-				sineWave = [...sineWave.slice(0, sineWave.length - 1)]
-			}
-		}, 1000)
-	})
+	const xs1 = sineWave.map((v, i) => i)
+	const xs2 = sineWave.map((v, i) => i + 15)
+	const domainX: [number, number] = [0, 65]
 </script>
 
 <Section title="Graphs">
 	<CGraph allowPanX allowZoomX marginLeft="45">
-		<CPath y={sineWave} width="5" />
+		<CPath y={sineWave} x={xs1} {domainX} width="5" />
+		<CPath y={sineWave} x={xs2} {domainX} width="2" color="yellow" />
 		<CAxisY domain={[min(sineWave), max(sineWave)]} ticksNumber="5" />
-		<CAxisX domain={[0, sineWave.length]} />
+		<CAxisX domain={domainX} />
 	</CGraph>
 </Section>
