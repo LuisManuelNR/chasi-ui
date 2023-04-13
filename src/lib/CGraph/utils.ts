@@ -38,28 +38,20 @@ export function polyArea(vertices: [number, number][]) {
   return Math.abs(total)
 }
 
-export function max<T extends Record<string, unknown> | number>(data: T[], key?: T extends number ? undefined : keyof T) {
+export function max(data: number[]): number {
   let max = Number.NEGATIVE_INFINITY
   for (let i = 0; i < data.length; i++) {
     const point = data[i]
-    if (key) {
-      max = Number(point[key] > max ? point[key] : max)
-    } else {
-      max = Number(point > max ? point : max)
-    }
+    max = Number(point > max ? point : max)
   }
   return max
 }
 
-export function min<T extends Record<string, unknown> | number>(data: T[], key?: T extends number ? undefined : keyof T) {
+export function min(data: number[]): number {
   let min = Number.POSITIVE_INFINITY
   for (let i = 0; i < data.length; i++) {
     const point = data[i]
-    if (key) {
-      min = Number(point[key] < min ? point[key] : min)
-    } else {
-      min = Number(point < min ? point : min)
-    }
+    min = Number(point < min ? point : min)
   }
   return min
 }
