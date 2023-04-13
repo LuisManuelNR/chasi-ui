@@ -2,6 +2,22 @@
   "name": "@chasi/ui",
   "version": "0.1.1",
   "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "svelte": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "theme": "node package/scripts/theme.js",
     "package": "svelte-package",
@@ -9,7 +25,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "release": "npm version patch && npm run package && cd package && npm publish"
+    "release": "npm version patch && npm run package && cd dist && npm publish"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.0.2",
