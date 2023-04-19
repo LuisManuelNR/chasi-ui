@@ -3,21 +3,18 @@
   "version": "0.1.4",
   "type": "module",
   "main": "./dist/index.js",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
-    }
+    },
+    "./styles": "./dist/styles/app.scss"
   },
   "files": [
     "dist"
   ],
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/index.d.ts"
-      ]
-    }
-  },
   "scripts": {
     "theme": "node package/scripts/theme.js",
     "package": "svelte-package",
@@ -32,6 +29,7 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^4.0.1",
     "@types/node": "^18.15.11",
+    "esm-env": "^1.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-svelte": "^2.10.0",
     "sass": "^1.62.0",

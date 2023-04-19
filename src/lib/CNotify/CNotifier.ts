@@ -1,4 +1,5 @@
 import CNotify from './CNotify.svelte'
+import { BROWSER } from 'esm-env'
 
 type CNotifierParams = {
 	title: string
@@ -7,7 +8,7 @@ type CNotifierParams = {
 	target?: string
 }
 
-if (!import.meta.env.SSR) {
+if (!BROWSER) {
 	if (!document.querySelector('.notifications-holder')) {
 		const defaultContainer = document.createElement('div')
 		defaultContainer.classList.add('notifications-holder')

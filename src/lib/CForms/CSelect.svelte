@@ -4,6 +4,7 @@
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiChevronDown } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
+	import { BROWSER } from 'esm-env'
 
 	type T = $$Generic<Record<string, any> | string | number>
 	type X = $$Generic<keyof T | undefined>
@@ -26,7 +27,6 @@
 	let selectText: string | undefined = ''
 	let dispatch = createEventDispatcher()
 	let selectElement: HTMLDivElement
-	const ssr = import.meta.env.SSR
 	let dirty = false
 
 	$: {
@@ -40,7 +40,7 @@
 		if (!visibleMenu) {
 			filteredItems = items
 			hoveredItem = -1
-			if (!ssr && dirty && window.history.state === 'select open') {
+			if (BROWSER && dirty && window.history.state === 'select open') {
 				window.history.back()
 			}
 		} else {
