@@ -4,6 +4,9 @@ dependencies:
   '@mdi/js':
     specifier: ^7.2.96
     version: 7.2.96
+  esm-env:
+    specifier: ^1.0.0
+    version: 1.0.0
 
 devDependencies:
   '@sveltejs/package':
@@ -18,9 +21,6 @@ devDependencies:
   '@types/node':
     specifier: ^18.15.11
     version: 18.15.11
-  esm-env:
-    specifier: ^1.0.0
-    version: 1.0.0
   prettier:
     specifier: ^2.8.7
     version: 2.8.7
@@ -459,7 +459,7 @@ packages:
 
   /esm-env@1.0.0:
     resolution: {integrity: sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==}
-    dev: true
+    dev: false
 
   /fast-glob@3.2.12:
     resolution: {integrity: sha512-DVj4CQIYYow0BlaelwK1pHl5n5cRSJfM60UA0zK891sVInoPri2Ekj7+e1CT3/3qxXenpI+nBBmQAcJPJgaj4w==}

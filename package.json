@@ -29,7 +29,6 @@
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^4.0.1",
     "@types/node": "^18.15.11",
-    "esm-env": "^1.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-svelte": "^2.10.0",
     "sass": "^1.62.0",
@@ -43,6 +42,7 @@
     "svelte": "^3.55.1"
   },
   "dependencies": {
-    "@mdi/js": "^7.2.96"
+    "@mdi/js": "^7.2.96",
+    "esm-env": "^1.0.0"
   }
 }
