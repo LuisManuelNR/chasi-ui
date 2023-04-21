@@ -1,29 +1,79 @@
-$sm: 600px;
+$xs: 0;
+$sm: 576px;
 $md: 768px;
 $lg: 992px;
 
-@mixin for-size($size) {
-  @if $size ==xs {
-    @media (max-width: 599px) {
-      @content;
-    }
+// exacto
+@mixin xs {
+  @media (min-width: $xs) and (max-width: $sm) {
+    @content;
   }
+}
 
-  @else if $size ==sm {
-    @media (min-width: $sm) {
-      @content;
-    }
+@mixin sm {
+  @media (min-width: $sm) and (max-width: $md) {
+    @content;
   }
+}
 
-  @else if $size ==md {
-    @media (min-width: $md) {
-      @content;
-    }
+@mixin md {
+  @media (min-width: $md) and (max-width: $lg) {
+    @content;
   }
+}
 
-  @else if $size ==lg {
-    @media (min-width: $lg) {
-      @content;
-    }
+@mixin lg {
+  @media (min-width: $lg) {
+    @content;
+  }
+}
+
+// exacto y hacia arriba
+@mixin xs-up {
+  @media (min-width: $xs) {
+    @content;
+  }
+}
+
+@mixin sm-up {
+  @media (min-width: $sm) {
+    @content;
+  }
+}
+
+@mixin md-up {
+  @media (min-width: $md) {
+    @content;
+  }
+}
+
+@mixin lg-up {
+  @media (min-width: $lg) {
+    @content;
+  }
+}
+
+// exacto y hacia abajo
+@mixin xs-down {
+  @media (max-width: $xs) {
+    @content;
+  }
+}
+
+@mixin sm-down {
+  @media (max-width: $sm) {
+    @content;
+  }
+}
+
+@mixin md-down {
+  @media (max-width: $md) {
+    @content;
+  }
+}
+
+@mixin lg-down {
+  @media (max-width: $lg) {
+    @content;
   }
 }
