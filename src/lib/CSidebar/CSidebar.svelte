@@ -70,7 +70,7 @@
 	:global(dialog.open-state + [slot='action']) {
 		z-index: 5;
 	}
-	@include breakpoints.for-size(md) {
+	@include breakpoints.sm-down {
 		:global(dialog.open-state + [slot='action']) {
 			z-index: -1;
 		}

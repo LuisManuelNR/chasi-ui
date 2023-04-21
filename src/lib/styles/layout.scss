@@ -6,6 +6,37 @@
 
 .d-grid {
 	display: grid;
+	--xs-area: initial;
+	--xs-columns: initial;
+
+	--sm-area: var(--xs-area);
+	--sm-columns: var(--xs-columns);
+
+	--md-area: var(--sm-area);
+	--md-columns: var(--sm-columns);
+
+	--lg-area: var(--md-area);
+	--lg-columns: var(--md-columns);
+
+	@include breakpoints.xs {
+		grid-template-areas: var(--xs-area);
+		grid-template-columns: var(--xs-columns);
+	}
+
+	@include breakpoints.sm {
+		grid-template-areas: var(--sm-area);
+		grid-template-columns: var(--sm-columns);
+	}
+
+	@include breakpoints.md {
+		grid-template-areas: var(--md-area);
+		grid-template-columns: var(--md-columns);
+	}
+
+	@include breakpoints.lg {
+		grid-template-areas: var(--lg-area);
+		grid-template-columns: var(--lg-columns);
+	}
 }
 
 .flex-wrap {
@@ -82,48 +113,4 @@
 
 .gap-4 {
 	gap: var(--size-4);
-}
-
-.grid-area {
-	display: grid;
-
-	@include breakpoints.for-size(xs) {
-		grid-template-areas: var(--xs-area);
-	}
-
-	@include breakpoints.for-size(sm) {
-		grid-template-areas: var(--sm-area, var(--xs-area));
-	}
-
-	@include breakpoints.for-size(md) {
-		grid-template-areas: var(--md-area, var(--sm-area));
-	}
-
-	@include breakpoints.for-size(lg) {
-		grid-template-areas: var(--lg-area, var(--md-area));
-	}
-}
-
-.grid-columns {
-	display: grid;
-	--xs-area: 1fr;
-	--sm-area: var(--xs-area);
-	--md-area: var(--sm-area);
-	--lg-area: var(--md-area);
-
-	@include breakpoints.for-size(xs) {
-		grid-template-columns: var(--xs-area);
-	}
-
-	@include breakpoints.for-size(sm) {
-		grid-template-columns: var(--sm-area);
-	}
-
-	@include breakpoints.for-size(md) {
-		grid-template-columns: var(--md-area);
-	}
-
-	@include breakpoints.for-size(lg) {
-		grid-template-columns: var(--lg-area);
-	}
 }
