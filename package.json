@@ -10,7 +10,7 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
     },
-    "./styles": "./dist/styles"
+    "./styles/": "./dist/styles/"
   },
   "files": [
     "dist"
