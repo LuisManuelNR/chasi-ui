@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@chasi/ui':
+    specifier: 'link:'
+    version: 'link:'
   '@mdi/js':
     specifier: ^7.2.96
     version: 7.2.96
