@@ -10,7 +10,7 @@
 @use './theme.scss';
 @use './utils.scss';
 
-:global(:root) {
+:root {
 	accent-color: var(--brand);
 	background-color: var(--n-400);
 	color: var(--on-n-400);
