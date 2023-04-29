@@ -10,7 +10,7 @@
 @use './theme.scss';
 @use './utils.scss';
 
-:root {
+:global(:root) {
 	accent-color: var(--brand);
 	background-color: var(--n-400);
 	color: var(--on-n-400);
@@ -56,8 +56,8 @@
 			background-color: var(--on-n-400);
 		}
 	}
-}
 
-img {
-	background-color: var(--brand);
+	img {
+		background-color: var(--brand);
+	}
 }
