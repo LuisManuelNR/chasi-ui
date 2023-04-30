@@ -8,7 +8,7 @@ type CNotifierParams = {
 	target?: string
 }
 
-if (!BROWSER) {
+if (BROWSER) {
 	if (!document.querySelector('.notifications-holder')) {
 		const defaultContainer = document.createElement('div')
 		defaultContainer.classList.add('notifications-holder')
