@@ -1,234 +1,98 @@
 <script lang="ts">
-	import { getContext, onMount, tick } from 'svelte'
-	import CIcon from '../CIcon/CIcon.svelte'
-	import { mdiCloseCircle } from '@mdi/js'
+	import type { HTMLInputAttributes } from 'svelte/elements'
+	import type { Rule } from './rules'
+	import CLabel from './CLabel.svelte'
 
-	type T = $$Generic
-	type InputRules<R> = Array<(inputValue: R) => string | boolean>
-	type SuportedInputs =
-		| {
-				type: 'text' | 'email' | 'tel' | 'password' | 'date' | 'textarea'
-				rules: InputRules<string>
-				value: string
-		  }
-		| {
-				type: 'number'
-				value: number
-				rules: InputRules<number>
-		  }
+	type AllowedTypes =
+		| 'text'
+		| 'color'
+		| 'date'
+		| 'datetime-local'
+		| 'email'
+		| 'file'
+		| 'image'
+		| 'month'
+		| 'number'
+		| 'password'
+		| 'range'
+		| 'search'
+		| 'tel'
+		| 'time'
+		| 'url'
+		| 'week'
+
+	interface $$Props extends HTMLInputAttributes {
+		label?: string
+		loading?: boolean
+		rules?: Rule[]
+		type?: AllowedTypes
+	}
 
 	export let label = ''
-	export let placeholder = ''
-	export let rules: SuportedInputs['rules'] | InputRules<T> = []
-	export let type: SuportedInputs['type'] = 'text'
-	export let value: SuportedInputs['value'] | T = ''
-	export let disabled = false
 	export let loading = false
+	export let rules: Rule[] = []
+
+	export let value: string = ''
+	export let valueAsDate: Date | null = null
+	export let valueAsNumber: number = NaN
+	export let files: FileList | null = null
+	export let type: AllowedTypes = 'text'
+	export let placeholder = ''
+
+	let inputElement: HTMLInputElement | undefined
+
+	$: activeLabel =
+		type === 'date' ||
+		type === 'file' ||
+		Boolean(placeholder || value || valueAsDate || valueAsNumber)
+	$: updateDate(valueAsDate)
+	$: updateNumber(valueAsNumber)
 
 	function onInput(e: Event) {
-		const target = e.target as HTMLInputElement
-		value = type === 'number' ? target.valueAsNumber : target.value
+		const input = e.target as HTMLInputElement
+		value = input.value
+		valueAsDate = input.valueAsDate
+		valueAsNumber = input.valueAsNumber
+		files = input.files
 	}
 
-	let active = false
-	let initialState = false
-	let hint: string | boolean = ''
-	let shake = false
-	$: {
-		hint = validate(value)
+	function updateDate(d: typeof valueAsDate) {
+		if (inputElement) inputElement.valueAsDate = d
 	}
-	function validate(v: typeof value) {
-		let ilegal: string | boolean = ''
-		if (initialState && rules.length) {
-			for (let i = 0; i < rules.length; i++) {
-				// @ts-ignore
-				ilegal = rules[i](v)
-				if (ilegal) {
-					break
-				}
-			}
-		}
-		initialState = true
-		return ilegal || ''
+	function updateNumber(d: typeof valueAsNumber) {
+		if (inputElement) inputElement.valueAsNumber = d
 	}
-	const validatorFunc = () => {
-		hint = validate(value)
-		if (hint) {
-			shake = true
-			setTimeout(() => {
-				shake = false
-			}, 820)
-		}
-		return hint
-	}
-	// if this input is inside a form register this rules, so when the form is submitted can be validated
-	const formValidator: Array<typeof validate> = getContext('validators')
-	if (formValidator) formValidator.push(validatorFunc)
-
-	const initialValue = value
-	async function resetInput() {
-		value = initialValue
-		await tick()
-		hint = ''
-	}
-	// if this input is inside a form register reset function, so when the form is reseted the value can be reseted too
-	const formResets: Array<typeof resetInput> = getContext('resets')
-	if (formResets) formResets.push(resetInput)
-	$: activeLabel = active || placeholder || (value !== null && value !== undefined && value !== '')
-
-	// on browser autofill input trigger a transitionstart event, so we can animate label to not overlap the autofill text
-	function onTransitionStart() {
-		active = true
-	}
-
-	onMount(() => {
-		const touchSuport = 'ontouchstart' in window
-		if (!touchSuport && type === 'date') {
-			active = true
-		}
-		return () => {
-			if (formValidator) {
-				// unregister from a form on destroy
-				const index = formValidator.indexOf(validatorFunc)
-				if (index > -1) {
-					formValidator.splice(index, 1)
-				}
-			}
-		}
-	})
 </script>
 
-<div
-	class="c-input px-2 gap-2 d-flex align-center"
-	class:active={activeLabel}
-	class:error-state={hint}
-	class:shake-animation={shake}
-	class:disabled
-	class:loading-inline={loading}
-	on:click
-	on:keydown
+<CLabel
+	{label}
+	{loading}
+	active={activeLabel}
+	disabled={$$restProps.disabled}
+	values={{ value, valueAsDate, valueAsNumber, files, checked: false }}
+	{rules}
 >
-	<slot name="prepend" />
-	<label>
-		<div class="label-text">{label}</div>
-		<slot>
-			{#if type === 'textarea'}
-				<textarea
-					rows="5"
-					{disabled}
-					{placeholder}
-					on:input={onInput}
-					on:transitionstart={onTransitionStart}
-					on:change>{value}</textarea
-				>
-			{:else}
-				<input
-					{disabled}
-					{type}
-					{value}
-					{placeholder}
-					on:input={onInput}
-					on:transitionstart={onTransitionStart}
-					on:change
-				/>
-			{/if}
-		</slot>
-	</label>
-	{#if hint}
-		<CIcon icon={mdiCloseCircle} />
-	{:else}
-		<slot name="append" />
-	{/if}
-	<div class="hint">{hint}</div>
-</div>
+	<slot name="prepend" slot="prepend" />
+	<input
+		class="input-ctrl"
+		{type}
+		{value}
+		{files}
+		{placeholder}
+		bind:this={inputElement}
+		on:input={onInput}
+		on:input
+		on:change
+		on:click
+		on:keydown
+		{...$$restProps}
+	/>
+	<slot name="append" slot="append" />
+</CLabel>
 
 <style lang="scss">
-	@layer CInput {
-		.c-input {
-			border-bottom: 2px solid var(--border-color-input, hsla(0, 0%, 50%, 0.5));
-			background-color: var(--n-400);
-			color: var(--text-color-input, inherit);
-			border-radius: var(--size-1);
-			transition: all 0.2s;
-			margin-bottom: var(--size-4);
-			position: relative;
-			label {
-				flex-grow: 1;
-				min-height: 48px;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-			}
-			input,
-			:global(textarea) {
-				border: none;
-				outline: none;
-				width: 100%;
-				font-size: 1.1rem;
-				font-family: inherit;
-				background-color: transparent;
-				color: var(--on-n-400);
-				&:-webkit-autofill,
-				&:-webkit-autofill:hover,
-				&:-webkit-autofill:focus {
-					border: none;
-					box-shadow: none;
-					transition: background-color 5000s ease-in-out 0s;
-				}
-				&::placeholder {
-					color: hsla(0, 0%, 50%, 0.5);
-				}
-			}
-			.label-text {
-				user-select: none;
-				pointer-events: none;
-				transform: translate(var(--translate-label, 0, 13px)) scale(var(--scale-label, 1));
-				transition: all 170ms;
-				color: var(--on-n-400);
-				transform-origin: left center;
-				cursor: text;
-				white-space: nowrap;
-				// letter-spacing: 0.05rem;
-				width: fit-content;
-				will-change: transform;
-				backface-visibility: hidden;
-			}
-			.hint {
-				color: var(--text-color-input);
-				user-select: none;
-				line-height: 1;
-				position: absolute;
-				bottom: -1.2rem;
-				transform: translateZ(0);
-				white-space: nowrap;
-			}
-			&:focus-within,
-			&.active {
-				--translate-label: 0px, 3px;
-				--scale-label: 0.8;
-			}
-			&:focus-within {
-				--text-color-input: var(--brand);
-				--border-color-input: var(--brand);
-			}
-			&.error-state {
-				--text-color-input: var(--error);
-				--border-color-input: var(--error);
-			}
-			:disabled,
-			&.disabled {
-				cursor: not-allowed;
-				color: hsla(0, 0%, 50%, 0.5);
-				--text-color-input: currentColor;
-				--border-color-input: currentColor;
-				&::before {
-					content: '';
-					position: absolute;
-					inset: 0;
-					background-color: rgba(0, 0, 0, 0.082);
-					border-radius: inherit;
-				}
-			}
-		}
+	.icon {
+		grid-area: I;
+		display: flex;
 	}
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import CInput from './CInput.svelte'
+	import type { HTMLInputAttributes } from 'svelte/elements'
+	import type { Rule } from './rules'
+	import CLabel from './CLabel.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { scale } from 'svelte/transition'
 	import {
@@ -9,14 +11,25 @@
 		mdiRadioboxMarked
 	} from '@mdi/js'
 
-	export let label: string = ''
-	export let rules: Array<(inputValue: boolean) => string | boolean> = []
-	export let type: 'checkbox' | 'radio' = 'checkbox'
-	export let group: any = type === 'radio' ? '' : []
-	export let value: any = undefined
-	export let checked = false
-	export let disabled = false
+	type AllowedTypes = 'checkbox' | 'radio'
+
+	interface $$Props extends HTMLInputAttributes {
+		label?: string
+		loading?: boolean
+		rules?: Rule[]
+		type?: AllowedTypes
+		group?: any
+		value?: any
+	}
+
+	export let label = ''
 	export let loading = false
+	export let rules: Rule[] = []
+
+	export let value: any = ''
+	export let checked = false
+	export let type: AllowedTypes = 'checkbox'
+	export let group: any = type === 'checkbox' ? [] : ''
 
 	$: type === 'radio' && updateRadio(group, value)
 
@@ -47,53 +60,41 @@
 	}
 </script>
 
-<div class="c-toggle" class:checked>
-	<CInput {rules} {label} bind:value={checked} {disabled} {loading}>
-		{#if type === 'radio'}
-			<input type="radio" {value} bind:group {disabled} />
-		{:else}
-			<input type="checkbox" {value} bind:checked {disabled} />
-		{/if}
-		<svelte:fragment slot="prepend">
-			{#if checked}
-				<div class="icon" in:scale={{ duration: 100, start: 0.7 }}>
-					<CIcon icon={type === 'checkbox' ? mdiCheckboxMarked : mdiRadioboxMarked} />
-				</div>
-			{:else}
-				<div class="icon" in:scale={{ duration: 100, start: 0.7 }}>
-					<CIcon icon={type === 'checkbox' ? mdiCheckboxBlankOutline : mdiRadioboxBlank} />
-				</div>
-			{/if}
-		</svelte:fragment>
-	</CInput>
-</div>
+<CLabel
+	{label}
+	{loading}
+	disabled={$$restProps.disabled}
+	values={{ value, valueAsDate: null, valueAsNumber: NaN, files: null, checked }}
+	{rules}
+	isToggle
+>
+	{#if checked}
+		<div class="icon secondary-text" in:scale={{ duration: 100, start: 0.7 }}>
+			<CIcon icon={type === 'checkbox' ? mdiCheckboxMarked : mdiRadioboxMarked} />
+		</div>
+	{:else}
+		<div class="icon" in:scale={{ duration: 100, start: 0.7 }}>
+			<CIcon icon={type === 'checkbox' ? mdiCheckboxBlankOutline : mdiRadioboxBlank} />
+		</div>
+	{/if}
+	<slot name="prepend" slot="prepend" />
+	{#if type === 'radio'}
+		<input type="radio" {value} bind:group {...$$restProps} on:change />
+	{:else}
+		<input type="checkbox" {value} bind:checked {...$$restProps} on:change />
+	{/if}
+	<slot name="append" slot="append" />
+</CLabel>
 
-<style lang="scss">
-	.c-toggle {
-		--border-color-input: transparent;
-		input {
-			position: absolute;
-			inset: 0;
-			opacity: 0;
-		}
-		:global(.c-input) {
-			background-color: transparent;
-		}
-		:global(.label-text) {
-			transform: translate(0, 0) scale(1);
-			font-size: 1.1rem;
-			cursor: pointer;
-		}
-		:global(:focus-within:not(.error-state)) {
-			--border-color-input: transparent;
-			--text-color-input: initial;
-		}
-		.icon {
-			display: flex;
-			pointer-events: none;
-		}
-		&.checked .icon {
-			color: var(--success);
-		}
+<style>
+	.icon {
+		grid-area: I;
+		display: flex;
+	}
+	input {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		cursor: inherit;
 	}
 </style>

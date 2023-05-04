@@ -1,5 +1,3 @@
-// import type { ThemeGeneratorConfig } from '$lib/scripts/theme'
-
 /** @type {import('$lib/scripts/theme').ThemeGeneratorConfig} */
 const theme = {
   pathToSave: './src/lib/styles',

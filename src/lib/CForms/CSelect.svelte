@@ -5,17 +5,16 @@
 	import { mdiChevronDown } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
 	import { BROWSER } from 'esm-env'
+	import type { Rule } from './rules'
 
 	type T = $$Generic<Record<string, any> | string | number>
-	type X = $$Generic<keyof T | undefined>
+	type X = $$Generic<keyof T>
 	export let label = ''
 	export let items: T[] = []
-	export let itemText: keyof T | undefined = undefined
+	export let itemText: X | undefined = undefined
 	export let itemValue: X | undefined = undefined
-	export let value:
-		| (T extends Record<string, any> ? (X extends keyof T ? T[X] : T) : T)
-		| undefined = undefined
-	export let rules: Array<(inputValue: typeof value) => string | boolean> = []
+	export let value: any = ''
+	export let rules: Rule[] = []
 	export let filter = false
 	export let disabled = false
 	export let loading = false
@@ -146,15 +145,14 @@
 		<svelte:fragment slot="action">
 			<CInput
 				{label}
-				{rules}
-				bind:value
-				{disabled}
 				{loading}
-				on:click={!disabled && toggle}
+				{rules}
+				value={selectText}
+				{disabled}
+				readonly
+				on:click={!disabled ? toggle : undefined}
 				on:keydown={handleKeyDown()}
 			>
-				<slot slot="prepend" name="prepend" />
-				<input readonly value={selectText} {disabled} />
 				<svelte:fragment slot="append">
 					<CIcon icon={mdiChevronDown} />
 				</svelte:fragment>
@@ -162,16 +160,12 @@
 		</svelte:fragment>
 		{#if filter}
 			<div class="px-3 pt-2 pb-1 filter-input">
-				<CInput>
-					<!-- svelte-ignore a11y-autofocus -->
-					<input
-						autofocus
-						placeholder="Filtrar Lista"
-						on:click|stopPropagation
-						on:input={onFilter}
-						on:keydown={handleKeyDown(true)}
-					/>
-				</CInput>
+				<CInput
+					autofocus
+					placeholder="Filtrar Lista"
+					on:input={onFilter}
+					on:keydown={handleKeyDown(true)}
+				/>
 			</div>
 		{/if}
 		{#if !filteredItems.length}
@@ -210,17 +204,6 @@
 		:global(.c-menu-content) {
 			padding: 0;
 		}
-		input {
-			cursor: initial;
-			display: flex;
-			user-select: none;
-			&:focus-visible {
-				outline: none;
-			}
-		}
-		:global(label) {
-			pointer-events: none;
-		}
 		:global(.c-select-item) {
 			padding: var(--size-1) var(--size-3);
 			position: relative;
@@ -240,12 +223,16 @@
 				color: var(--brand);
 			}
 		}
+		:global(.c-label:not(.disabled)),
+		:global(:where(input[readonly])) {
+			cursor: pointer;
+		}
 		.filter-input {
 			position: sticky;
 			top: 0;
 			background-color: inherit;
 			z-index: 1;
-			:global(.c-input) {
+			:global(.c-label) {
 				margin: 0;
 			}
 		}
@@ -256,12 +243,10 @@
 			}
 			:global(.c-menu-content) {
 				position: fixed;
-				inset: 16px;
+				inset: 16px !important;
 				width: auto;
 				height: fit-content;
 				max-height: -webkit-fill-available;
-				top: 50%;
-				transform: translate(0, -50%);
 			}
 			&.is-filter :global(.c-menu-content) {
 				height: auto;

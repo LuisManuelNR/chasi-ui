@@ -1,20 +1,30 @@
 <script lang="ts">
 	import { createEventDispatcher, setContext } from 'svelte'
-	const validator: Array<() => string | true> = []
+	import type { FormValidator } from './rules'
+
+	const validator: Array<FormValidator> = []
 	setContext('validators', validator)
-	const resets: Array<() => void> = []
-	setContext('resets', resets)
+
 	const dispatch = createEventDispatcher<{ submit: SubmitEvent }>()
-	export function onSubmit(e: SubmitEvent) {
-		const submiter = e.submitter
+
+	async function onSubmit(e: SubmitEvent) {
+		let submiter = e.submitter
+		if (!submiter) {
+			const target = e.target as HTMLFormElement
+			const selector = target.querySelector('[type="submit"]') as HTMLElement
+			if (selector) {
+				submiter = selector
+			}
+		}
 		if (!submiter || submiter.getAttribute('type') !== 'submit') return
 		let invalidForm = false
-		validator.forEach((f) => {
-			const invalidInput = f()
+		for (let i = 0; i < validator.length; i++) {
+			const f = validator[i]
+			const invalidInput = await f()
 			if (invalidInput) {
 				invalidForm = true
 			}
-		})
+		}
 		if (!invalidForm) {
 			dispatch('submit', e)
 		} else {
@@ -26,11 +36,8 @@
 			})
 		}
 	}
-	function onReset() {
-		resets.forEach((resest) => resest())
-	}
 </script>
 
-<form novalidate on:submit|preventDefault={onSubmit} on:reset|preventDefault={onReset}>
+<form novalidate on:submit|preventDefault={onSubmit}>
 	<slot />
 </form>

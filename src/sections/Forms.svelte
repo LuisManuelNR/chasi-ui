@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Section from './Section.svelte'
-	import { CInput, CSelect, CForm, CToggle, CNotifier } from '$lib'
+	import { CInput, CSelect, CForm, CNotifier, CIcon, CToggle } from '$lib'
+	import type { Rule } from '$lib'
+	import { mdiFaceMan } from '@mdi/js'
 
 	let items = [
 		{ state: 'Florida', abbr: 'FL' },
@@ -34,100 +36,138 @@
 		{ state: 'California', abbr: 'CA' },
 		{ state: 'New York', abbr: 'NY' }
 	]
+	const requiredCheck: Rule = ({ checked }) => checked || 'Este campo es requerido'
+	const requiredInput: Rule = ({ value }) => !!value || 'Este campo es requerido'
+	const requiredEmail: Rule = ({ value }) =>
+		(value && /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(value)) ||
+		'El email debe ser válido'
 
-	const required = (v: string | boolean) =>
-		v === undefined || v === null || v === '' || v === false ? 'Este campo es requerido' : false
-	const requiredEmail = (v: string) =>
-		/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) ? false : 'El email debe ser válido'
+	const formDataDemo: Record<string, any> = {
+		restaurant: 'Cuban'
+	}
 
-	const formDataDemo: Record<string, any> = {}
-
-	function onSubmit() {
+	async function onSubmit() {
 		CNotifier.success({
 			title: 'Check console to see form data!!',
 			text: 'With this we can test notifications too'
 		})
 		console.log(formDataDemo)
 	}
+
+	function changeExternally() {
+		formDataDemo.name = 'name Changed'
+		formDataDemo.country = 'Florida'
+		formDataDemo.food = ['Fish', 'Pizza']
+		formDataDemo.acceptTerms = true
+	}
 </script>
 
 <Section title="Forms">
-	<CInput />
-	<CInput label="Nombre" />
 	<CInput label="Nombre" placeholder="rapamparampa" />
 	<CInput label="Loading" loading />
-	<CInput label="disabled" disabled value="poapdoapwd" />
+	<CInput label="disabled" value="poapdoapwd" disabled />
 
-	<CInput label="number" type="number" />
-	<CInput label="date" type="date" />
-	<CInput label="tel" type="tel" />
-	<CInput label="email" type="email" />
-	<CInput label="password" type="password" />
+	<CInput label="Number" type="number" />
+	<CInput label="Date" type="date" />
+	<CInput label="Tel" type="tel" />
+	<CInput label="Email" type="email" />
+	<CInput label="Password" type="password" />
 
 	<CSelect label="Select Country" {items} itemText="state" itemValue="state" filter />
 	<CSelect label="Select Country" {items} itemText="state" itemValue="state" filter disabled />
 
-	<p>Inside a form</p>
+	<p class="text-h4">Inside a form</p>
 	<CForm on:submit={onSubmit}>
-		<CInput label="Nombre" bind:value={formDataDemo.name} rules={[required]} />
-		<CInput
-			label="email"
-			type="email"
-			placeholder="alguien@gmail.com"
-			rules={[required, requiredEmail]}
-			bind:value={formDataDemo.email}
-		/>
-		<CInput
-			label="password"
-			type="password"
-			rules={[required]}
-			bind:value={formDataDemo.password}
-		/>
-		<CSelect
-			label="Select Country"
-			{items}
-			itemText="state"
-			itemValue="state"
-			filter
-			rules={[required]}
-			bind:value={formDataDemo.country}
-		/>
-		<pre>Select some foods: {formDataDemo.food}</pre>
-		<div class="d-flex flex-wrap">
-			<CToggle label="Fish" bind:group={formDataDemo.food} value="Fish" />
-			<CToggle label="Meat" bind:group={formDataDemo.food} value="Meat" />
-			<CToggle
-				label="Pizza"
-				rules={[required]}
-				bind:group={formDataDemo.food}
-				checked
-				value="Pizza"
+		<div class="d-grid gap-4">
+			<CInput bind:value={formDataDemo.name} />
+			<CInput label="Nombre" rules={[requiredInput]} bind:value={formDataDemo.name} />
+			<CInput
+				label="Email"
+				type="email"
+				rules={[requiredInput, requiredEmail]}
+				bind:value={formDataDemo.email}
 			/>
-			<CToggle label="Salad" disabled bind:group={formDataDemo.food} value="Salad" />
-		</div>
-		<pre>Select one restaurant: {formDataDemo.restaurant}</pre>
-		<div class="d-flex flex-wrap">
-			<CToggle label="Chinese" type="radio" bind:group={formDataDemo.restaurant} value="Chinese" />
-			<CToggle label="Italian" type="radio" bind:group={formDataDemo.restaurant} value="Italian" />
-			<CToggle label="Cuban" type="radio" bind:group={formDataDemo.restaurant} value="Cuban" />
-			<CToggle label="Indi" type="radio" bind:group={formDataDemo.restaurant} value="Indi" />
-			<CToggle
-				label="American"
-				disabled
-				type="radio"
-				bind:group={formDataDemo.restaurant}
-				value="American"
+			<CInput
+				label="Password"
+				type="password"
+				rules={[requiredInput]}
+				bind:value={formDataDemo.password}
 			/>
+			<CSelect
+				label="Select Country"
+				{items}
+				itemText="state"
+				itemValue="state"
+				filter
+				rules={[requiredInput]}
+				bind:value={formDataDemo.country}
+			/>
+			<pre>Select some foods: {formDataDemo.food}</pre>
+			<div class="d-flex flex-wrap">
+				<CToggle label="Fish" bind:group={formDataDemo.food} value="Fish" />
+				<CToggle label="Meat" bind:group={formDataDemo.food} value="Meat" />
+				<CToggle
+					label="Pizza"
+					rules={[requiredCheck]}
+					bind:group={formDataDemo.food}
+					value="Pizza"
+				/>
+				<CToggle label="Salad" disabled bind:group={formDataDemo.food} value="Salad" />
+			</div>
+			<pre>Select one restaurant: {formDataDemo.restaurant}</pre>
+			<div class="d-flex flex-wrap">
+				<CToggle
+					label="Chinese"
+					type="radio"
+					bind:group={formDataDemo.restaurant}
+					value="Chinese"
+				/>
+				<CToggle label="Italian" type="radio" bind:group={formDataDemo.restaurant} value="Italian">
+					<img
+						slot="prepend"
+						src="https://imagessl.casadellibro.com/t1e/flag/IT.png"
+						alt="Italian"
+						width="38px"
+					/>
+				</CToggle>
+				<CToggle label="Cuban" type="radio" bind:group={formDataDemo.restaurant} value="Cuban">
+					<svelte:fragment slot="prepend">
+						<CIcon icon={mdiFaceMan} />
+					</svelte:fragment>
+				</CToggle>
+				<CToggle label="Indi" type="radio" bind:group={formDataDemo.restaurant} value="Indi">
+					<svelte:fragment slot="append">
+						<CIcon icon={mdiFaceMan} />
+					</svelte:fragment>
+				</CToggle>
+				<CToggle
+					label="American"
+					disabled
+					type="radio"
+					bind:group={formDataDemo.restaurant}
+					value="American"
+				/>
+			</div>
+			<!-- <CLabel label="About you" rules={[requiredInput]}>
+			<textarea rows="5" bind:value={formDataDemo.about} />
+		</CLabel> -->
+			<CToggle
+				label="Accept terms and conditions"
+				bind:checked={formDataDemo.acceptTerms}
+				rules={[requiredCheck]}
+			/>
+			<button type="submit"> submit </button>
+			<button on:click={changeExternally}> modify form externally </button>
+			<pre>{JSON.stringify(formDataDemo, null, 2)}</pre>
 		</div>
-		<CInput label="About you" type="textarea" bind:value={formDataDemo.about} />
-		<CToggle
-			label="Accept terms and conditions"
-			rules={[required]}
-			bind:checked={formDataDemo.acceptTerms}
-		/>
-		<button type="submit"> submit </button>
-		<button type="reset"> reset!! </button>
 	</CForm>
+
+	<p>Inline inputs</p>
+	<div class="d-flex align-center gap-2">
+		<button> hello </button>
+		<CInput bind:value={formDataDemo.name} class="mb-0" />
+		<CInput bind:value={formDataDemo.email} />
+	</div>
 </Section>
 
 <style>
