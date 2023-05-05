@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiPlus } from '@mdi/js'
 
@@ -10,7 +9,7 @@
 
 <div class="c-expand">
 	<button
-		class="d-flex align-center pa-2 gap-2 {klass}"
+		class="btn d-flex align-center pa-2 gap-2 {klass}"
 		class:active
 		on:click={() => (active = !active)}
 	>
@@ -21,11 +20,11 @@
 			</slot>
 		</div>
 	</button>
-	{#if active}
-		<div in:slide={{ duration: 180 }} out:slide={{ duration: 180 }}>
+	<div class="c-expand-content" class:active-content={active}>
+		<div class="content-wrapper">
 			<slot />
 		</div>
-	{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -36,6 +35,17 @@
 	.action-icon {
 		rotate: 0deg;
 		transition: rotate 0.5s ease;
+	}
+	.c-expand-content {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 250ms;
+		> .content-wrapper {
+			overflow: hidden;
+		}
+		&.active-content {
+			grid-template-rows: 1fr;
+		}
 	}
 	.active {
 		padding: 24px 1rem;

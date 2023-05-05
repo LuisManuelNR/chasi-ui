@@ -34,7 +34,7 @@
 
 <div class="c-menu" bind:this={menuElement}>
 	<slot name="action">
-		<button on:click={toggle}>open</button>
+		<button class="btn" on:click={toggle}>open</button>
 	</slot>
 	{#if visible}
 		<div

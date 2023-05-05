@@ -11,6 +11,6 @@
 		<a href="#d" class="list-item">Lorem, ipsum.</a>
 		<a href="#d" class="list-item">Lorem ipsum dolor sit amet.</a>
 		<a href="#d" class="list-item">Lorem, ipsum dolor.</a>
-		<button slot="action" on:click={open}> open sidebar </button>
+		<button class="btn" slot="action" on:click={open}> open sidebar </button>
 	</CSidebar>
 </Section>

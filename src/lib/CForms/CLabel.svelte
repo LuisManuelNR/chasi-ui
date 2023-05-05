@@ -88,7 +88,6 @@
 		color: var(--text-color-input, inherit);
 		border-radius: var(--size-1);
 		transition: all 0.2s;
-		// margin-bottom: var(--size-5);
 		position: relative;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
@@ -125,6 +124,9 @@
 			color: hsla(0, 0%, 50%, 0.5);
 			--text-color-input: currentColor;
 			--border-color-input: currentColor;
+			> .label-text {
+				color: hsla(0, 0%, 50%, 0.5);
+			}
 		}
 		&.error-state {
 			--text-color-input: var(--error);
@@ -201,7 +203,7 @@
 				color: hsla(0, 0%, 50%, 0.5);
 			}
 			&:disabled {
-				color: var(--n-100);
+				color: hsla(0, 0%, 50%, 0.5);
 				cursor: inherit;
 			}
 		}

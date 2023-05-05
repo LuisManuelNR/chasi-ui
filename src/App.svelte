@@ -22,7 +22,7 @@
 	<a href="#Draggable" class="list-item">Draggable</a>
 	<a href="#Graphs" class="list-item">Graphs</a>
 	<a href="#Avatar" class="list-item">Avatar</a>
-	<button slot="action" class="fab icon" on:click={open}>
+	<button slot="action" class="btn fab icon" on:click={open}>
 		<CIcon icon={mdiMenu} />
 	</button>
 </CSidebar>

@@ -24,7 +24,7 @@
 		<slot {close}>
 			<div class="d-flex align-center justify-between px-3 py-1">
 				<strong>{title}</strong>
-				<button class="icon tonal {type}" on:click={close}>
+				<button class="btn icon tonal {type}" on:click={close}>
 					<CIcon icon={mdiClose} />
 				</button>
 			</div>

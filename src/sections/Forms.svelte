@@ -156,15 +156,15 @@
 				bind:checked={formDataDemo.acceptTerms}
 				rules={[requiredCheck]}
 			/>
-			<button type="submit"> submit </button>
-			<button on:click={changeExternally}> modify form externally </button>
+			<button class="btn" type="submit"> submit </button>
+			<button class="btn" on:click={changeExternally}> modify form externally </button>
 			<pre>{JSON.stringify(formDataDemo, null, 2)}</pre>
 		</div>
 	</CForm>
 
 	<p>Inline inputs</p>
 	<div class="d-flex align-center gap-2">
-		<button> hello </button>
+		<button class="btn"> hello </button>
 		<CInput bind:value={formDataDemo.name} class="mb-0" />
 		<CInput bind:value={formDataDemo.email} />
 	</div>

@@ -28,7 +28,7 @@
 		<CDraggableList bind:list={photos}>
 			{#each photos as photo (photo.id)}
 				<div class="d-flex gap-2 draggable handler n-200">
-					<!-- <button class="c-btn icon handler">
+					<!-- <button class="btn icon handler">
             <CIcon icon={mdiDrag} />
           </button> -->
 					<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />

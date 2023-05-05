@@ -210,7 +210,7 @@
 
 <CDialog let:close bind:this={dialog}>
 	<slot name="action" slot="action" {selectImage}>
-		<button on:click={selectImage}> Subir imagen </button>
+		<button class="btn" on:click={selectImage}> Subir imagen </button>
 	</slot>
 	<div class="c-fileuploader" style="--aspect-ratio:{aspectRatio};">
 		<div
@@ -227,8 +227,8 @@
 			</div>
 		</div>
 		<div class="d-flex mt-4">
-			<button on:click={close} class="tonal"> Cancelar </button>
-			<button on:click={crop} class="brand ml-auto" class:loading> Confirmar </button>
+			<button on:click={close} class="btn tonal"> Cancelar </button>
+			<button on:click={crop} class="btn brand ml-auto" class:loading> Confirmar </button>
 		</div>
 	</div>
 </CDialog>
