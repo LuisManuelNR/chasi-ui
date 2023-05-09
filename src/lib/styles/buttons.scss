@@ -51,11 +51,15 @@
 	}
 
 	&.icon {
+		--icon-size: 48px;
 		border-radius: 50%;
-		width: 48px;
-		height: 48px;
+		width: var(--icon-size);
+		height: var(--icon-size);
+		min-height: var(--icon-size);
+		max-height: var(--icon-size);
+		min-width: var(--icon-size);
+		max-width: var(--icon-size);
 		padding: 0;
-		min-width: auto;
 	}
 
 	&.outlined {
