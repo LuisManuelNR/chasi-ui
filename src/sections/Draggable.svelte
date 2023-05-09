@@ -134,7 +134,6 @@
 					</div>
 				{/each}
 			</div>
-			<div class="pa-5 card droppable-zone">algo que no es droppable</div>
 			<div class="my-4 d-grid gap-4 droppable-zone">
 				{#each list2 as item, i}
 					<div data-list="2" data-item={i} class="d-flex align-center gap-2 n-200 pa-3 draggable">
@@ -166,7 +165,7 @@
 
 <style>
 	.two-list {
-		--xs-columns: repeat(3, 1fr);
+		--xs-columns: repeat(2, 1fr);
 	}
 	.scrollable {
 		max-height: 700px;
