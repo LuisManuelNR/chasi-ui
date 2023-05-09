@@ -4,6 +4,7 @@
 	import { draggable } from '$lib/Actions'
 	import { mdiDrag } from '@mdi/js'
 	import { onMount } from 'svelte'
+	import Tree from '../components/Tree.svelte'
 
 	type Photo = {
 		albumId: number
@@ -29,25 +30,69 @@
 	]
 	let list2 = [6, 7, 8, 9]
 
+	type NestedList = {
+		name: string
+		childs?: NestedList[]
+	}
+	let nestedList: NestedList[] = [
+		{
+			name: '1'
+		},
+		{
+			name: '2',
+			childs: [
+				{
+					name: '2.1'
+				},
+				{
+					name: '2.2',
+					childs: [
+						{
+							name: '2.2.1'
+						},
+						{
+							name: '2.2.2'
+						}
+					]
+				}
+			]
+		},
+		{
+			name: '3',
+			childs: [
+				{
+					name: '3.1'
+				}
+			]
+		},
+		{
+			name: '4'
+		}
+	]
+
 	onMount(() => {
 		loadData()
 	})
 
 	function updateList(from: HTMLElement, to: HTMLElement) {
-		const fromListNumber = from.getAttribute('data-list')
-		const fromList = fromListNumber === '1' ? list1 : list2
-		const fromIndex = from.getAttribute('data-item')
-		const toListNumber = to.getAttribute('data-list')
-		const toList = toListNumber === '1' ? list1 : list2
-		const toIndex = to.getAttribute('data-item')
-		const item = fromList.splice(+fromIndex, 1)
-		toList.splice(+toIndex, 0, item[0])
-		list1 = list1
+		// console.log(list1, list2)
+		// const fromListNumber = from.getAttribute('data-list')
+		// const fromList = fromListNumber === '1' ? list1 : list2
+		// const fromIndex = from.getAttribute('data-item')
+		// const toListNumber = to.getAttribute('data-list')
+		// const toList = toListNumber === '1' ? list1 : list2
+		// const toIndex = to.getAttribute('data-item')
+		// const item = fromList.splice(+fromIndex, 1)
+		// toList.splice(+toIndex, 0, item[0])
+		list1[1] = 'pepito'
 		list2 = list2
 	}
 </script>
 
 <Section title="Draggable">
+	<div>
+		<!-- <Tree list={nestedList} /> -->
+	</div>
 	<div class="scrollable">
 		<!-- <CDraggableList bind:list={photos}>
 			{#each photos as photo (photo.id)}
@@ -66,10 +111,10 @@
 		<div class="my-4 d-grid gap-4 droppable-zone">
 			{#each list1 as item, i}
 				<div
-					use:draggable={updateList}
+					use:draggable={{ dropZone: '.droppable-zone', handler: '.handler', onChange: updateList }}
 					data-list="1"
 					data-item={i}
-					class="d-flex align-center gap-2 n-200 pa-3"
+					class="d-flex align-center gap-2 n-200 pa-3 draggable"
 				>
 					<p class="title">{item}</p>
 					<button class="btn icon tonal ml-auto handler">
@@ -81,10 +126,10 @@
 		<div class="my-4 d-grid gap-4 droppable-zone">
 			{#each list2 as item, i}
 				<div
-					use:draggable={updateList}
+					use:draggable={{ dropZone: '.droppable-zone', handler: '.handler', onChange: updateList }}
 					data-list="2"
 					data-item={i}
-					class="d-flex align-center gap-2 n-200 pa-3"
+					class="d-flex align-center gap-2 n-200 pa-3 draggable"
 				>
 					<p class="title">{item}</p>
 					<button class="btn icon tonal ml-auto handler">
@@ -106,6 +151,6 @@
 	}
 	.draggable {
 		border-radius: var(--size-1);
-		margin-bottom: var(--size-4);
+		transition: transform 150ms;
 	}
 </style>
