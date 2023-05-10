@@ -22,6 +22,7 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
       if (!handler) return
       draggable = handler.closest(draggableSelector) as HTMLElement
       if (!draggable) return
+      LastDropZone = draggable.parentElement
       event.preventDefault()
       height = getHeight(draggable)
       ghost = cloneElement(draggable)
@@ -49,31 +50,31 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
       }
     },
     onEnd: async (event, coords) => {
-      if (!draggable) return
       const dropZone = LastDropZone
-      if (!dropZone) return
-      dropZone.classList.remove(currentDropZoneClass)
-      if (dropZone.children.length) {
-        let inserted
-        for (let i = 0; i < dropZone.children.length; i++) {
-          const el = dropZone.children[i] as HTMLElement
-          el.style.transition = 'none'
-          if (el.style.transform && !inserted) {
-            inserted = true
-            dropZone.insertBefore(draggable, el)
+      if (dropZone && draggable) {
+        dropZone.classList.remove(currentDropZoneClass)
+        if (dropZone.children.length) {
+          let inserted
+          for (let i = 0; i < dropZone.children.length; i++) {
+            const el = dropZone.children[i] as HTMLElement
+            el.style.transition = 'none'
+            if (el.style.transform && !inserted) {
+              inserted = true
+              dropZone.insertBefore(draggable, el)
+            }
+            if (i === dropZone.children.length - 1 && !inserted) {
+              dropZone.append(draggable)
+            }
+            el.style.transform = ''
           }
-          if (i === dropZone.children.length - 1 && !inserted) {
-            dropZone.append(draggable)
-          }
-          el.style.transform = ''
+        } else {
+          dropZone.append(draggable)
         }
-      } else {
-        dropZone.append(draggable)
+        if (ghost) {
+          await ghost.dispose(draggable)
+        }
+        draggable.style.opacity = ''
       }
-      if (ghost) {
-        await ghost.dispose(draggable)
-      }
-      draggable.style.opacity = ''
       LastDropZone = null
       draggable = null
       ghost = null
@@ -114,10 +115,6 @@ function cloneElement(el: Element) {
     },
     dispose(node: HTMLElement): Promise<void> {
       return new Promise(resolve => {
-        clone.addEventListener('transitionend', () => {
-          clone.remove()
-          resolve()
-        })
         const elBound = node.getBoundingClientRect()
         const dy = elBound.y - top - y
         const dx = elBound.x - left - x
@@ -125,7 +122,17 @@ function cloneElement(el: Element) {
         clone.style.opacity = '1'
         clone.style.width = `${elBound.width}px`
         clone.style.height = `${elBound.height}px`
-        this.translate(dx, dy)
+        if (!x && !y) {
+          this.translate(dx, dy)
+          clone.remove()
+          resolve()
+        } else {
+          onTransitionEnd(clone, () => {
+            clone.remove()
+            resolve()
+          })
+          this.translate(dx, dy)
+        }
       })
     }
   }
@@ -150,4 +157,23 @@ function createDisplacement(root: Element, selected: Element, draggableSelector:
       }
     }
   }
+}
+
+function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void) {
+  const getTransitionName = () => {
+    const transitions = {
+      transition: 'transitionend',
+      OTransition: 'oTransitionEnd',
+      MozTransition: 'transitionend',
+      WebkitTransition: 'webkitTransitionEnd'
+    }
+    for (const key in transitions) {
+      //@ts-ignore
+      if (el.style[key] !== undefined) {
+        //@ts-ignore
+        return transitions[key]
+      }
+    }
+  }
+  el.addEventListener(getTransitionName(), callback, { once: true })
 }
