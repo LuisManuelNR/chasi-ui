@@ -9,20 +9,20 @@ interface DraggableActionOptions {
 }
 
 export default function (node: HTMLElement, { dropZoneSelector, handlerSelector, draggableSelector, currentDropZoneClass = 'current-drop-zone', onChange }: DraggableActionOptions) {
-  let ghost: ReturnType<typeof cloneElement> | null
-  let height = 0
-  let displace: ReturnType<typeof createDisplacement>
   node.style.overflow = 'hidden'
-  let draggable: HTMLElement | null
-  let LastDropZone: HTMLElement | null
+  let ghost: ReturnType<typeof cloneElement> | null
+  let displace: ReturnType<typeof createDisplacement>
+  let height = 0
+  let draggable: HTMLElement | null = null
+  let LastDropZone: HTMLElement | null = null
   const { destroy } = pannable(node, {
     onStart(event, coords) {
+      if (ghost) return
       const evTarget = event.target as HTMLElement
       const handler = evTarget.closest(handlerSelector)
       if (!handler) return
       draggable = handler.closest(draggableSelector) as HTMLElement
       if (!draggable) return
-      LastDropZone = draggable.parentElement
       event.preventDefault()
       height = getHeight(draggable)
       ghost = cloneElement(draggable)
@@ -34,7 +34,7 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
       }
     },
     onMove(event, coords) {
-      if (ghost && draggable) {
+      if (ghost && !ghost.disposing && draggable) {
         ghost.translate(coords.dx, coords.dy)
         const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
         const dropZone = evTarget.closest(dropZoneSelector) as HTMLElement
@@ -44,40 +44,35 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
           LastDropZone.classList.add(currentDropZoneClass)
           dropZone.append(draggable)
         }
-        requestAnimationFrame(() => {
-          displace(height, coords, true)
-        })
+        displace(height, coords, true)
       }
     },
     onEnd: async (event, coords) => {
-      const dropZone = LastDropZone
-      if (dropZone && draggable) {
-        dropZone.classList.remove(currentDropZoneClass)
-        if (dropZone.children.length) {
+      if (ghost && !ghost.disposing && LastDropZone && draggable) {
+        LastDropZone.classList.remove(currentDropZoneClass)
+        if (LastDropZone.children.length) {
           let inserted
-          for (let i = 0; i < dropZone.children.length; i++) {
-            const el = dropZone.children[i] as HTMLElement
+          for (let i = 0; i < LastDropZone.children.length; i++) {
+            const el = LastDropZone.children[i] as HTMLElement
             el.style.transition = 'none'
             if (el.style.transform && !inserted) {
               inserted = true
-              dropZone.insertBefore(draggable, el)
+              LastDropZone.insertBefore(draggable, el)
             }
-            if (i === dropZone.children.length - 1 && !inserted) {
-              dropZone.append(draggable)
+            if (i === LastDropZone.children.length - 1 && !inserted) {
+              LastDropZone.append(draggable)
             }
             el.style.transform = ''
           }
         } else {
-          dropZone.append(draggable)
+          LastDropZone.append(draggable)
         }
-        if (ghost) {
-          await ghost.dispose(draggable)
-        }
+        await ghost.dispose(draggable)
         draggable.style.opacity = ''
+        LastDropZone = null
+        draggable = null
+        ghost = null
       }
-      LastDropZone = null
-      draggable = null
-      ghost = null
     },
   })
 
@@ -108,27 +103,31 @@ function cloneElement(el: Element) {
 
   document.body.append(clone)
   return {
+    disposing: false,
     translate(dx: number, dy: number) {
       x += dx
       y += dy
       clone.style.transform = `translate3d(${x}px, ${y}px, 0)`
     },
     dispose(node: HTMLElement): Promise<void> {
+      this.disposing = true
       return new Promise(resolve => {
         const elBound = node.getBoundingClientRect()
         const dy = elBound.y - top - y
         const dx = elBound.x - left - x
-        clone.style.transition = 'all 250ms'
+        clone.style.transition = 'all 100ms'
         clone.style.opacity = '1'
         clone.style.width = `${elBound.width}px`
         clone.style.height = `${elBound.height}px`
         if (!x && !y) {
           this.translate(dx, dy)
+          this.disposing = false
           clone.remove()
           resolve()
         } else {
           onTransitionEnd(clone, () => {
             clone.remove()
+            this.disposing = false
             resolve()
           })
           this.translate(dx, dy)
