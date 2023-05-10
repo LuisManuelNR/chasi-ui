@@ -3,7 +3,7 @@ type Coord = {
   y: number
 }
 
-type PannableParams = {
+export type PannableParams = {
   onStart?: (event: MouseEvent | TouchEvent, coords: Coord) => void
   onMove?: (event: MouseEvent | TouchEvent, coords: Coord & { dx: number, dy: number }) => void
   onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void

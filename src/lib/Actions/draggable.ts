@@ -1,15 +1,20 @@
 import pannable from './pannable'
 
 interface DraggableActionOptions {
-  dropZoneSelector: string
   handlerSelector: string
-  draggableSelector: string
+  draggableSelector?: string
+  list: unknown[]
+  group?: string
   currentDropZoneClass?: string
-  onChange: (from: HTMLElement, to: HTMLElement) => void
 }
 
-export default function (node: HTMLElement, { dropZoneSelector, handlerSelector, draggableSelector, currentDropZoneClass = 'current-drop-zone', onChange }: DraggableActionOptions) {
-  node.style.overflow = 'hidden'
+export default function (node: HTMLElement,
+  {
+    handlerSelector,
+    draggableSelector = '.',
+    list,
+    currentDropZoneClass = 'current-drop-zone',
+  }: DraggableActionOptions) {
   let ghost: ReturnType<typeof cloneElement> | null
   let displace: ReturnType<typeof createDisplacement>
   let height = 0
@@ -24,12 +29,15 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
       draggable = handler.closest(draggableSelector) as HTMLElement
       if (!draggable) return
       event.preventDefault()
+      node.style.overflow = 'hidden'
       height = getHeight(draggable)
       ghost = cloneElement(draggable)
       displace = createDisplacement(node, draggable, draggableSelector)
       draggable.style.opacity = '0'
       displace(height, coords, false)
       if (draggable.parentElement) {
+        fromIndex = [...draggable.parentElement.children].indexOf(draggable)
+        fromList = draggable.parentElement
         draggable.parentElement.append(draggable)
       }
     },
@@ -37,7 +45,7 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
       if (ghost && !ghost.disposing && draggable) {
         ghost.translate(coords.dx, coords.dy)
         const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
-        const dropZone = evTarget.closest(dropZoneSelector) as HTMLElement
+        const dropZone = evTarget && evTarget.closest(dropZoneSelector) as HTMLElement
         if (dropZone && LastDropZone !== dropZone) {
           if (LastDropZone) LastDropZone.classList.remove(currentDropZoneClass)
           LastDropZone = dropZone
@@ -49,6 +57,7 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
     },
     onEnd: async (event, coords) => {
       if (ghost && !ghost.disposing && LastDropZone && draggable) {
+        let toIndex = 0
         LastDropZone.classList.remove(currentDropZoneClass)
         if (LastDropZone.children.length) {
           let inserted
@@ -58,9 +67,11 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
             if (el.style.transform && !inserted) {
               inserted = true
               LastDropZone.insertBefore(draggable, el)
+              toIndex = i
             }
             if (i === LastDropZone.children.length - 1 && !inserted) {
               LastDropZone.append(draggable)
+              toIndex = i
             }
             el.style.transform = ''
           }
@@ -69,9 +80,13 @@ export default function (node: HTMLElement, { dropZoneSelector, handlerSelector,
         }
         await ghost.dispose(draggable)
         draggable.style.opacity = ''
+        if (onChange) {
+          onChange({ fromList, fromIndex, toList: LastDropZone, toIndex })
+        }
         LastDropZone = null
         draggable = null
         ghost = null
+        node.style.overflow = 'hidden'
       }
     },
   })

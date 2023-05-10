@@ -73,78 +73,52 @@
 	onMount(() => {
 		loadData()
 	})
-
-	function updateList(from: HTMLElement, to: HTMLElement) {
-		// console.log(list1, list2)
-		// const fromListNumber = from.getAttribute('data-list')
-		// const fromList = fromListNumber === '1' ? list1 : list2
-		// const fromIndex = from.getAttribute('data-item')
-		// const toListNumber = to.getAttribute('data-list')
-		// const toList = toListNumber === '1' ? list1 : list2
-		// const toIndex = to.getAttribute('data-item')
-		// const item = fromList.splice(+fromIndex, 1)
-		// toList.splice(+toIndex, 0, item[0])
-		// list1[1] = 'pepito'
-		// list2 = list2
-	}
 </script>
 
 <Section title="Draggable">
 	<div>
 		<strong>Simple</strong>
-		<div
-			class="scrollable"
-			use:draggable={{
-				dropZoneSelector: '.scrollable',
-				handlerSelector: '.simple-handler',
-				draggableSelector: '.simple-draggable',
-				onChange: updateList
-			}}
-		>
-			{#each photos as photo (photo.id)}
-				<div class="d-flex align-center gap-2 simple-draggable handler n-200 pa-2 mb-2">
-					<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
-					<p class="title">{photo.title}</p>
-					<button class="btn icon ml-auto simple-handler">
+		<div class="scrollable">
+			<CDraggableList bind:list={photos} let:item>
+				<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
+					<img src={item.thumbnailUrl} alt="ssss" width="150" height="150" />
+					<p class="title">{item.title}</p>
+					<button class="btn icon ml-auto handler">
 						<CIcon icon={mdiDrag} />
 					</button>
 				</div>
-			{/each}
+			</CDraggableList>
 		</div>
+		<!-- <pre>{JSON.stringify(photos, null, 2)}</pre> -->
 	</div>
 
 	<div>
 		<strong>Two list</strong>
-		<div
-			class="two-list d-grid gap-2"
-			use:draggable={{
-				dropZoneSelector: '.droppable-zone',
-				handlerSelector: '.handler',
-				draggableSelector: '.draggable',
-				onChange: updateList
-			}}
-		>
-			<div class="my-4 d-grid gap-4 droppable-zone">
-				{#each list1 as item, i}
-					<div data-list="1" data-item={i} class="d-flex align-center gap-2 n-200 pa-3 draggable">
+		<div class="two-list d-grid gap-2">
+			<CDraggableList bind:list={list1} group="two-list" let:item>
+				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
+					<div>
 						<p class="title">{item}</p>
-						<button class="btn icon tonal ml-auto handler">
-							<CIcon icon={mdiDrag} />
-						</button>
+						<!-- <button class="btn" on:click={() => (item = Math.random())}>change</button> -->
 					</div>
-				{/each}
-			</div>
-			<div class="my-4 d-grid gap-4 droppable-zone">
-				{#each list2 as item, i}
-					<div data-list="2" data-item={i} class="d-flex align-center gap-2 n-200 pa-3 draggable">
+					<button class="btn icon tonal ml-auto handler">
+						<CIcon icon={mdiDrag} />
+					</button>
+				</div>
+			</CDraggableList>
+			<CDraggableList bind:list={list2} group="two-list" let:item>
+				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
+					<div>
 						<p class="title">{item}</p>
-						<button class="btn icon tonal ml-auto handler">
-							<CIcon icon={mdiDrag} />
-						</button>
+						<!-- <button class="btn" on:click={() => (item = Math.random())}>change</button> -->
 					</div>
-				{/each}
-			</div>
+					<button class="btn icon tonal ml-auto handler">
+						<CIcon icon={mdiDrag} />
+					</button>
+				</div>
+			</CDraggableList>
 		</div>
+		<!-- <pre>{JSON.stringify([list1, list2], null, 2)}</pre> -->
 	</div>
 
 	<div>
@@ -153,8 +127,7 @@
 			use:draggable={{
 				dropZoneSelector: '.tree-drop-zone',
 				handlerSelector: '.tree-handler',
-				draggableSelector: '.tree-item',
-				onChange: updateList
+				draggableSelector: '.tree-item'
 			}}
 			class="tree-drop-zone"
 		>
@@ -174,5 +147,8 @@
 	.draggable {
 		border-radius: var(--size-1);
 		transition: transform 150ms;
+	}
+	pre {
+		white-space: pre-wrap;
 	}
 </style>

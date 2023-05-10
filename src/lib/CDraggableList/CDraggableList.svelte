@@ -1,168 +1,249 @@
-<script lang="ts">
-	import pannable from '../Actions/pannable'
-	import { Draggable, getBound, draw, isInside } from './draggable-api'
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store'
 
-	type T = $$Generic
-	export let list: T[] = []
-	export let itemClass = '.draggable'
+	let ghost: ReturnType<typeof cloneElement> | undefined
+	let LastDropZone: HTMLElement | null = writable()
 
-	let inParent = false
-	let selected: Draggable | undefined
-	let allowTransition = false
-	let runUpdate = false
-	let selectedIndex = -1
-	let targetIndex = -1
-	let handler: HTMLElement | null
+	function cloneElement(el: Element) {
+		const { top, left, width, height } = el.getBoundingClientRect()
+		const clone = el.cloneNode(true) as HTMLElement
+		clone.style.position = 'fixed'
+		clone.style.top = `${top}px`
+		clone.style.left = `${left}px`
+		clone.style.width = `${width}px`
+		clone.style.height = `${height}px`
+		clone.style.pointerEvents = 'none'
+		clone.style.transition = 'none'
+		clone.style.opacity = '0.1'
 
-	function draggableList(node: HTMLElement) {
-		function eachChild(callback: (child: HTMLElement, i: number) => void) {
-			for (let i = 0; i < node.children.length; i++) {
-				const child = node.children[i] as HTMLElement
-				callback(child, i)
-			}
-		}
+		let x = 0
+		let y = 0
 
-		let bounds: Record<
-			number,
-			{ top: number; right: number; bottom: number; left: number; height: number; width: number }
-		> = {}
-
-		function checkChildCollission(requestId: number) {
-			if (!runUpdate) return cancelAnimationFrame(requestId)
-			const sel = selected
-			if (sel) {
-				targetIndex = selectedIndex
-				let target = false
-				eachChild((child, i) => {
-					if (child !== sel.element && child !== sel.ghost) {
-						child.style.transition = allowTransition ? '' : 'none'
-						child.style.transform = ''
-						const ch = bounds[i]
-						const inside = isInside(
-							[sel.position.centerX, sel.position.centerY],
-							[
-								[ch.left, ch.top],
-								[ch.right, ch.top],
-								[ch.right, ch.bottom],
-								[ch.left, ch.bottom]
-							]
-						)
-						if (inside) {
-							target = true
-							targetIndex = i
-						}
-						if (target) {
-							child.style.transform = `translateY(${sel.bound.outerHeight}px)`
-						}
+		document.body.append(clone)
+		return {
+			disposing: false,
+			translate(dx: number, dy: number) {
+				x += dx
+				y += dy
+				clone.style.transform = `translate3d(${x}px, ${y}px, 0)`
+			},
+			dispose(node: HTMLElement): Promise<void> {
+				this.disposing = true
+				return new Promise((resolve) => {
+					const elBound = node.getBoundingClientRect()
+					const dy = elBound.y - top - y
+					const dx = elBound.x - left - x
+					clone.style.transition = 'all 100ms'
+					clone.style.opacity = '1'
+					clone.style.width = `${elBound.width}px`
+					clone.style.height = `${elBound.height}px`
+					if (!x && !y) {
+						this.translate(dx, dy)
+						this.disposing = false
+						clone.remove()
+						resolve()
+					} else {
+						onTransitionEnd(clone, () => {
+							clone.remove()
+							this.disposing = false
+							resolve()
+						})
+						this.translate(dx, dy)
 					}
 				})
-				allowTransition = true
 			}
 		}
-
-		const update = draw(checkChildCollission, 24)
-
-		return pannable(node, {
-			onStart: (e) => {
-				const el = e.target as HTMLElement
-				handler = el.closest<HTMLElement>('.handler')
-				if (!handler) return
-				e.preventDefault()
-				const grabbed = handler.closest<HTMLElement>(itemClass)
-				if (grabbed) {
-					selected = new Draggable(grabbed)
-					let offset = 0
-					eachChild((child, i) => {
-						const cBound = getBound(child)
-						if (child !== grabbed) {
-							const top = cBound.top - offset
-							const right = cBound.right
-							const bottom = cBound.bottom - offset
-							const left = cBound.left
-							const height = cBound.height
-							const width = cBound.width
-							bounds[i] = { top, right, bottom, left, height, width }
-						} else {
-							selectedIndex = i
-							targetIndex = i
-							offset = selected!.bound.outerHeight
-						}
-					})
-				}
-			},
-			onMove: (e, coords) => {
-				if (selected) {
-					selected.element.style.transition = 'none'
-					selected.translate(coords.dx, coords.dy)
-					if (!runUpdate) {
-						document.body.style.cursor = 'grabbing'
-						runUpdate = true
-						update()
-					}
-					const el = document.elementFromPoint(coords.x, coords.y)
-					if (el) {
-						inParent = !!el.closest('.c-draggablelist')
-					}
-				}
-			},
-			onEnd: async () => {
-				if (selected) {
-					const target = bounds[targetIndex]
-					let objective = targetIndex
-					document.body.style.cursor = ''
-					if (target) {
-						const dx = target.left - (selected.position.x + selected.bound.left)
-						const dy = target.top - (selected.position.y + selected.bound.top)
-						await selected.release(dx, dy)
-					} else if (inParent) {
-						const gbound = getBound(selected.ghost!)
-						const dx = gbound.left - (selected.position.x + selected.bound.left)
-						const dy = gbound.top - (selected.position.y + selected.bound.top)
-						await selected.release(dx, dy)
-						objective = node.childElementCount
-					} else {
-						await selected.release(-selected.position.x, -selected.position.y)
-					}
-					runUpdate = false
-					if (selectedIndex !== objective) {
-						const realTarget = selectedIndex >= objective ? objective : objective - 1
-						moveItem(selectedIndex, realTarget)
-					}
-					selected = undefined
-					allowTransition = false
-					eachChild((child) => {
-						child.style.transition = 'none'
-						child.style.transform = ''
-					})
-					selectedIndex = -1
-					targetIndex = -1
-					inParent = false
-					bounds = {}
+	}
+	function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void) {
+		const getTransitionName = () => {
+			const transitions = {
+				transition: 'transitionend',
+				OTransition: 'oTransitionEnd',
+				MozTransition: 'transitionend',
+				WebkitTransition: 'webkitTransitionEnd'
+			}
+			for (const key in transitions) {
+				//@ts-ignore
+				if (el.style[key] !== undefined) {
+					//@ts-ignore
+					return transitions[key]
 				}
 			}
-		})
-	}
-
-	function moveItem(from: number, to: number) {
-		let temp = list[from]
-		list = [...list.slice(0, from), ...list.slice(from + 1)]
-		list = [...list.slice(0, to), temp, ...list.slice(to)]
+		}
+		el.addEventListener(getTransitionName(), callback, { once: true })
 	}
 </script>
 
-<div class="c-draggablelist" use:draggableList>
-	<slot />
+<script lang="ts">
+	import type { PannableParams } from '../Actions/pannable'
+	import { pannable } from '../Actions'
+	import { onMount } from 'svelte'
+	type T = $$Generic
+	export let list: T[] = []
+	export let group: string = `default-group-${Math.random().toString(36).slice(-5)}`
+	export let handlerSelector = '.handler'
+
+	const DRAGGABBLE_SELECTOR = '.draggable'
+
+	let lastList: T[] | undefined
+
+	let displace: ReturnType<typeof createDisplacement>
+	let height = 0
+	let draggable: HTMLElement | null = null
+	let root: HTMLElement
+	let rootSelected = false
+
+	let draggableIndex = 0
+	let draggableItem: unknown
+
+	onMount(() => {
+		// @ts-ignore
+		root.__removeItem = removeItem
+		// @ts-ignore
+		root.__addItem = addItem
+	})
+
+	const actions: PannableParams = {
+		onStart(event, coords) {
+			if (ghost) return
+			const evTarget = event.target as HTMLElement
+			const handler = evTarget.closest(handlerSelector)
+			if (!handler) return
+			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
+			if (!draggable) return
+			event.preventDefault()
+			const rootBound = root.getBoundingClientRect()
+			height = getHeight(draggable)
+			ghost = cloneElement(draggable)
+			displace = createDisplacement()
+			draggableIndex = [...root.children].indexOf(draggable)
+			root.style.height = `${rootBound.height}px`
+			draggableItem = removeItem(draggableIndex)
+			displace(height, coords, false)
+		},
+		onMove(event, coords) {
+			if (ghost && !ghost.disposing && draggable) {
+				ghost.translate(coords.dx, coords.dy)
+				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
+				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
+				if (dropZone && LastDropZone !== dropZone) {
+					rootSelected = dropZone === root
+					LastDropZone = dropZone
+					// 	let lastList = list
+					// 	if (LastDropZone) {
+					// 		lastList = LastDropZone.__DRAGGABLE_LIST__
+					// 	}
+					// 	LastDropZone = dropZone
+					// 	const newList = dropZone.__DRAGGABLE_LIST__
+					// 	moveItem(lastList, newList, draggableIndex, list.length - 1)
+					// 	dropZone.append(draggable)
+				}
+				displace(height, coords, true)
+			}
+		},
+		onEnd: async (event, coords) => {
+			// if (ghost && !ghost.disposing && lastList && draggable) {
+			// 	let toIndex = 0
+			// 	rootSelected = false
+			// 	if (lastList.length) {
+			// 		let inserted
+			// 		for (let i = 0; i < lastList.length; i++) {
+			// 			const item = lastList[i] as HTMLElement
+			// 			el.style.transition = 'none'
+			// 			if (el.style.transform && !inserted) {
+			// 				inserted = true
+			// 				LastDropZone.insertBefore(draggable, el)
+			// 				toIndex = i
+			// 			}
+			// 			if (i === LastDropZone.children.length - 1 && !inserted) {
+			// 				LastDropZone.append(draggable)
+			// 				toIndex = i
+			// 			}
+			// 			el.style.transform = ''
+			// 		}
+			// 	} else {
+			// 		LastDropZone.append(draggable)
+			// 	}
+			// 	await ghost.dispose(draggable)
+			// 	draggable.style.opacity = ''
+			// 	LastDropZone = null
+			// 	draggable = null
+			// 	ghost = undefined
+			// }
+		}
+	}
+
+	function removeItem(index: number) {
+		const item = list.splice(index, 1)
+		list = list
+		return item[0]
+	}
+
+	function addItem(index: number, item: T) {
+		list.splice(index, 0, item)
+		list = list
+	}
+
+	function moveItem(fromList: unknown[], toList: unknown[], fromIndex: number, toIndex: number) {
+		const cloneFrom = structuredClone(fromList)
+		const cloneTo = structuredClone(toList)
+		const item = cloneFrom.splice(fromIndex, 1)
+		cloneTo.splice(toIndex, 0, item[0])
+		fromList = []
+		// list = cloneFrom
+		// list = cloneTo
+	}
+
+	function getHeight(element: Element): number {
+		const elBound = element.getBoundingClientRect()
+		const nextBound = element.nextElementSibling
+			? element.nextElementSibling.getBoundingClientRect()
+			: { top: 0 }
+		const diff = nextBound.top - elBound.top
+		return diff > 0 ? diff : elBound.height
+	}
+
+	function createDisplacement() {
+		const groups = document.querySelectorAll(`.draggable-list.${group}`)
+		console.log(groups)
+		const items: Element[] = []
+		for (let i = 0; i < groups.length; i++) {
+			items.push(...groups[i].children)
+		}
+		return (amount = 100, cursor: { x: number; y: number }, transition: boolean) => {
+			for (let i = 0; i < items.length; i++) {
+				const el = items[i] as HTMLElement
+				el.style.transition = transition ? 'transform 150ms' : 'none'
+				const { x, y, height, width } = el.getBoundingClientRect()
+				if (el.parentElement !== LastDropZone) {
+					el.style.transform = ''
+				} else if (cursor.y >= y + height / 2) {
+					el.style.transform = ''
+				} else {
+					el.style.transform = `translate3d(0px, ${amount}px, 0)`
+				}
+			}
+		}
+	}
+</script>
+
+<div
+	class="draggable-list {group}"
+	class:selected={root === LastDropZone}
+	use:pannable={actions}
+	bind:this={root}
+>
+	{#each list as item, i (`${group}-${i}`)}
+		<slot {item} />
+	{/each}
 </div>
 
-<style lang="scss">
-	.c-draggablelist {
-		transition: background 150ms cubic-bezier(0.2, 0, 0, 1);
-		:global(> *) {
-			transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
-			will-change: transform;
-		}
-		:global(.handler) {
-			cursor: grab;
-		}
+<style>
+	.draggable-list {
+		overflow: hidden;
+	}
+	.selected {
+		box-shadow: inset 0 0 20px var(--success);
+		transition: box-shadow 250ms ease;
 	}
 </style>
