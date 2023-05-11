@@ -36,8 +36,6 @@ export default function (node: HTMLElement,
       draggable.style.opacity = '0'
       displace(height, coords, false)
       if (draggable.parentElement) {
-        fromIndex = [...draggable.parentElement.children].indexOf(draggable)
-        fromList = draggable.parentElement
         draggable.parentElement.append(draggable)
       }
     },
@@ -80,9 +78,6 @@ export default function (node: HTMLElement,
         }
         await ghost.dispose(draggable)
         draggable.style.opacity = ''
-        if (onChange) {
-          onChange({ fromList, fromIndex, toList: LastDropZone, toIndex })
-        }
         LastDropZone = null
         draggable = null
         ghost = null

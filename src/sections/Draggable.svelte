@@ -95,7 +95,7 @@
 	<div>
 		<strong>Two list</strong>
 		<div class="two-list d-grid gap-2">
-			<CDraggableList bind:list={list1} group="two-list" let:item>
+			<CDraggableList bind:list={list1} group="two-list" let:item class="d-grid gap-3">
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
@@ -106,7 +106,7 @@
 					</button>
 				</div>
 			</CDraggableList>
-			<CDraggableList bind:list={list2} group="two-list" let:item>
+			<CDraggableList bind:list={list2} group="two-list" let:item class="d-grid gap-3">
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
@@ -121,7 +121,7 @@
 		<!-- <pre>{JSON.stringify([list1, list2], null, 2)}</pre> -->
 	</div>
 
-	<div>
+	<!-- <div>
 		<strong>Nested tree</strong>
 		<div
 			use:draggable={{
@@ -133,7 +133,7 @@
 		>
 			<Tree list={nestedList} />
 		</div>
-	</div>
+	</div> -->
 </Section>
 
 <style>

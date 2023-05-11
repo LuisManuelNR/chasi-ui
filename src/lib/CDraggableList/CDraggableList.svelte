@@ -1,8 +1,26 @@
 <script lang="ts" context="module">
 	import { writable } from 'svelte/store'
+	interface CurrentDropZone {
+		el: HTMLElement | null
+		list: unknown[]
+	}
+	interface CurrentItem {
+		item: unknown
+		itemElement: HTMLElement | null
+		displaceGap: number
+	}
+	const ghost = writable<ReturnType<typeof cloneElement> | undefined>()
+	const currentDropZone = writable<CurrentDropZone>({
+		el: null,
+		list: []
+	})
+	const currentItem = writable<CurrentItem>({
+		item: undefined,
+		itemElement: null,
+		displaceGap: 0
+	})
 
-	let ghost: ReturnType<typeof cloneElement> | undefined
-	let LastDropZone: HTMLElement | null = writable()
+	const groups = writable({})
 
 	function cloneElement(el: Element) {
 		const { top, left, width, height } = el.getBoundingClientRect()
@@ -82,116 +100,80 @@
 	export let list: T[] = []
 	export let group: string = `default-group-${Math.random().toString(36).slice(-5)}`
 	export let handlerSelector = '.handler'
+	let klass = ''
+	export { klass as class }
 
 	const DRAGGABBLE_SELECTOR = '.draggable'
 
-	let lastList: T[] | undefined
-
 	let displace: ReturnType<typeof createDisplacement>
-	let height = 0
-	let draggable: HTMLElement | null = null
-	let root: HTMLElement
-	let rootSelected = false
-
-	let draggableIndex = 0
-	let draggableItem: unknown
 
 	onMount(() => {
-		// @ts-ignore
-		root.__removeItem = removeItem
-		// @ts-ignore
-		root.__addItem = addItem
+		if (!$groups[group]) $groups[group] = []
+		$groups[group].push(list)
+
+		setTimeout(() => {
+			console.log($groups)
+		}, 5000)
 	})
 
 	const actions: PannableParams = {
 		onStart(event, coords) {
-			if (ghost) return
+			if ($ghost) return
 			const evTarget = event.target as HTMLElement
 			const handler = evTarget.closest(handlerSelector)
 			if (!handler) return
-			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
+			const draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
 			if (!draggable) return
 			event.preventDefault()
-			const rootBound = root.getBoundingClientRect()
-			height = getHeight(draggable)
-			ghost = cloneElement(draggable)
 			displace = createDisplacement()
-			draggableIndex = [...root.children].indexOf(draggable)
-			root.style.height = `${rootBound.height}px`
-			draggableItem = removeItem(draggableIndex)
-			displace(height, coords, false)
+			const draggableIndex = [...draggable.parentElement!.children].indexOf(draggable)
+			$currentItem.itemElement = draggable
+			$currentItem.displaceGap = getHeight(draggable)
+			$currentItem.item = list.at(draggableIndex)
+			$ghost = cloneElement(draggable)
+			// draggableItem = removeItem(draggableIndex)
+			displace($currentItem.displaceGap, coords, false)
+			draggable.parentElement!.append(draggable)
 		},
 		onMove(event, coords) {
-			if (ghost && !ghost.disposing && draggable) {
-				ghost.translate(coords.dx, coords.dy)
+			if ($ghost && !$ghost.disposing && $currentItem.itemElement) {
+				$ghost.translate(coords.dx, coords.dy)
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
-				if (dropZone && LastDropZone !== dropZone) {
-					rootSelected = dropZone === root
-					LastDropZone = dropZone
-					// 	let lastList = list
-					// 	if (LastDropZone) {
-					// 		lastList = LastDropZone.__DRAGGABLE_LIST__
-					// 	}
-					// 	LastDropZone = dropZone
-					// 	const newList = dropZone.__DRAGGABLE_LIST__
-					// 	moveItem(lastList, newList, draggableIndex, list.length - 1)
-					// 	dropZone.append(draggable)
+				if (dropZone && $currentDropZone.el !== dropZone) {
+					$currentDropZone.el = dropZone
+					$currentDropZone.list = dropZone.__LIST__
+					dropZone.append($currentItem.itemElement)
 				}
-				displace(height, coords, true)
+				displace($currentItem.displaceGap, coords, true)
 			}
 		},
 		onEnd: async (event, coords) => {
-			// if (ghost && !ghost.disposing && lastList && draggable) {
-			// 	let toIndex = 0
-			// 	rootSelected = false
-			// 	if (lastList.length) {
-			// 		let inserted
-			// 		for (let i = 0; i < lastList.length; i++) {
-			// 			const item = lastList[i] as HTMLElement
-			// 			el.style.transition = 'none'
-			// 			if (el.style.transform && !inserted) {
-			// 				inserted = true
-			// 				LastDropZone.insertBefore(draggable, el)
-			// 				toIndex = i
-			// 			}
-			// 			if (i === LastDropZone.children.length - 1 && !inserted) {
-			// 				LastDropZone.append(draggable)
-			// 				toIndex = i
-			// 			}
-			// 			el.style.transform = ''
-			// 		}
-			// 	} else {
-			// 		LastDropZone.append(draggable)
-			// 	}
-			// 	await ghost.dispose(draggable)
-			// 	draggable.style.opacity = ''
-			// 	LastDropZone = null
-			// 	draggable = null
-			// 	ghost = undefined
-			// }
+			if ($ghost && !$ghost.disposing && $currentDropZone.el && $currentItem.itemElement) {
+				if ($currentDropZone.el.children.length) {
+					let inserted
+					for (let i = 0; i < $currentDropZone.el.children.length; i++) {
+						const el = $currentDropZone.el.children[i] as HTMLElement
+						el.style.transition = 'none'
+						if (el.style.transform && !inserted) {
+							inserted = true
+							$currentDropZone.el.insertBefore($currentItem.itemElement, el)
+						}
+						if (i === $currentDropZone.el.children.length - 1 && !inserted) {
+							$currentDropZone.el.append($currentItem.itemElement)
+						}
+						el.style.transform = ''
+					}
+				} else {
+					$currentDropZone.el.append($currentItem.itemElement)
+				}
+				await $ghost.dispose($currentItem.itemElement)
+				// draggable.style.opacity = ''
+				$currentDropZone.el = null
+				$currentItem.itemElement = null
+				$ghost = undefined
+			}
 		}
-	}
-
-	function removeItem(index: number) {
-		const item = list.splice(index, 1)
-		list = list
-		return item[0]
-	}
-
-	function addItem(index: number, item: T) {
-		list.splice(index, 0, item)
-		list = list
-	}
-
-	function moveItem(fromList: unknown[], toList: unknown[], fromIndex: number, toIndex: number) {
-		const cloneFrom = structuredClone(fromList)
-		const cloneTo = structuredClone(toList)
-		const item = cloneFrom.splice(fromIndex, 1)
-		cloneTo.splice(toIndex, 0, item[0])
-		fromList = []
-		// list = cloneFrom
-		// list = cloneTo
 	}
 
 	function getHeight(element: Element): number {
@@ -205,7 +187,6 @@
 
 	function createDisplacement() {
 		const groups = document.querySelectorAll(`.draggable-list.${group}`)
-		console.log(groups)
 		const items: Element[] = []
 		for (let i = 0; i < groups.length; i++) {
 			items.push(...groups[i].children)
@@ -215,7 +196,7 @@
 				const el = items[i] as HTMLElement
 				el.style.transition = transition ? 'transform 150ms' : 'none'
 				const { x, y, height, width } = el.getBoundingClientRect()
-				if (el.parentElement !== LastDropZone) {
+				if (el.parentElement !== $currentDropZone.el) {
 					el.style.transform = ''
 				} else if (cursor.y >= y + height / 2) {
 					el.style.transform = ''
@@ -228,19 +209,18 @@
 </script>
 
 <div
-	class="draggable-list {group}"
-	class:selected={root === LastDropZone}
+	class="draggable-list {group} {klass}"
+	class:selected={list === $currentDropZone.list}
 	use:pannable={actions}
-	bind:this={root}
 >
-	{#each list as item, i (`${group}-${i}`)}
+	{#each list as item}
 		<slot {item} />
 	{/each}
 </div>
 
 <style>
 	.draggable-list {
-		overflow: hidden;
+		/* overflow: hidden; */
 	}
 	.selected {
 		box-shadow: inset 0 0 20px var(--success);
