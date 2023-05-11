@@ -16,7 +16,7 @@
 	let photos: Photo[] = []
 
 	async function loadData() {
-		const url = 'https://jsonplaceholder.typicode.com/photos?_limit=12'
+		const url = 'https://jsonplaceholder.typicode.com/photos?_limit=7'
 		const response = await fetch(url)
 		photos = await response.json()
 	}
@@ -36,37 +36,42 @@
 	}
 	let nestedList: NestedList[] = [
 		{
-			name: '1'
-		},
-		{
-			name: '2',
+			name: 'root',
 			childs: [
 				{
-					name: '2.1'
+					name: '1'
 				},
 				{
-					name: '2.2',
+					name: '2',
 					childs: [
 						{
-							name: '2.2.1'
+							name: '2.1'
 						},
 						{
-							name: '2.2.2'
+							name: '2.2',
+							childs: [
+								{
+									name: '2.2.1'
+								},
+								{
+									name: '2.2.2'
+								}
+							]
 						}
 					]
-				}
-			]
-		},
-		{
-			name: '3',
-			childs: [
+				},
 				{
-					name: '3.1'
+					name: '3',
+					childs: [
+						{
+							name: '3.1'
+						}
+					]
+				},
+				{
+					name: '4'
 				}
 			]
-		},
-		{
-			name: '4'
 		}
 	]
 
@@ -95,7 +100,7 @@
 	<div>
 		<strong>Two list</strong>
 		<div class="two-list d-grid gap-2">
-			<CDraggableList bind:list={list1} group="two-list" let:item class="d-grid gap-3">
+			<CDraggableList bind:list={list1} group="two-list" let:item class="my-4 d-grid gap-4">
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
@@ -106,7 +111,7 @@
 					</button>
 				</div>
 			</CDraggableList>
-			<CDraggableList bind:list={list2} group="two-list" let:item class="d-grid gap-3">
+			<CDraggableList bind:list={list2} group="two-list" let:item class="my-4 d-grid gap-4">
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
@@ -118,22 +123,12 @@
 				</div>
 			</CDraggableList>
 		</div>
-		<!-- <pre>{JSON.stringify([list1, list2], null, 2)}</pre> -->
 	</div>
 
-	<!-- <div>
+	<div>
 		<strong>Nested tree</strong>
-		<div
-			use:draggable={{
-				dropZoneSelector: '.tree-drop-zone',
-				handlerSelector: '.tree-handler',
-				draggableSelector: '.tree-item'
-			}}
-			class="tree-drop-zone"
-		>
-			<Tree list={nestedList} />
-		</div>
-	</div> -->
+		<Tree list={nestedList} />
+	</div>
 </Section>
 
 <style>

@@ -1,18 +1,17 @@
 import pannable from './pannable'
 
 interface DraggableActionOptions {
+  dropZoneSelector: string
   handlerSelector: string
   draggableSelector?: string
-  list: unknown[]
-  group?: string
   currentDropZoneClass?: string
 }
 
 export default function (node: HTMLElement,
   {
+    dropZoneSelector,
     handlerSelector,
     draggableSelector = '.',
-    list,
     currentDropZoneClass = 'current-drop-zone',
   }: DraggableActionOptions) {
   let ghost: ReturnType<typeof cloneElement> | null
@@ -55,7 +54,6 @@ export default function (node: HTMLElement,
     },
     onEnd: async (event, coords) => {
       if (ghost && !ghost.disposing && LastDropZone && draggable) {
-        let toIndex = 0
         LastDropZone.classList.remove(currentDropZoneClass)
         if (LastDropZone.children.length) {
           let inserted
@@ -65,11 +63,9 @@ export default function (node: HTMLElement,
             if (el.style.transform && !inserted) {
               inserted = true
               LastDropZone.insertBefore(draggable, el)
-              toIndex = i
             }
             if (i === LastDropZone.children.length - 1 && !inserted) {
               LastDropZone.append(draggable)
-              toIndex = i
             }
             el.style.transform = ''
           }

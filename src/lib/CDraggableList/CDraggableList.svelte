@@ -20,7 +20,13 @@
 		displaceGap: 0
 	})
 
-	const groups = writable({})
+	interface Groups {
+		[key: string]: {
+			[key: string]: unknown[]
+		}
+	}
+
+	const groups = writable<Groups>({})
 
 	function cloneElement(el: Element) {
 		const { top, left, width, height } = el.getBoundingClientRect()
@@ -32,7 +38,7 @@
 		clone.style.height = `${height}px`
 		clone.style.pointerEvents = 'none'
 		clone.style.transition = 'none'
-		clone.style.opacity = '0.1'
+		clone.style.opacity = '0.5'
 
 		let x = 0
 		let y = 0
@@ -98,7 +104,7 @@
 	import { onMount } from 'svelte'
 	type T = $$Generic
 	export let list: T[] = []
-	export let group: string = `default-group-${Math.random().toString(36).slice(-5)}`
+	export let group: string = `default-group-${randomStr()}`
 	export let handlerSelector = '.handler'
 	let klass = ''
 	export { klass as class }
@@ -106,14 +112,11 @@
 	const DRAGGABBLE_SELECTOR = '.draggable'
 
 	let displace: ReturnType<typeof createDisplacement>
+	const hash = randomStr()
 
 	onMount(() => {
-		if (!$groups[group]) $groups[group] = []
-		$groups[group].push(list)
-
-		setTimeout(() => {
-			console.log($groups)
-		}, 5000)
+		if (!$groups[group]) $groups[group] = {}
+		$groups[group][hash] = list
 	})
 
 	const actions: PannableParams = {
@@ -126,14 +129,15 @@
 			if (!draggable) return
 			event.preventDefault()
 			displace = createDisplacement()
-			const draggableIndex = [...draggable.parentElement!.children].indexOf(draggable)
+			// const draggableIndex = [...draggable.parentElement!.children].indexOf(draggable)
 			$currentItem.itemElement = draggable
 			$currentItem.displaceGap = getHeight(draggable)
-			$currentItem.item = list.at(draggableIndex)
+			// $currentItem.item = list.at(draggableIndex)
 			$ghost = cloneElement(draggable)
+			draggable.style.opacity = '0'
 			// draggableItem = removeItem(draggableIndex)
-			displace($currentItem.displaceGap, coords, false)
 			draggable.parentElement!.append(draggable)
+			displace($currentItem.displaceGap, coords, false)
 		},
 		onMove(event, coords) {
 			if ($ghost && !$ghost.disposing && $currentItem.itemElement) {
@@ -141,8 +145,9 @@
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
 				if (dropZone && $currentDropZone.el !== dropZone) {
+					if ($currentDropZone.el) $currentDropZone.el.classList.remove('selected')
 					$currentDropZone.el = dropZone
-					$currentDropZone.list = dropZone.__LIST__
+					$currentDropZone.el.classList.add('selected')
 					dropZone.append($currentItem.itemElement)
 				}
 				displace($currentItem.displaceGap, coords, true)
@@ -150,6 +155,7 @@
 		},
 		onEnd: async (event, coords) => {
 			if ($ghost && !$ghost.disposing && $currentDropZone.el && $currentItem.itemElement) {
+				$currentDropZone.el.classList.remove('selected')
 				if ($currentDropZone.el.children.length) {
 					let inserted
 					for (let i = 0; i < $currentDropZone.el.children.length; i++) {
@@ -168,9 +174,9 @@
 					$currentDropZone.el.append($currentItem.itemElement)
 				}
 				await $ghost.dispose($currentItem.itemElement)
-				// draggable.style.opacity = ''
-				$currentDropZone.el = null
+				$currentItem.itemElement.style.opacity = '1'
 				$currentItem.itemElement = null
+				$currentDropZone.el = null
 				$ghost = undefined
 			}
 		}
@@ -194,25 +200,27 @@
 		return (amount = 100, cursor: { x: number; y: number }, transition: boolean) => {
 			for (let i = 0; i < items.length; i++) {
 				const el = items[i] as HTMLElement
-				el.style.transition = transition ? 'transform 150ms' : 'none'
-				const { x, y, height, width } = el.getBoundingClientRect()
-				if (el.parentElement !== $currentDropZone.el) {
-					el.style.transform = ''
-				} else if (cursor.y >= y + height / 2) {
-					el.style.transform = ''
-				} else {
-					el.style.transform = `translate3d(0px, ${amount}px, 0)`
+				if (el !== $currentItem.itemElement) {
+					el.style.transition = transition ? 'transform 150ms' : 'none'
+					const { x, y, height, width } = el.getBoundingClientRect()
+					if (el.parentElement !== $currentItem.itemElement?.parentElement) {
+						el.style.transform = ''
+					} else if (cursor.y >= y + height / 2) {
+						el.style.transform = ''
+					} else {
+						el.style.transform = `translate3d(0px, ${amount}px, 0)`
+					}
 				}
 			}
 		}
 	}
+
+	function randomStr() {
+		return Math.random().toString(36).slice(-5)
+	}
 </script>
 
-<div
-	class="draggable-list {group} {klass}"
-	class:selected={list === $currentDropZone.list}
-	use:pannable={actions}
->
+<div class="draggable-list {group} {klass}" data-ref={hash} use:pannable={actions}>
 	{#each list as item}
 		<slot {item} />
 	{/each}
@@ -220,7 +228,7 @@
 
 <style>
 	.draggable-list {
-		/* overflow: hidden; */
+		overflow: hidden;
 	}
 	.selected {
 		box-shadow: inset 0 0 20px var(--success);

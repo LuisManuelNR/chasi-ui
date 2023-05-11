@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { CDraggableList } from '$lib'
 	type NestedList = {
 		name: string
 		childs?: NestedList[]
@@ -6,25 +7,22 @@
 	export let list: NestedList[] = []
 </script>
 
-{#each list as item}
-	<div class="tree-item">
-		<div class="n-200 pa-3 mb-2 tree-handler d-flex">
+<CDraggableList bind:list let:item group="draggable-tree" class="childs pa-2 ml-4">
+	<div class="tree-item draggable">
+		<div class="n-200 pa-3 mb-2 handler d-flex">
 			{item.name}
 		</div>
 		{#if item.childs}
-			<div class="childs pa-2 ml-4 tree-drop-zone">
-				<svelte:self list={item.childs} />
-			</div>
+			<svelte:self list={item.childs} />
 		{/if}
 	</div>
-{/each}
+</CDraggableList>
 
 <style>
-	.childs {
+	:global(.childs) {
 		border-left: 1px solid var(--n-100);
 	}
 	.tree-item {
-		transition: transform 150ms;
 		user-select: none;
 	}
 </style>
