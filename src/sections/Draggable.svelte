@@ -94,7 +94,7 @@
 				</div>
 			</CDraggableList>
 		</div>
-		<!-- <pre>{JSON.stringify(photos, null, 2)}</pre> -->
+		<pre>{JSON.stringify(photos, null, 2)}</pre>
 	</div>
 
 	<div>
