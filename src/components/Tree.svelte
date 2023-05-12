@@ -7,13 +7,13 @@
 	export let list: NestedList[] = []
 </script>
 
-<CDraggableList bind:list let:item group="draggable-tree" class="childs pa-2 ml-4">
+<CDraggableList bind:list let:item let:index group="draggable-tree" class="childs pa-2 ml-4">
 	<div class="tree-item draggable">
 		<div class="n-200 pa-3 mb-2 handler d-flex">
 			{item.name}
 		</div>
 		{#if item.childs}
-			<svelte:self list={item.childs} />
+			<svelte:self bind:list={list[index].childs} />
 		{/if}
 	</div>
 </CDraggableList>

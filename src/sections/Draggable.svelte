@@ -36,42 +36,37 @@
 	}
 	let nestedList: NestedList[] = [
 		{
-			name: 'root',
+			name: '1'
+		},
+		{
+			name: '2',
 			childs: [
 				{
-					name: '1'
+					name: '2.1'
 				},
 				{
-					name: '2',
+					name: '2.2',
 					childs: [
 						{
-							name: '2.1'
+							name: '2.2.1'
 						},
 						{
-							name: '2.2',
-							childs: [
-								{
-									name: '2.2.1'
-								},
-								{
-									name: '2.2.2'
-								}
-							]
+							name: '2.2.2'
 						}
 					]
-				},
-				{
-					name: '3',
-					childs: [
-						{
-							name: '3.1'
-						}
-					]
-				},
-				{
-					name: '4'
 				}
 			]
+		},
+		{
+			name: '3',
+			childs: [
+				{
+					name: '3.1'
+				}
+			]
+		},
+		{
+			name: '4'
 		}
 	]
 
@@ -81,7 +76,7 @@
 </script>
 
 <Section title="Draggable">
-	<div>
+	<!-- <div>
 		<strong>Simple</strong>
 		<div class="scrollable">
 			<CDraggableList bind:list={photos} let:item>
@@ -95,16 +90,24 @@
 			</CDraggableList>
 		</div>
 		<pre>{JSON.stringify(photos, null, 2)}</pre>
-	</div>
+	</div> -->
 
-	<div>
+	<!-- <div>
 		<strong>Two list</strong>
+		<button
+			class="btn"
+			on:click={() => {
+				list1.splice(0, 0, Math.random())
+				list1 = list1
+			}}
+		>
+			add item
+		</button>
 		<div class="two-list d-grid gap-2">
 			<CDraggableList bind:list={list1} group="two-list" let:item class="my-4 d-grid gap-4">
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
-						<!-- <button class="btn" on:click={() => (item = Math.random())}>change</button> -->
 					</div>
 					<button class="btn icon tonal ml-auto handler">
 						<CIcon icon={mdiDrag} />
@@ -115,7 +118,6 @@
 				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
 					<div>
 						<p class="title">{item}</p>
-						<!-- <button class="btn" on:click={() => (item = Math.random())}>change</button> -->
 					</div>
 					<button class="btn icon tonal ml-auto handler">
 						<CIcon icon={mdiDrag} />
@@ -123,15 +125,18 @@
 				</div>
 			</CDraggableList>
 		</div>
-	</div>
+	</div> -->
 
 	<div>
 		<strong>Nested tree</strong>
-		<Tree list={nestedList} />
+		<Tree bind:list={nestedList} />
+		<div>
+			<pre>{JSON.stringify(nestedList, null, 2)}</pre>
+		</div>
 	</div>
 </Section>
 
-<style>
+<style lang="scss">
 	.two-list {
 		--xs-columns: repeat(2, 1fr);
 	}
@@ -144,6 +149,11 @@
 		transition: transform 150ms;
 	}
 	pre {
-		white-space: pre-wrap;
+		/* white-space: nowrap; */
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+	:has(pre) {
+		overflow: hidden;
 	}
 </style>
