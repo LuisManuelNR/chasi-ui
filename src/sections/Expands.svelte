@@ -5,7 +5,7 @@
 
 <Section title="Expand">
 	<CExpand>
-		<p slot="header">I have more content</p>
+		<p slot="title">I have more content</p>
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero accusamus nam distinctio qui
 			vel doloremque blanditiis impedit, mollitia perferendis maiores praesentium, aperiam ad
@@ -14,7 +14,7 @@
 		</p>
 	</CExpand>
 	<CExpand>
-		<p slot="header">I have more content too</p>
+		<p slot="title">I have more content too</p>
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero accusamus nam distinctio qui
 			vel doloremque blanditiis impedit

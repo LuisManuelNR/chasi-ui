@@ -92,7 +92,7 @@
 		<pre>{JSON.stringify(photos, null, 2)}</pre>
 	</div> -->
 
-	<!-- <div>
+	<div>
 		<strong>Two list</strong>
 		<button
 			class="btn"
@@ -125,7 +125,13 @@
 				</div>
 			</CDraggableList>
 		</div>
-	</div> -->
+		<!-- <div>
+			<pre>{JSON.stringify(list1, null, 2)}</pre>
+		</div>
+		<div>
+			<pre>{JSON.stringify(list2, null, 2)}</pre>
+		</div> -->
+	</div>
 
 	<div>
 		<strong>Nested tree</strong>

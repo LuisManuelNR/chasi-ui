@@ -14,7 +14,6 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
   let y: number
 
   function handleMousedown(event: MouseEvent | TouchEvent) {
-    // event.preventDefault()
     event.stopPropagation()
     const e = event instanceof MouseEvent ? event : event.touches[0]
     x = e.clientX

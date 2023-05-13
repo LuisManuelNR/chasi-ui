@@ -3,27 +3,25 @@
 	import { mdiPlus } from '@mdi/js'
 
 	export let active = false
-	let klass = ''
-	export { klass as class }
+
+	function toggle() {
+		active = !active
+	}
 </script>
 
-<div class="c-expand">
-	<button
-		class="btn d-flex align-center pa-2 gap-2 {klass}"
-		class:active
-		on:click={() => (active = !active)}
-	>
-		<slot name="header">Panel header</slot>
+<slot name="action">
+	<button class="btn d-flex align-center pa-2 gap-2" class:active on:click|stopPropagation={toggle}>
+		<slot name="title">Panel header</slot>
 		<div class="action-icon ml-auto">
 			<slot name="icon">
 				<CIcon icon={mdiPlus} />
 			</slot>
 		</div>
 	</button>
-	<div class="c-expand-content" class:active-content={active}>
-		<div class="content-wrapper">
-			<slot />
-		</div>
+</slot>
+<div class="c-expand-content" class:active-content={active}>
+	<div class="content-wrapper">
+		<slot {toggle} />
 	</div>
 </div>
 
