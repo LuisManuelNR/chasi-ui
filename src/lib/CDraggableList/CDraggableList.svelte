@@ -27,10 +27,10 @@
 				y += dy
 				clone.style.transform = `translate3d(${x}px, ${y}px, 0)`
 			},
-			dispose(node: HTMLElement): Promise<void> {
+			dispose(): Promise<void> {
 				this.disposing = true
 				return new Promise((resolve) => {
-					const elBound = node.getBoundingClientRect()
+					const elBound = el.getBoundingClientRect()
 					const dy = elBound.y - top - y
 					const dx = elBound.x - left - x
 					clone.style.transition = 'all 100ms'
@@ -72,6 +72,25 @@
 		}
 		el.addEventListener(getTransitionName(), callback, { once: true })
 	}
+	function getHeight(element: Element): number {
+		const elBound = element.getBoundingClientRect()
+		const nextBound = element.nextElementSibling
+			? element.nextElementSibling.getBoundingClientRect()
+			: { top: 0 }
+		const diff = nextBound.top - elBound.top
+		return diff > 0 ? diff : elBound.height
+	}
+
+	function randomStr() {
+		return Math.random().toString(36).slice(-5)
+	}
+
+	function getElementIndex(el: Element) {
+		if (!el.parentElement) return 0
+		let i = 0
+		while (el.parentElement.children[i] != el) i++
+		return i
+	}
 	function moveItem(fromHash: string, hash: string, from?: number, to?: number) {
 		const evRemove = new CustomEvent(`draggable-remove-${fromHash}`, { detail: from })
 		const evAdd = new CustomEvent(`draggable-add-${hash}`, { detail: to })
@@ -111,8 +130,9 @@
 		}
 	})
 
-	let lastDropZoneSeen: HTMLElement | null
-	let toIndex = 0
+	let lastDropZone: HTMLElement | null
+	let draggable: HTMLElement | null
+	let fromIndex = 0
 
 	const actions: PannableParams = {
 		onStart(event, coords) {
@@ -122,72 +142,71 @@
 			if (isIgnore) return
 			const handler = evTarget.closest(handlerSelector)
 			if (!handler) return
-			const draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
+			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
 			if (!draggable) return
 			event.preventDefault()
 			$ghost = cloneElement(draggable)
 			displace = createDisplacement(draggable)
-			lastDropZoneSeen = draggable.parentElement!
-			lastDropZoneSeen.classList.add('selected')
+			fromIndex = getElementIndex(draggable)
 
-			const selectedIndex = getElementIndex(draggable)
-			$selectedItem = list.at(selectedIndex)
-			moveItem(hash, hash, selectedIndex)
+			lastDropZone = draggable.parentElement!
+			lastDropZone.classList.add('selected')
+			lastDropZone.append(draggable)
+			draggable.style.opacity = '0'
+			draggable.style.pointerEvents = 'none'
 			displace(coords, false)
 		},
 		onMove(event, coords) {
-			if ($ghost && !$ghost.disposing) {
+			if ($ghost && !$ghost.disposing && draggable) {
 				$ghost.translate(coords.dx, coords.dy)
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
-				if (dropZone && lastDropZoneSeen !== dropZone) {
-					let fromHash = ''
-					if (lastDropZoneSeen) {
-						lastDropZoneSeen.classList.remove('selected')
-						fromHash = lastDropZoneSeen.getAttribute('data-ref')!
+				if (dropZone && lastDropZone !== dropZone) {
+					if (lastDropZone) {
+						lastDropZone.classList.remove('selected')
 					}
-					lastDropZoneSeen = dropZone
-					lastDropZoneSeen.classList.add('selected')
-					const toHash = dropZone.getAttribute('data-ref')!
-					moveItem(fromHash, toHash)
+					lastDropZone = dropZone
+					lastDropZone.classList.add('selected')
+					lastDropZone.append(draggable)
 				}
 				displace(coords, true)
 			}
 		},
 		onEnd: async (event, coords) => {
-			if ($ghost && !$ghost.disposing && lastDropZoneSeen) {
-				const toHash = lastDropZoneSeen.getAttribute('data-ref')!
-				const transformedElements = lastDropZoneSeen.querySelectorAll('[style*=translate3d]')
-				let toIndex = lastDropZoneSeen.childElementCount - 1
+			if ($ghost && !$ghost.disposing && lastDropZone && draggable) {
+				const toHash = lastDropZone.getAttribute('data-ref')!
+				const transformedElements = lastDropZone.querySelectorAll('[style*=translate3d]')
 				for (let i = 0; i < transformedElements.length; i++) {
 					const el = transformedElements[i] as HTMLElement
+					el.style.transition = 'none'
 					if (i === 0) {
-						toIndex = getElementIndex(el)
+						lastDropZone.insertBefore(draggable, el)
 					}
 					el.style.transform = ''
-					el.style.transition = ''
 				}
-				moveItem(toHash, toHash, undefined, toIndex)
-				await tick()
-				const newElement = lastDropZoneSeen.children[toIndex] as HTMLElement
-				lastDropZoneSeen.classList.remove('selected')
-				newElement.style.opacity = '0'
-				await $ghost.dispose(newElement)
-				newElement.style.opacity = ''
+				lastDropZone.classList.remove('selected')
+				await $ghost.dispose()
+				draggable.style.opacity = ''
+				draggable.style.pointerEvents = ''
 				$ghost = undefined
-				$selectedItem = undefined
-				lastDropZoneSeen = null
+				lastDropZone = null
+				const toIndex = getElementIndex(draggable)
+				moveItem(hash, toHash, fromIndex, toIndex)
+				draggable = null
 			}
 		}
 	}
 
-	function getHeight(element: Element): number {
-		const elBound = element.getBoundingClientRect()
-		const nextBound = element.nextElementSibling
-			? element.nextElementSibling.getBoundingClientRect()
-			: { top: 0 }
-		const diff = nextBound.top - elBound.top
-		return diff > 0 ? diff : elBound.height
+	async function addItem(e: CustomEvent) {
+		await tick()
+		const index = e.detail === undefined || e.detail === null ? list.length : e.detail
+		list.splice(index, 0, $selectedItem)
+		list = list
+	}
+	function removeItem(e: CustomEvent) {
+		const index = e.detail === undefined || e.detail === null ? list.length - 1 : e.detail
+		$selectedItem = list.splice(index, 1)[0]
+		list = list
 	}
 
 	function createDisplacement(selectedElement: HTMLElement) {
@@ -210,28 +229,6 @@
 			}
 		}
 	}
-
-	function randomStr() {
-		return Math.random().toString(36).slice(-5)
-	}
-
-	function getElementIndex(el: Element) {
-		if (!el.parentElement) return 0
-		let i = 0
-		while (el.parentElement.children[i] != el) i++
-		return i
-	}
-
-	function addItem(e: CustomEvent) {
-		const index = e.detail === undefined || e.detail === null ? list.length : e.detail
-		list.splice(index, 0, $selectedItem)
-		list = list
-	}
-	function removeItem(e: CustomEvent) {
-		const index = e.detail === undefined || e.detail === null ? list.length - 1 : e.detail
-		list.splice(index, 1)
-		list = list
-	}
 </script>
 
 <div class="draggable-list {group} {klass}" data-ref={hash} use:pannable={actions}>
@@ -244,9 +241,5 @@
 	.selected {
 		box-shadow: inset 0 0 20px var(--success);
 		transition: box-shadow 250ms ease;
-	}
-	:global(.selected > .draggable:last-child) {
-		opacity: 0;
-		pointer-events: none;
 	}
 </style>

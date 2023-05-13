@@ -76,7 +76,7 @@
 </script>
 
 <Section title="Draggable">
-	<!-- <div>
+	<div>
 		<strong>Simple</strong>
 		<div class="scrollable">
 			<CDraggableList bind:list={photos} let:item>
@@ -89,8 +89,10 @@
 				</div>
 			</CDraggableList>
 		</div>
-		<pre>{JSON.stringify(photos, null, 2)}</pre>
-	</div> -->
+		<div>
+			<pre>{JSON.stringify(photos, null, 2)}</pre>
+		</div>
+	</div>
 
 	<div>
 		<strong>Two list</strong>
@@ -124,13 +126,13 @@
 					</button>
 				</div>
 			</CDraggableList>
+			<div>
+				<pre>{JSON.stringify(list1, null, 2)}</pre>
+			</div>
+			<div>
+				<pre>{JSON.stringify(list2, null, 2)}</pre>
+			</div>
 		</div>
-		<!-- <div>
-			<pre>{JSON.stringify(list1, null, 2)}</pre>
-		</div>
-		<div>
-			<pre>{JSON.stringify(list2, null, 2)}</pre>
-		</div> -->
 	</div>
 
 	<div>
