@@ -1,9 +1,55 @@
 <script lang="ts" context="module">
-	import { writable } from 'svelte/store'
+	import { writable, get } from 'svelte/store'
 
 	const ghost = writable<ReturnType<typeof cloneElement> | undefined>()
 	const selectedItem = writable<any | undefined>()
+	const scroller = writable<ReturnType<typeof createScroller> | undefined>()
 
+	function createScroller(el: Element, initialX: number, initialY: number) {
+		const scroller = getScrollParent(el)
+		const { top, bottom, height } = scroller.getBoundingClientRect()
+		const _TOP = top < 0 ? 0 : top
+		const _BOTTOM = bottom < 0 ? scroller.clientHeight : bottom
+		const thresholdZone = height * 0.1
+		// let x = initialX
+		let y = initialY
+		scroller.style.scrollBehavior = 'auto'
+		const dispose = draw(() => {
+			if (y > _TOP + thresholdZone && y < _BOTTOM - thresholdZone) return
+			const deltaY = (y - initialY) * 0.03
+			scroller.scrollBy(0, deltaY)
+		}, 60)
+
+		return {
+			updateCursor(currentX: number, currentY: number) {
+				// x = currentX
+				y = currentY
+			},
+			dispose
+		}
+	}
+	function draw(callback: () => void, fps = 30) {
+		const interval = 1000 / fps
+		let now: number
+		let then = Date.now()
+		let delta: number
+
+		let requestId: number
+		function update() {
+			requestId = requestAnimationFrame(update)
+
+			now = Date.now()
+			delta = now - then
+
+			if (delta > interval) {
+				then = now - (delta % interval)
+
+				callback()
+			}
+		}
+		update()
+		return () => cancelAnimationFrame(requestId)
+	}
 	function cloneElement(el: Element) {
 		const { top, left, width, height } = el.getBoundingClientRect()
 		const clone = el.cloneNode(true) as HTMLElement
@@ -97,6 +143,27 @@
 		window.dispatchEvent(evRemove)
 		window.dispatchEvent(evAdd)
 	}
+	function getScrollParent(element: Element) {
+		let style = getComputedStyle(element)
+		const excludeStaticParent = style.position === 'absolute'
+		const overflowRegex = /(auto|scroll)/
+
+		if (style.position === 'fixed') return document.body
+		if (element.parentElement) {
+			// @ts-ignore
+			for (let parent = element; (parent = parent.parentElement); ) {
+				style = getComputedStyle(parent)
+				if (excludeStaticParent && style.position === 'static') {
+					continue
+				}
+				if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
+					return parent as HTMLElement
+				}
+			}
+		}
+
+		return document.documentElement
+	}
 </script>
 
 <script lang="ts">
@@ -146,6 +213,7 @@
 			if (!draggable) return
 			event.preventDefault()
 			$ghost = cloneElement(draggable)
+			$scroller = createScroller(draggable, coords.x, coords.y)
 			displace = createDisplacement(draggable)
 			fromIndex = getElementIndex(draggable)
 
@@ -157,8 +225,9 @@
 			displace(coords, false)
 		},
 		onMove(event, coords) {
-			if ($ghost && !$ghost.disposing && draggable) {
+			if ($ghost && !$ghost.disposing && draggable && $scroller) {
 				$ghost.translate(coords.dx, coords.dy)
+				$scroller.updateCursor(coords.x, coords.y)
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
 				if (dropZone && lastDropZone !== dropZone) {
@@ -173,7 +242,8 @@
 			}
 		},
 		onEnd: async (event, coords) => {
-			if ($ghost && !$ghost.disposing && lastDropZone && draggable) {
+			if ($ghost && !$ghost.disposing && lastDropZone && draggable && $scroller) {
+				$scroller.dispose()
 				const toHash = lastDropZone.getAttribute('data-ref')!
 				const transformedElements = lastDropZone.querySelectorAll('[style*=translate3d]')
 				for (let i = 0; i < transformedElements.length; i++) {
