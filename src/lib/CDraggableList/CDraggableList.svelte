@@ -1,29 +1,26 @@
 <script lang="ts" context="module">
-	import { writable, get } from 'svelte/store'
+	import { writable } from 'svelte/store'
 
 	const ghost = writable<ReturnType<typeof cloneElement> | undefined>()
 	const selectedItem = writable<any | undefined>()
 	const scroller = writable<ReturnType<typeof createScroller> | undefined>()
 
-	function createScroller(el: Element, initialX: number, initialY: number) {
+	function createScroller(el: Element) {
 		const scroller = getScrollParent(el)
-		const { top, bottom, height } = scroller.getBoundingClientRect()
-		const _TOP = top < 0 ? 0 : top
-		const _BOTTOM = bottom < 0 ? scroller.clientHeight : bottom
-		const thresholdZone = height * 0.1
-		// let x = initialX
-		let y = initialY
+		// let x = 0
+		let y = 0
 		scroller.style.scrollBehavior = 'auto'
 		const dispose = draw(() => {
-			if (y > _TOP + thresholdZone && y < _BOTTOM - thresholdZone) return
-			const deltaY = (y - initialY) * 0.03
-			scroller.scrollBy(0, deltaY)
+			// const stepX = Math.pow(x * 0.002, 5)
+			const stepX = 0
+			const stepY = Math.pow(y * 0.002, 9)
+			scroller.scrollBy(stepX, stepY)
 		}, 60)
 
 		return {
-			updateCursor(currentX: number, currentY: number) {
-				// x = currentX
-				y = currentY
+			updateCursor(dx: number, dy: number) {
+				// x += dx
+				y += dy
 			},
 			dispose
 		}
@@ -213,7 +210,7 @@
 			if (!draggable) return
 			event.preventDefault()
 			$ghost = cloneElement(draggable)
-			$scroller = createScroller(draggable, coords.x, coords.y)
+			$scroller = createScroller(draggable)
 			displace = createDisplacement(draggable)
 			fromIndex = getElementIndex(draggable)
 
@@ -227,7 +224,7 @@
 		onMove(event, coords) {
 			if ($ghost && !$ghost.disposing && draggable && $scroller) {
 				$ghost.translate(coords.dx, coords.dy)
-				$scroller.updateCursor(coords.x, coords.y)
+				$scroller.updateCursor(coords.dx, coords.dy)
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
 				if (dropZone && lastDropZone !== dropZone) {
