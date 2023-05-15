@@ -69,6 +69,10 @@
 	}
 	:global(dialog.open-state + [slot='action']) {
 		z-index: 5;
+		--c-sidebar-container: var(--c-sidebar-width);
+	}
+	:global(dialog.open-state) {
+		--c-sidebar-container: var(--c-sidebar-width);
 	}
 	@include breakpoints.sm-up {
 		:global(dialog.open-state + [slot='action']) {
