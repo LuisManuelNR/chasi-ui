@@ -1,133 +1,32 @@
-export class Draggable {
-  position: { x: number, y: number, centerX: number, centerY: number }
-  element: HTMLElement
-  ghost: HTMLElement | undefined
-  bound: {
-    top: number,
-    left: number,
-    bottom: number,
-    right: number,
-    height: number,
-    width: number,
-    outerHeight: number,
-    outerWidth: number
-  }
-  constructor(el: HTMLElement) {
-    this.bound = getBound(el)
-    const centerX = this.bound.left + this.bound.width / 2
-    const centerY = this.bound.top + this.bound.height / 2
-    this.position = { x: 0, y: 0, centerX, centerY }
-    this.element = el
-  }
+export function createScroller(el: Element) {
+  const scroller = getScrollParent(el)
+  // let x = 0
+  let y = 0
+  scroller.style.scrollBehavior = 'auto'
+  const dispose = runOnFrames(() => {
+    // const stepX = Math.pow(x * 0.002, 5)
+    const stepX = 0
+    const stepY = Math.pow(y * 0.002, 9)
+    scroller.scrollBy(stepX, stepY)
+  }, 60)
 
-  translate(deltaX: number, deltaY: number) {
-    this.position.x += deltaX
-    this.position.y += deltaY
-    this.position.centerX += deltaX
-    this.position.centerY += deltaY
-
-    this.element.style.width = `${this.bound.width}px`
-    this.element.style.height = `${this.bound.height}px`
-    this.element.style.boxShadow = 'var(--shadow-5)'
-    this.element.style.pointerEvents = 'none'
-
-    if (!this.ghost && this.element.parentElement) {
-      this.ghost = this.element.cloneNode() as HTMLElement
-      this.ghost.style.opacity = '0'
-      this.element.parentElement.append(this.ghost)
-    }
-
-    this.element.style.position = 'fixed'
-    this.element.style.zIndex = '9999'
-    this.element.style.top = `${this.bound.top}px`
-    this.element.style.left = `${this.bound.left}px`
-    this.element.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`
-  }
-
-  release(deltaX: number, deltaY: number): Promise<void> {
-    return new Promise(resolve => {
-      this.element.style.transition = ''
-      // this.element.style.transform = ''
-      const x = this.position.x
-      const y = this.position.y
-      this.translate(deltaX, deltaY)
-      if (x !== 0 || y !== 0) {
-        onTransitionEnd(this.element, () => {
-          this.dispose()
-          resolve()
-        })
-      } else {
-        this.dispose()
-        resolve()
-      }
-    })
-  }
-
-  private dispose() {
-    this.element.style.width = ''
-    this.element.style.height = ''
-    this.element.style.pointerEvents = ''
-
-    this.element.style.position = ''
-    if (this.ghost) {
-      this.ghost.remove()
-      this.ghost = undefined
-    }
-    this.element.style.zIndex = ''
-    this.element.style.transition = ''
-    this.element.style.top = ''
-    this.element.style.left = ''
-    this.element.style.transform = ''
-    this.element.style.boxShadow = ''
-  }
-}
-
-export function getBound(element: HTMLElement) {
-  const { top, bottom, left, right, height, width } = element.getBoundingClientRect()
-  const { marginTop, marginBottom, marginLeft, marginRight } = window.getComputedStyle(element)
-  const _top = top - parseInt(marginTop)
-  const _bottom = bottom + parseInt(marginBottom)
-  const _left = left - parseInt(marginLeft)
-  const _right = right + parseInt(marginRight)
-  const outerWidth = _right - _left
-  const outerHeight = _bottom - _top
   return {
-    top: _top,
-    bottom: _bottom,
-    left: _left,
-    right: _right,
-    height,
-    width,
-    outerWidth,
-    outerHeight
+    updateCursor(dx: number, dy: number) {
+      // x += dx
+      y += dy
+    },
+    dispose
   }
 }
-
-export function isInside(point: [number, number], vs: [number, number][]) {
-  const x = point[0]
-  const y = point[1]
-  let inside = false
-  for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-    const xi = vs[i][0]
-    const yi = vs[i][1]
-    const xj = vs[j][0]
-    const yj = vs[j][1]
-
-    const intersect = ((yi > y) !== (yj > y)) &&
-      (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
-    if (intersect) inside = !inside
-  }
-  return inside
-}
-
-export function draw(callback: (requestId: number) => void, fps = 30) {
+export function runOnFrames(callback: () => void, fps = 30) {
   const interval = 1000 / fps
   let now: number
   let then = Date.now()
   let delta: number
 
+  let requestId: number
   function update() {
-    const requestId = requestAnimationFrame(update)
+    requestId = requestAnimationFrame(update)
 
     now = Date.now()
     delta = now - then
@@ -135,13 +34,63 @@ export function draw(callback: (requestId: number) => void, fps = 30) {
     if (delta > interval) {
       then = now - (delta % interval)
 
-      callback(requestId)
+      callback()
     }
   }
-  return update
+  update()
+  return () => cancelAnimationFrame(requestId)
 }
+export function cloneElement(el: Element) {
+  const { top, left, width, height } = el.getBoundingClientRect()
+  const clone = el.cloneNode(true) as HTMLElement
+  clone.style.position = 'fixed'
+  clone.style.top = `${top}px`
+  clone.style.left = `${left}px`
+  clone.style.width = `${width}px`
+  clone.style.height = `${height}px`
+  clone.style.pointerEvents = 'none'
+  clone.style.transition = 'none'
+  clone.style.opacity = '0.5'
 
-function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void) {
+  let x = 0
+  let y = 0
+
+  document.body.append(clone)
+  return {
+    disposing: false,
+    translate(dx: number, dy: number) {
+      x += dx
+      y += dy
+      clone.style.transform = `translate3d(${x}px, ${y}px, 0)`
+    },
+    dispose(): Promise<void> {
+      this.disposing = true
+      return new Promise((resolve) => {
+        const elBound = el.getBoundingClientRect()
+        const dy = elBound.y - top - y
+        const dx = elBound.x - left - x
+        clone.style.transition = 'all 100ms'
+        clone.style.opacity = '1'
+        clone.style.width = `${elBound.width}px`
+        clone.style.height = `${elBound.height}px`
+        if (!x && !y) {
+          this.translate(dx, dy)
+          this.disposing = false
+          clone.remove()
+          resolve()
+        } else {
+          onTransitionEnd(clone, () => {
+            clone.remove()
+            this.disposing = false
+            resolve()
+          })
+          this.translate(dx, dy)
+        }
+      })
+    }
+  }
+}
+export function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void) {
   const getTransitionName = () => {
     const transitions = {
       transition: 'transitionend',
@@ -158,4 +107,42 @@ function onTransitionEnd(el: HTMLElement, callback: (e: TransitionEvent) => void
     }
   }
   el.addEventListener(getTransitionName(), callback, { once: true })
+}
+export function getHeight(element: Element): number {
+  const elBound = element.getBoundingClientRect()
+  const nextBound = element.nextElementSibling
+    ? element.nextElementSibling.getBoundingClientRect()
+    : { top: 0 }
+  const diff = nextBound.top - elBound.top
+  return diff > 0 ? diff : elBound.height
+}
+export function randomStr() {
+  return Math.random().toString(36).slice(-5)
+}
+export function getElementIndex(el: Element) {
+  if (!el.parentElement) return 0
+  let i = 0
+  while (el.parentElement.children[i] != el) i++
+  return i
+}
+export function getScrollParent(element: Element) {
+  let style = getComputedStyle(element)
+  const excludeStaticParent = style.position === 'absolute'
+  const overflowRegex = /(auto|scroll)/
+
+  if (style.position === 'fixed') return document.body
+  if (element.parentElement) {
+    // @ts-ignore
+    for (let parent = element; (parent = parent.parentElement);) {
+      style = getComputedStyle(parent)
+      if (excludeStaticParent && style.position === 'static') {
+        continue
+      }
+      if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) {
+        return parent as HTMLElement
+      }
+    }
+  }
+
+  return document.documentElement
 }

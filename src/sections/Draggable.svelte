@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Section from './Section.svelte'
 	import { CDraggableList, CIcon } from '$lib'
-	import { draggable } from '$lib/Actions'
 	import { mdiDrag } from '@mdi/js'
 	import { onMount } from 'svelte'
 	import Tree from '../components/Tree.svelte'
