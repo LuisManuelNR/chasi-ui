@@ -1,17 +1,24 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition'
+	import { tick } from 'svelte'
 
 	export let closeOnClick = false
 	export let visible = false
 
 	let menuElement: HTMLDivElement
-	let orientation = 'to-top'
+	let menuContent: HTMLElement
+	let orientation = 'to-bottom'
 
 	$: {
 		if (visible) {
-			const { bottom } = menuElement.getBoundingClientRect()
-			orientation = window.innerHeight - bottom < 350 ? 'to-bottom' : 'to-top'
+			resolveOrientation()
 		}
+	}
+
+	async function resolveOrientation() {
+		await tick()
+		const { bottom } = menuElement.getBoundingClientRect()
+		const { height } = menuContent.getBoundingClientRect()
+		orientation = window.innerHeight - bottom < height ? 'to-top' : 'to-bottom'
 	}
 
 	function openMenu() {
@@ -38,8 +45,7 @@
 	</slot>
 	{#if visible}
 		<div
-			in:slide={{ duration: 150 }}
-			out:slide={{ duration: 150 }}
+			bind:this={menuContent}
 			tabindex="-1"
 			class="c-menu-content {orientation}"
 			on:click={onContentClick}
@@ -51,33 +57,19 @@
 </div>
 
 <style lang="scss">
-	@layer CMenu {
+	@layer Menu {
 		.c-menu {
 			position: relative;
 			.c-menu-content {
-				width: 100%;
 				max-width: 98vw;
 				position: absolute;
 				left: 0;
-				background-color: var(--n-200);
-				box-shadow: var(--shadow-3);
-				border-radius: var(--size-1);
-				padding: var(--size-3);
-				display: inline-block;
-				max-height: 350px;
-				overflow-x: hidden;
-				overflow-y: auto;
 				z-index: 999;
-				& > * {
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
-				}
 				&.to-bottom {
-					bottom: 100%;
+					top: 100%;
 				}
 				&.to-top {
-					top: 100%;
+					bottom: 100%;
 				}
 			}
 		}

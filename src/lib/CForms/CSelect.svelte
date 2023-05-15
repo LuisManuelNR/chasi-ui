@@ -236,6 +236,14 @@
 				margin: 0;
 			}
 		}
+		:global(.c-menu-content) {
+			background-color: var(--n-200);
+			width: 100%;
+			max-height: 350px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			padding: 0;
+		}
 		/* smartphones, touchscreens */
 		@media (hover: none) and (pointer: coarse) {
 			.show-overlay {

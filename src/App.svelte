@@ -8,6 +8,7 @@
 	import Draggable from './sections/Draggable.svelte'
 	import Graphs from './sections/Graphs.svelte'
 	import Avatar from './sections/Avatar.svelte'
+	import Menu from './sections/Menu.svelte'
 	import { CSidebar, CIcon } from '$lib'
 	import { mdiMenu } from '@mdi/js'
 </script>
@@ -22,6 +23,7 @@
 	<a href="#Draggable" class="list-item">Draggable</a>
 	<a href="#Graphs" class="list-item">Graphs</a>
 	<a href="#Avatar" class="list-item">Avatar</a>
+	<a href="#Menu" class="list-item">Menu</a>
 	<button slot="action" class="btn fab icon" on:click={open}>
 		<CIcon icon={mdiMenu} />
 	</button>
@@ -37,6 +39,7 @@
 	<Draggable />
 	<Graphs />
 	<Avatar />
+	<Menu />
 </div>
 
 <style lang="scss">
