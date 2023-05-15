@@ -1,12 +1,13 @@
-export function createScroller(el: Element) {
+export function createScroller(el: Element, initialX: number, initialY: number) {
   const scroller = getScrollParent(el)
+  const offset = window.innerHeight / 2 - initialY
   // let x = 0
   let y = 0
   scroller.style.scrollBehavior = 'auto'
   const dispose = runOnFrames(() => {
-    // const stepX = Math.pow(x * 0.002, 5)
+    const delta = y - offset
     const stepX = 0
-    const stepY = Math.pow(y * 0.002, 9)
+    const stepY = Math.pow(delta * 0.003, 9)
     scroller.scrollBy(stepX, stepY)
   }, 60)
 
