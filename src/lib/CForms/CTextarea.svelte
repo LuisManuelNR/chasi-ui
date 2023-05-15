@@ -9,6 +9,7 @@
 		rules?: Rule[]
 		autogrow?: boolean
 		value?: string
+		rows: number
 	}
 
 	export let label = ''
@@ -17,7 +18,7 @@
 	export let autogrow = false
 
 	export let value: string = ''
-	export let placeholder = ''
+	export let placeholder: string | null = ''
 	export let rows = 6
 
 	$: activeLabel = Boolean(placeholder || value)

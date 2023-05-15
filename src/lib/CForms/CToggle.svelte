@@ -20,6 +20,7 @@
 		type?: AllowedTypes
 		group?: any
 		value?: any
+		checked?: boolean
 	}
 
 	export let label = ''
