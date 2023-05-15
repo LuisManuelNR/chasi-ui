@@ -2,7 +2,7 @@
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiPlus } from '@mdi/js'
 
-	export let active = false
+	let active = false
 
 	function toggle() {
 		active = !active
@@ -21,7 +21,7 @@
 </slot>
 <div class="c-expand-content" class:active-content={active}>
 	<div class="content-wrapper">
-		<slot {toggle} />
+		<slot {toggle} {active} />
 	</div>
 </div>
 
