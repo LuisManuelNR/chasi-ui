@@ -67,10 +67,9 @@
 			if (!draggable) return
 			event.preventDefault()
 			$ghost = cloneElement(draggable)
-			$scroller = createScroller(draggable)
+			$scroller = createScroller(draggable, coords.x, coords.y)
 			displace = createDisplacement(draggable)
 			fromIndex = getElementIndex(draggable)
-
 			lastDropZone = draggable.parentElement!
 			lastDropZone.classList.add('selected')
 			lastDropZone.append(draggable)

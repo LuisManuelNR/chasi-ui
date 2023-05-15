@@ -37,7 +37,7 @@
 	export let valueAsNumber: number = NaN
 	export let files: FileList | null = null
 	export let type: AllowedTypes = 'text'
-	export let placeholder = ''
+	export let placeholder: string | null = ''
 
 	let inputElement: HTMLInputElement | undefined
 
