@@ -78,7 +78,7 @@
 	<div>
 		<strong>Simple</strong>
 		<div class="scrollable">
-			<CDraggableList bind:list={photos} let:item>
+			<CDraggableList bind:list={photos} let:item uid="id">
 				<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
 					<img src={item.thumbnailUrl} alt="ssss" width="150" height="150" />
 					<p class="title">{item.title}</p>
