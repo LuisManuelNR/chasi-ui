@@ -6,7 +6,7 @@
 <Section title="Expand">
 	<CExpand>
 		<p slot="title">I have more content</p>
-		<p>
+		<p class="py-4">
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero accusamus nam distinctio qui
 			vel doloremque blanditiis impedit, mollitia perferendis maiores praesentium, aperiam ad
 			reiciendis quas omnis laborum suscipit autem ea laboriosam repellat. Quaerat blanditiis
