@@ -2,7 +2,7 @@
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiPlus } from '@mdi/js'
 
-	let active = false
+	export let active = false
 
 	function toggle() {
 		active = !active
