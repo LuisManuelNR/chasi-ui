@@ -21,7 +21,7 @@
 </slot>
 <div class="c-expand-content" class:active-content={active}>
 	<div class="content-wrapper">
-		<slot {toggle} {active} />
+		<slot {toggle} isOpen={active} />
 	</div>
 </div>
 
