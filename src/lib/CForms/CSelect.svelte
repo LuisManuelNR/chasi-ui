@@ -7,12 +7,14 @@
 	import { BROWSER } from 'esm-env'
 	import type { Rule } from './rules'
 
-	type T = $$Generic<Record<string, any> | string | number>
-	type X = $$Generic<keyof T>
+	type T = $$Generic
+	type X = T extends Record<string, any> ? keyof T : undefined
 	export let label = ''
 	export let items: T[] = []
-	export let itemText: X | undefined = undefined
-	export let itemValue: X | undefined = undefined
+	// @ts-ignore
+	export let itemText: X = undefined
+	// @ts-ignore
+	export let itemValue: X = undefined
 	export let value: any = ''
 	export let rules: Rule[] = []
 	export let filter = false
