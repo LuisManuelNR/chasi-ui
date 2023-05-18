@@ -252,11 +252,9 @@
 				opacity: 1;
 			}
 			:global(.c-menu-content) {
-				position: fixed;
 				inset: 16px !important;
-				width: auto;
-				height: fit-content;
-				max-height: -webkit-fill-available;
+				width: auto !important;
+				height: 95dvh !important;
 			}
 			&.is-filter :global(.c-menu-content) {
 				height: auto;

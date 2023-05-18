@@ -26,7 +26,7 @@
 		</button>
 	</slot>
 	{#if active}
-		<div transition:slide={{ duration: 180 }}>
+		<div transition:slide|local={{ duration: 180 }}>
 			<slot {toggle} isOpen={active} />
 		</div>
 	{/if}

@@ -68,16 +68,7 @@
 			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
 			if (!draggable) return
 			event.preventDefault()
-			$ghost = cloneElement(draggable)
 			$scroller = createScroller(draggable, coords.x, coords.y)
-			displace = createDisplacement(draggable)
-			fromIndex = getElementIndex(draggable)
-			lastDropZone = draggable.parentElement!
-			lastDropZone.classList.add('selected')
-			lastDropZone.append(draggable)
-			draggable.style.opacity = '0'
-			draggable.style.pointerEvents = 'none'
-			displace(coords, false)
 		},
 		onMove(event, coords) {
 			if ($ghost && !$ghost.disposing && draggable && $scroller) {
@@ -94,11 +85,23 @@
 					lastDropZone.append(draggable)
 				}
 				displace(coords, true)
+			} else if (draggable) {
+				$ghost = cloneElement(draggable)
+				displace = createDisplacement(draggable)
+				fromIndex = getElementIndex(draggable)
+				lastDropZone = draggable.parentElement!
+				lastDropZone.classList.add('selected')
+				lastDropZone.append(draggable)
+				draggable.style.opacity = '0'
+				draggable.style.pointerEvents = 'none'
+				displace(coords, false)
 			}
 		},
 		onEnd: async (event, coords) => {
-			if ($ghost && !$ghost.disposing && lastDropZone && draggable && $scroller) {
+			if ($scroller) {
 				$scroller.dispose()
+			}
+			if ($ghost && !$ghost.disposing && lastDropZone && draggable && $scroller) {
 				const toHash = lastDropZone.getAttribute('data-ref')!
 				const transformedElements = lastDropZone.querySelectorAll('[style*=translate3d]')
 				for (let i = 0; i < transformedElements.length; i++) {
@@ -137,12 +140,18 @@
 	function createDisplacement(selectedElement: HTMLElement) {
 		const groups = document.querySelectorAll(`.draggable-list.${group} ${DRAGGABBLE_SELECTOR}`)
 		const displaceGap = getHeight(selectedElement)
+		const bounds = new Map()
+		for (let i = 0; i < groups.length; i++) {
+			const el = groups[i]
+			const bound = el.getBoundingClientRect()
+			bounds.set(el, bound)
+		}
 		return (cursor: { x: number; y: number }, transition: boolean) => {
 			for (let i = 0; i < groups.length; i++) {
 				const el = groups[i] as HTMLElement
 				el.style.transition = transition ? 'transform 150ms' : 'none'
 				if (el !== selectedElement) {
-					const { x, y, height, width } = el.getBoundingClientRect()
+					const { x, y, height, width } = bounds.get(el)
 					if (!el.parentElement!.classList.contains('selected')) {
 						el.style.transform = ''
 					} else if (cursor.y >= y + height / 2) {

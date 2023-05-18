@@ -163,7 +163,7 @@
 	</CForm>
 
 	<p>Inline inputs</p>
-	<div class="d-flex align-center gap-2">
+	<div class="d-flex align-center gap-2 flex-wrap">
 		<button class="btn"> hello </button>
 		<CInput bind:value={formDataDemo.name} class="mb-0" />
 		<CInput bind:value={formDataDemo.email} />

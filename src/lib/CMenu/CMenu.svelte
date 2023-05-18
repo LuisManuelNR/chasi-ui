@@ -6,19 +6,21 @@
 
 	let menuElement: HTMLDivElement
 	let menuContent: HTMLElement
-	let orientation = 'to-bottom'
 
-	$: {
-		if (visible) {
-			resolveOrientation()
-		}
+	$: if (visible) {
+		resolveOrientation()
 	}
 
 	async function resolveOrientation() {
+		if (!visible) return
 		await tick()
-		const { bottom } = menuElement.getBoundingClientRect()
-		const { height } = menuContent.getBoundingClientRect()
-		orientation = window.innerHeight - bottom < height ? 'to-top' : 'to-bottom'
+		const { left, top, width, height, bottom } = menuElement.getBoundingClientRect()
+		menuContent.style.top = `${top + height}px`
+		menuContent.style.left = `${left}px`
+		menuContent.style.width = `${width}px`
+		const menuBound = menuContent.getBoundingClientRect()
+		const flip = window.innerHeight - bottom < menuBound.height
+		menuContent.style.top = flip ? `${top - menuBound.height}px` : `${top + height}px`
 	}
 
 	function openMenu() {
@@ -37,7 +39,7 @@
 	}
 </script>
 
-<svelte:window on:click={closeMenu} />
+<svelte:window on:click={closeMenu} on:scroll={resolveOrientation} />
 
 <div class="c-menu" bind:this={menuElement}>
 	<slot name="action">
@@ -47,7 +49,7 @@
 		<div
 			bind:this={menuContent}
 			tabindex="-1"
-			class="c-menu-content {orientation}"
+			class="c-menu-content"
 			on:click={onContentClick}
 			on:keydown
 		>
@@ -57,21 +59,9 @@
 </div>
 
 <style lang="scss">
-	@layer Menu {
-		.c-menu {
-			position: relative;
-			.c-menu-content {
-				max-width: 98vw;
-				position: absolute;
-				left: 0;
-				z-index: 999;
-				&.to-bottom {
-					top: 100%;
-				}
-				&.to-top {
-					bottom: 100%;
-				}
-			}
-		}
+	.c-menu-content {
+		position: fixed;
+		min-width: 20ch;
+		z-index: 99999;
 	}
 </style>

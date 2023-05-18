@@ -1,13 +1,43 @@
+function createDebugLine(initialX: number, initialY: number) {
+  let x = initialX
+  let y = initialY
+  const line = document.createElement('div')
+  line.style.backgroundColor = 'red'
+  line.style.width = '100vw'
+  line.style.height = '2px'
+  line.style.position = 'fixed'
+  line.style.left = `${x}px`
+  line.style.top = `${y}px`
+  document.body.append(line)
+  return {
+    set(newX: number, newY: number) {
+      x = newX
+      y = newY
+      line.style.left = `${x}px`
+      line.style.top = `${y}px`
+    },
+    update(dx: number, dy: number) {
+      x += dx
+      y += dy
+      line.style.left = `${x}px`
+      line.style.top = `${y}px`
+    }
+  }
+}
+
 export function createScroller(el: Element, initialX: number, initialY: number) {
   const scroller = getScrollParent(el)
-  const offset = window.innerHeight / 2 - initialY
+  const offset = window.innerHeight / 2
+  const line = createDebugLine(0, offset)
+  console.log(offset, window.innerHeight)
   // let x = 0
-  let y = 0
+  let y = initialY - offset
   scroller.style.scrollBehavior = 'auto'
   const dispose = runOnFrames(() => {
-    const delta = y - offset
     const stepX = 0
-    const stepY = Math.pow(delta * 0.003, 9)
+    const stepY = Math.pow(y * 0.002, 17)
+    console.log(stepY)
+    if (stepY >= 1 && stepY <= -1) return
     scroller.scrollBy(stepX, stepY)
   }, 60)
 
