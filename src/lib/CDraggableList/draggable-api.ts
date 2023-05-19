@@ -1,7 +1,7 @@
 export function createScroller(el: Element, initialX: number, initialY: number) {
   const scroller = getScrollParent(el)
   const totalH = window.innerHeight
-  const min = totalH * 0.1
+  const min = totalH * 0.05
   const max = totalH - min
   // let x = 0
   let y = initialY
@@ -9,13 +9,21 @@ export function createScroller(el: Element, initialX: number, initialY: number) 
   const stepX = 0
   const stepY = 20
   let deltaScroll = 0
+  let prevScrollState = scroller.scrollHeight - scroller.scrollTop
   const dispose = runOnFrames(() => {
     if (y < min) {
-      deltaScroll -= stepY
       scroller.scrollBy(stepX, -stepY)
     } else if (y > max) {
-      deltaScroll += stepY
       scroller.scrollBy(stepX, stepY)
+    }
+    const currentScrollChange = scroller.scrollHeight - scroller.scrollTop
+    if (prevScrollState !== currentScrollChange) {
+      prevScrollState = currentScrollChange
+      if (y < min) {
+        deltaScroll -= stepY
+      } else if (y > max) {
+        deltaScroll += stepY
+      }
     }
   }, 60)
 
