@@ -1,29 +1,36 @@
 export function createScroller(el: Element, initialX: number, initialY: number) {
   const scroller = getScrollParent(el)
-  const { height } = scroller.getBoundingClientRect()
-  const totalH = height > window.innerHeight ? window.innerHeight : height
+  const totalH = window.innerHeight
   const min = totalH * 0.1
   const max = totalH - min
   // let x = 0
   let y = initialY
   scroller.style.scrollBehavior = 'auto'
   const stepX = 0
-  const stepY = scroller.scrollHeight * 0.02
-  console.log(stepY)
+  const stepY = 20
+  let deltaScroll = 0
   const dispose = runOnFrames(() => {
     if (y < min) {
+      deltaScroll -= stepY
       scroller.scrollBy(stepX, -stepY)
     } else if (y > max) {
+      deltaScroll += stepY
       scroller.scrollBy(stepX, stepY)
     }
-  }, 24)
+  }, 60)
 
   return {
+    deltaScroll() {
+      return deltaScroll
+    },
     updateCursor(dx: number, currentY: number) {
       // x += dx
       y = currentY
     },
-    dispose
+    dispose() {
+      scroller.style.scrollBehavior = ''
+      dispose()
+    }
   }
 }
 export function runOnFrames(callback: () => void, fps = 30) {

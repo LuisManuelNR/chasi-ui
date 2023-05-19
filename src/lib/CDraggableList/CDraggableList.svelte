@@ -140,21 +140,22 @@
 	function createDisplacement(selectedElement: HTMLElement) {
 		const groups = document.querySelectorAll(`.draggable-list.${group} ${DRAGGABBLE_SELECTOR}`)
 		const displaceGap = getHeight(selectedElement)
-		// const bounds = new Map()
-		// for (let i = 0; i < groups.length; i++) {
-		// 	const el = groups[i]
-		// 	const bound = el.getBoundingClientRect()
-		// 	bounds.set(el, bound)
-		// }
+		const bounds = new Map()
+		for (let i = 0; i < groups.length; i++) {
+			const el = groups[i]
+			const bound = el.getBoundingClientRect()
+			bounds.set(el, bound)
+		}
 		return (cursor: { x: number; y: number }, transition: boolean) => {
 			for (let i = 0; i < groups.length; i++) {
 				const el = groups[i] as HTMLElement
 				el.style.transition = transition ? 'transform 150ms ease' : 'none'
 				if (el !== selectedElement) {
-					const { x, y, height, width } = el.getBoundingClientRect()
+					const { x, y, height, width } = bounds.get(el)
+					const _y = $scroller ? y - $scroller.deltaScroll() : y
 					if (!el.parentElement!.classList.contains('selected')) {
 						el.style.transform = ''
-					} else if (cursor.y >= y + height / 2) {
+					} else if (cursor.y >= _y + height / 2) {
 						el.style.transform = ''
 					} else {
 						el.style.transform = `translate3d(0px, ${displaceGap}px, 0)`
