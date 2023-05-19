@@ -1,50 +1,27 @@
-function createDebugLine(initialX: number, initialY: number) {
-  let x = initialX
-  let y = initialY
-  const line = document.createElement('div')
-  line.style.backgroundColor = 'red'
-  line.style.width = '100vw'
-  line.style.height = '2px'
-  line.style.position = 'fixed'
-  line.style.left = `${x}px`
-  line.style.top = `${y}px`
-  document.body.append(line)
-  return {
-    set(newX: number, newY: number) {
-      x = newX
-      y = newY
-      line.style.left = `${x}px`
-      line.style.top = `${y}px`
-    },
-    update(dx: number, dy: number) {
-      x += dx
-      y += dy
-      line.style.left = `${x}px`
-      line.style.top = `${y}px`
-    }
-  }
-}
-
 export function createScroller(el: Element, initialX: number, initialY: number) {
   const scroller = getScrollParent(el)
-  const offset = window.innerHeight / 2
-  const line = createDebugLine(0, offset)
-  console.log(offset, window.innerHeight)
+  const { height } = scroller.getBoundingClientRect()
+  const totalH = height > window.innerHeight ? window.innerHeight : height
+  const min = totalH * 0.1
+  const max = totalH - min
   // let x = 0
-  let y = initialY - offset
+  let y = initialY
   scroller.style.scrollBehavior = 'auto'
+  const stepX = 0
+  const stepY = scroller.scrollHeight * 0.02
+  console.log(stepY)
   const dispose = runOnFrames(() => {
-    const stepX = 0
-    const stepY = Math.pow(y * 0.002, 17)
-    console.log(stepY)
-    if (stepY >= 1 && stepY <= -1) return
-    scroller.scrollBy(stepX, stepY)
-  }, 60)
+    if (y < min) {
+      scroller.scrollBy(stepX, -stepY)
+    } else if (y > max) {
+      scroller.scrollBy(stepX, stepY)
+    }
+  }, 24)
 
   return {
-    updateCursor(dx: number, dy: number) {
+    updateCursor(dx: number, currentY: number) {
       // x += dx
-      y += dy
+      y = currentY
     },
     dispose
   }

@@ -73,7 +73,7 @@
 		onMove(event, coords) {
 			if ($ghost && !$ghost.disposing && draggable && $scroller) {
 				$ghost.translate(coords.dx, coords.dy)
-				$scroller.updateCursor(coords.dx, coords.dy)
+				$scroller.updateCursor(coords.x, coords.y)
 				const evTarget = document.elementFromPoint(coords.x, coords.y) as HTMLElement
 				const dropZone = evTarget && (evTarget.closest(`.draggable-list.${group}`) as HTMLElement)
 				if (dropZone && lastDropZone !== dropZone) {
@@ -140,18 +140,18 @@
 	function createDisplacement(selectedElement: HTMLElement) {
 		const groups = document.querySelectorAll(`.draggable-list.${group} ${DRAGGABBLE_SELECTOR}`)
 		const displaceGap = getHeight(selectedElement)
-		const bounds = new Map()
-		for (let i = 0; i < groups.length; i++) {
-			const el = groups[i]
-			const bound = el.getBoundingClientRect()
-			bounds.set(el, bound)
-		}
+		// const bounds = new Map()
+		// for (let i = 0; i < groups.length; i++) {
+		// 	const el = groups[i]
+		// 	const bound = el.getBoundingClientRect()
+		// 	bounds.set(el, bound)
+		// }
 		return (cursor: { x: number; y: number }, transition: boolean) => {
 			for (let i = 0; i < groups.length; i++) {
 				const el = groups[i] as HTMLElement
-				el.style.transition = transition ? 'transform 150ms' : 'none'
+				el.style.transition = transition ? 'transform 150ms ease' : 'none'
 				if (el !== selectedElement) {
-					const { x, y, height, width } = bounds.get(el)
+					const { x, y, height, width } = el.getBoundingClientRect()
 					if (!el.parentElement!.classList.contains('selected')) {
 						el.style.transform = ''
 					} else if (cursor.y >= y + height / 2) {
