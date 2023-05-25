@@ -1,45 +1,65 @@
 <script lang="ts">
 	import Section from './Section.svelte'
 	import { CIcon } from '$lib'
-	import { mdiBusAlert } from '@mdi/js'
+	import { mdiPencil } from '@mdi/js'
 </script>
 
 <Section title="Buttons">
 	<div>
-		<h3 class="mb-1">Styles</h3>
+		<h3 class="mb-1">Default</h3>
 		<button class="btn"> default </button>
-		<button class="btn outlined"> outlined</button>
-		<button class="btn tonal"> tonal</button>
-		<button class="btn tonal outlined"> tonal outlined</button>
+		<button class="btn brand"> default</button>
+		<button class="btn success"> default</button>
+		<button class="btn error"> default</button>
 	</div>
 	<div>
-		<h3 class="mb-1">Styles with brand color</h3>
-		<button class="btn brand"> default </button>
-		<button class="btn outlined brand"> outlined</button>
-		<button class="btn tonal brand-text"> tonal</button>
-		<button class="btn tonal outlined brand-text"> tonal outlined</button>
+		<h3 class="mb-1">Ghost</h3>
+		<button class="btn ghost"> Ghost </button>
+		<button class="btn ghost brand-text"> Ghost</button>
+		<button class="btn ghost success-text"> Ghost</button>
+		<button class="btn ghost error-text"> Ghost</button>
 	</div>
 	<div>
-		<h3 class="mb-1">Styles with success color</h3>
-		<button class="btn success"> default </button>
-		<button class="btn outlined success"> outlined</button>
-		<button class="btn tonal success-text"> tonal</button>
-		<button class="btn tonal outlined success-text"> tonal outlined</button>
+		<h3 class="mb-1">Tonal</h3>
+		<button class="btn tonal"> Tonal </button>
+		<button class="btn tonal brand-text"> Tonal</button>
+		<button class="btn tonal success-text"> Tonal</button>
+		<button class="btn tonal error-text"> Tonal</button>
 	</div>
 	<div>
-		<h3 class="mb-1">As icon</h3>
-		<button class="btn icon"> D </button>
-		<button class="btn outlined icon"> O</button>
-		<button class="btn tonal icon"> T</button>
-		<button class="btn tonal outlined icon"> TO</button>
+		<h3 class="mb-1">Outlined</h3>
+		<button class="btn outlined"> Outlined </button>
+		<button class="btn outlined brand"> Outlined</button>
+		<button class="btn outlined success"> Outlined</button>
+		<button class="btn outlined error"> Outlined</button>
+	</div>
+
+	<div>
+		<h3 class="mb-1">Default icon</h3>
+		<button class="btn icon"> <CIcon icon={mdiPencil} /> </button>
+		<button class="btn icon brand"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon success"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon error"> <CIcon icon={mdiPencil} /></button>
 	</div>
 	<div>
-		<h3 class="mb-1">As icon color</h3>
-		<button class="btn outlined icon brand"> O</button>
-		<button class="btn tonal icon brand-text"> T</button>
-		<button class="btn icon brand">
-			<CIcon icon={mdiBusAlert} />
-		</button>
-		<button class="btn tonal outlined icon brand-text"> TO</button>
+		<h3 class="mb-1">Ghost icon</h3>
+		<button class="btn icon ghost"> <CIcon icon={mdiPencil} /> </button>
+		<button class="btn icon ghost brand-text"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon ghost success-text"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon ghost error-text"> <CIcon icon={mdiPencil} /></button>
+	</div>
+	<div>
+		<h3 class="mb-1">Tonal icon</h3>
+		<button class="btn icon tonal"> <CIcon icon={mdiPencil} /> </button>
+		<button class="btn icon tonal brand-text"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon tonal success-text"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon tonal error-text"> <CIcon icon={mdiPencil} /></button>
+	</div>
+	<div>
+		<h3 class="mb-1">Outlined icon</h3>
+		<button class="btn icon outlined"> <CIcon icon={mdiPencil} /> </button>
+		<button class="btn icon outlined brand"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon outlined success"> <CIcon icon={mdiPencil} /></button>
+		<button class="btn icon outlined error"> <CIcon icon={mdiPencil} /></button>
 	</div>
 </Section>
