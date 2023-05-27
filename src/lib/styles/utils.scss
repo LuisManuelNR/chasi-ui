@@ -8,6 +8,8 @@
 .disabled,
 [disabled] {
 	background-color: #8080801c;
+	pointer-events: none;
+	user-select: none;
 	color: grey;
 	cursor: not-allowed;
 	box-shadow: none;
