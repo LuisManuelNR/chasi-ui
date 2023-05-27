@@ -13,6 +13,13 @@
 		<button class="btn error"> default</button>
 	</div>
 	<div>
+		<h3 class="mb-1">Default</h3>
+		<button disabled class="btn"> default </button>
+		<button disabled class="btn brand"> default</button>
+		<button disabled class="btn success"> default</button>
+		<button disabled class="btn error"> default</button>
+	</div>
+	<div>
 		<h3 class="mb-1">Ghost</h3>
 		<button class="btn ghost"> Ghost </button>
 		<button class="btn ghost brand-text"> Ghost</button>

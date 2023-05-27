@@ -5,6 +5,19 @@
 	padding: var(--size-3);
 }
 
+.disabled,
+[disabled] {
+	background-color: #8080801c;
+	color: grey;
+	cursor: not-allowed;
+	box-shadow: none;
+
+	&:active {
+		scale: 1;
+		box-shadow: none;
+	}
+}
+
 @for $i from 0 through 6 {
 	.mb-#{$i} {
 		margin-bottom: var(--size-#{$i});
