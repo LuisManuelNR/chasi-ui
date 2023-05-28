@@ -5,7 +5,7 @@
 </script>
 
 <Section title="Buttons">
-	<div>
+	<div class="disabled">
 		<h3 class="mb-1">Default</h3>
 		<button class="btn"> default </button>
 		<button class="btn brand"> default</button>
