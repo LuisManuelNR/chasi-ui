@@ -5,7 +5,7 @@
 </script>
 
 <Section title="Buttons">
-	<div class="disabled">
+	<div class="disabled loading">
 		<h3 class="mb-1">Default</h3>
 		<button class="btn"> default </button>
 		<button class="btn brand"> default</button>
@@ -14,8 +14,8 @@
 	</div>
 	<div>
 		<h3 class="mb-1">Default</h3>
-		<button disabled class="btn"> default </button>
-		<button disabled class="btn brand"> default</button>
+		<button disabled class="btn loading-inline"> default </button>
+		<button disabled class="btn loading brand"> default</button>
 		<button disabled class="btn success"> default</button>
 		<button disabled class="btn error"> default</button>
 	</div>
