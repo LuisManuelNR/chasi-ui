@@ -79,7 +79,7 @@
 </label>
 
 <style lang="scss">
-	.c-label {
+	:where(.c-label) {
 		--border-color-input: hsla(0, 0%, 50%, 0.5);
 		--translate-label: 0px, 9px;
 		--scale-label: 1;

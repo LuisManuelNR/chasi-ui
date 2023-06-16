@@ -18,7 +18,7 @@
 </div>
 
 <style lang="scss">
-	.c-avatar {
+	:where(.c-avatar) {
 		--scale: 1.1;
 		width: var(--size);
 		height: var(--size);

@@ -151,7 +151,7 @@
 				const el = groups[i] as HTMLElement
 				el.style.transition = transition ? 'transform 150ms ease' : 'none'
 				if (el !== selectedElement) {
-					const { x, y, height, width } = bounds.get(el)
+					const { y, height } = bounds.get(el)
 					const _y = $scroller ? y - $scroller.deltaScroll() : y
 					if (!el.parentElement!.classList.contains('selected')) {
 						el.style.transform = ''

@@ -1,4 +1,4 @@
-.btn {
+:where(.btn) {
 	--btn-shadow: var(--shadow-2), inset 0 -2px #00000021;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
@@ -139,7 +139,7 @@
 }
 
 
-.list-item {
+:where(.list-item) {
 	--mark-scale: 0;
 	--item-opacity: 0;
 	position: relative;

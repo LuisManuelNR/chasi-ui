@@ -15,12 +15,12 @@
 		if (!visible) return
 		await tick()
 		const { left, top, width, height, bottom } = menuElement.getBoundingClientRect()
-		menuContent.style.top = `${top + height}px`
-		menuContent.style.left = `${left}px`
-		menuContent.style.width = `${width}px`
+		menuContent.style.minWidth = `${width}px`
 		const menuBound = menuContent.getBoundingClientRect()
-		const flip = window.innerHeight - bottom < menuBound.height
-		menuContent.style.top = flip ? `${top - menuBound.height}px` : `${top + height}px`
+		const flipY = window.innerHeight - bottom < menuBound.height
+		const flipX = window.innerWidth - left < menuBound.width
+		menuContent.style.left = flipX ? `${left - menuBound.width + width}px` : `${left}px`
+		menuContent.style.top = flipY ? `${top - menuBound.height}px` : `${top + height}px`
 	}
 
 	function openMenu() {
@@ -61,7 +61,6 @@
 <style lang="scss">
 	.c-menu-content {
 		position: fixed;
-		min-width: 20ch;
 		z-index: 99999;
 	}
 </style>

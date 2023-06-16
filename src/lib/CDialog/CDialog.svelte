@@ -17,7 +17,7 @@
 </dialog>
 
 <style lang="scss">
-	dialog {
+	:where(dialog) {
 		max-width: var(--dialog-max-width, 70ch);
 		width: auto;
 		margin: auto;

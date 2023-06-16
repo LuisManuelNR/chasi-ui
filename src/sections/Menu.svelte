@@ -46,6 +46,20 @@
 				<button class="btn" on:click={close}>close</button>
 			</div>
 		</CDialog>
+		<span class="ml-auto" />
+		<CMenu let:toggle closeOnClick>
+			<button on:click={toggle} slot="action" class="btn icon">
+				<CIcon icon={mdiDotsVertical} />
+			</button>
+
+			<div class="menu-content">
+				<button class="list-item">click</button>
+				<button class="list-item">click</button>
+				<button class="list-item">click</button>
+				<button class="list-item">click</button>
+				<button class="list-item">click</button>
+			</div>
+		</CMenu>
 	</div>
 </Section>
 
