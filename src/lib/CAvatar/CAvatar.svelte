@@ -9,7 +9,7 @@
 	$: FirstLetter = text.charAt(0)
 </script>
 
-<div class="c-avatar {klass}" class:frame style="--size: {size};">
+<div class="c-avatar {klass}" class:frame style="--size: {size};" title={text}>
 	<div class="c-avatar-container">
 		<slot>
 			<span>{FirstLetter}</span>
