@@ -11,7 +11,10 @@
       "svelte": "./dist/index.js"
     },
     "./styles/": "./dist/styles/",
-    "./actions": "./dist/Actions/index.js"
+    "./actions": {
+      "types": "./dist/Actions/index.d.ts",
+      "svelte": "./dist/Actions/index.js"
+    }
   },
   "files": [
     "dist"
