@@ -11,7 +11,7 @@
       "svelte": "./dist/index.js"
     },
     "./styles/": "./dist/styles/",
-    "./actions": "./dist/Actions"
+    "./actions": "./dist/Actions/index.js"
   },
   "files": [
     "dist"
