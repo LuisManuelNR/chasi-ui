@@ -6,15 +6,13 @@
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
     },
     "./styles/": "./dist/styles/",
-    "./actions": {
-      "types": "./dist/Actions/index.d.ts",
-      "svelte": "./dist/Actions/index.js"
-    }
+    "./actions": "./dist/Actions/index.js"
   },
   "files": [
     "dist"
