@@ -35,6 +35,7 @@
 			overflow: hidden;
 			text-transform: capitalize;
 			:global(img) {
+				width: 100%;
 				transform: scale(var(--img-scale));
 				transition: transform 0.2s;
 			}
