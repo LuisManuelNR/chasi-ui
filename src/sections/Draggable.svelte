@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Section from './Section.svelte'
 	import { CDraggableList, CIcon } from '$lib'
+	import { draggable } from '$lib/Actions'
 	import { mdiDrag } from '@mdi/js'
 	import { onMount } from 'svelte'
 	import Tree from '../components/Tree.svelte'
@@ -72,24 +73,29 @@
 	onMount(() => {
 		loadData()
 	})
+
+	function onDragMove(e: CustomEvent) {
+		console.log('dragmove')
+	}
 </script>
 
 <Section title="Draggable">
 	<div>
 		<strong>Simple</strong>
 		<div class="scrollable">
-			<CDraggableList bind:list={photos} let:item uid="id">
-				<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
-					<img src={item.thumbnailUrl} alt="ssss" width="150" height="150" />
-					<p class="title">{item.title}</p>
+			{#each photos as photo}
+				<div
+					use:draggable
+					on:panmove={onDragMove}
+					class="d-flex align-center gap-2 n-200 pa-2 mb-2"
+				>
+					<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
+					<p class="title">{photo.title}</p>
 					<button class="btn icon ml-auto handler">
 						<CIcon icon={mdiDrag} />
 					</button>
 				</div>
-			</CDraggableList>
-		</div>
-		<div>
-			<pre>{JSON.stringify(photos, null, 2)}</pre>
+			{/each}
 		</div>
 	</div>
 
@@ -125,21 +131,12 @@
 					</button>
 				</div>
 			</CDraggableList>
-			<div>
-				<pre>{JSON.stringify(list1, null, 2)}</pre>
-			</div>
-			<div>
-				<pre>{JSON.stringify(list2, null, 2)}</pre>
-			</div>
 		</div>
 	</div>
 
 	<div>
 		<strong>Nested tree</strong>
 		<Tree bind:list={nestedList} />
-		<div>
-			<pre>{JSON.stringify(nestedList, null, 2)}</pre>
-		</div>
 	</div>
 </Section>
 
@@ -154,13 +151,5 @@
 	.draggable {
 		border-radius: var(--size-1);
 		transition: transform 150ms;
-	}
-	pre {
-		/* white-space: nowrap; */
-		text-overflow: ellipsis;
-		overflow: hidden;
-	}
-	:has(pre) {
-		overflow: hidden;
 	}
 </style>

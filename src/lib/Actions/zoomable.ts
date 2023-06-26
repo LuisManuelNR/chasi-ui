@@ -14,7 +14,6 @@ export default function (node: HTMLElement, params: ZoomableParams): { destroy?:
   }
 
   function touchStart(e: TouchEvent) {
-    e.preventDefault()
     if (e.touches.length >= 2) {
       dist = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
@@ -25,6 +24,7 @@ export default function (node: HTMLElement, params: ZoomableParams): { destroy?:
   }
 
   function handleTouchmove(e: TouchEvent) {
+    e.preventDefault()
     const currentDist = Math.hypot(
       e.touches[0].pageX - e.touches[1].pageX,
       e.touches[0].pageY - e.touches[1].pageY)

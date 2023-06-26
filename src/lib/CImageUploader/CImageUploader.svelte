@@ -215,7 +215,7 @@
 	<div class="c-fileuploader" style="--aspect-ratio:{aspectRatio};">
 		<div
 			class="preview"
-			use:pannable={{ onMove: (e, c) => translate(c.dx, c.dy) }}
+			use:pannable={{ onMove: (c) => translate(c.dx, c.dy) }}
 			use:zoomable={{ onZoom }}
 		>
 			<div

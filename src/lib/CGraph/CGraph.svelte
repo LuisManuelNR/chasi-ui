@@ -39,7 +39,7 @@
 		if (!allowPan && !allowPanX && !allowPanY) return
 		const el = node as HTMLElement
 		return pannable(el, {
-			onMove(e, coords) {
+			onMove(coords) {
 				if (allowPanX || allowPan) {
 					baseX.update((base) => base.map((v) => (v += coords.dx)))
 				}

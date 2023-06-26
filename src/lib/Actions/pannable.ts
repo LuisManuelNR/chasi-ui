@@ -4,9 +4,9 @@ type Coord = {
 }
 
 export type PannableParams = {
-  onStart?: (event: MouseEvent | TouchEvent, coords: Coord) => void
-  onMove?: (event: MouseEvent | TouchEvent, coords: Coord & { dx: number, dy: number }) => void
-  onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void
+  onStart?: (coords: Coord, ev: MouseEvent | TouchEvent) => void
+  onMove?: (coords: Coord & { dx: number, dy: number }, ev: MouseEvent | TouchEvent) => void
+  onEnd?: (coords: Coord, ev: MouseEvent | TouchEvent) => void
 }
 
 export default function (node: HTMLElement, params?: PannableParams): { destroy?: () => void } {
@@ -20,7 +20,7 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
     y = e.clientY
 
     if (params && params.onStart) {
-      params.onStart(event, { x, y })
+      params.onStart({ x, y }, event)
     }
 
     window.addEventListener('mousemove', handleMousemove)
@@ -37,7 +37,7 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
     y = e.clientY
 
     if (params && params.onMove) {
-      params.onMove(event, { x, y, dx, dy })
+      params.onMove({ x, y, dx, dy }, event)
     }
   }
 
@@ -47,7 +47,7 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
     y = e.clientY
 
     if (params && params.onEnd) {
-      params.onEnd(event, { x, y })
+      params.onEnd({ x, y }, event)
     }
 
     window.removeEventListener('mousemove', handleMousemove)
@@ -57,7 +57,7 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
   }
 
   node.addEventListener('mousedown', handleMousedown)
-  node.addEventListener('touchstart', handleMousedown)
+  node.addEventListener('touchstart', handleMousedown, { passive: true })
 
   return {
     destroy() {
