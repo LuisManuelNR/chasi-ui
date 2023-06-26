@@ -23,7 +23,7 @@
 <script lang="ts">
 	import type { PannableParams } from '../Actions/pannable'
 	import { pannable } from '../Actions'
-	import { onMount, tick } from 'svelte'
+	import { createEventDispatcher, onMount, tick } from 'svelte'
 
 	type T = $$Generic
 	export let list: T[] = []
@@ -36,6 +36,9 @@
 	export { klass as class }
 
 	const DRAGGABBLE_SELECTOR = '.draggable'
+	const dispatch = createEventDispatcher<{
+		change: T[]
+	}>()
 
 	let displace: ReturnType<typeof createDisplacement>
 	const hash = randomStr()
@@ -121,6 +124,7 @@
 				const toIndex = getElementIndex(draggable)
 				moveItem(hash, toHash, fromIndex, toIndex)
 				draggable = null
+				dispatch('change', list)
 			}
 		}
 	}
