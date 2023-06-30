@@ -8,7 +8,7 @@
 		loading?: boolean
 		rules?: Rule[]
 		autogrow?: boolean
-		value?: string
+		value?: string | null | undefined
 		rows: number
 	}
 
@@ -17,8 +17,8 @@
 	export let rules: Rule[] = []
 	export let autogrow = false
 
-	export let value: string | null = null
-	export let placeholder: string | null = null
+	export let value: string | null | undefined = undefined
+	export let placeholder: string | null | undefined = undefined
 	export let rows = 6
 
 	$: activeLabel = Boolean(placeholder || value)
