@@ -32,7 +32,7 @@
 	export let loading = false
 	export let rules: Rule[] = []
 
-	export let value: string = ''
+	export let value: string | null = null
 	export let valueAsDate: Date | null = null
 	export let valueAsNumber: number = NaN
 	export let files: FileList | null = null

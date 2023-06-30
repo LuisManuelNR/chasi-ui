@@ -17,8 +17,8 @@
 	export let rules: Rule[] = []
 	export let autogrow = false
 
-	export let value: string = ''
-	export let placeholder: string | null = ''
+	export let value: string | null = null
+	export let placeholder: string | null = null
 	export let rows = 6
 
 	$: activeLabel = Boolean(placeholder || value)
