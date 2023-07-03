@@ -65,7 +65,7 @@
 	{label}
 	{loading}
 	disabled={$$restProps.disabled}
-	values={{ value, valueAsDate: null, valueAsNumber: NaN, files: null, checked }}
+	values={{ value, checked }}
 	{rules}
 	isToggle
 >

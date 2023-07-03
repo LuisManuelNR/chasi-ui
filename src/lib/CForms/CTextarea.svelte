@@ -17,7 +17,7 @@
 	export let rules: Rule[] = []
 	export let autogrow = false
 
-	export let value: string | null | undefined = undefined
+	export let value: any = undefined
 	export let placeholder: string | null | undefined = undefined
 	export let rows = 6
 
@@ -37,7 +37,7 @@
 	{loading}
 	active={activeLabel}
 	disabled={$$restProps.disabled}
-	values={{ value, valueAsDate: null, valueAsNumber: null, files: null, checked: false }}
+	values={{ value, checked: false }}
 	{rules}
 >
 	<slot name="prepend" slot="prepend" />

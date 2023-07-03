@@ -34,7 +34,6 @@
 	export let rules: Rule[] = []
 
 	export let value: any = undefined
-	export let files: FileList | null | undefined = undefined
 	export let type: AllowedTypes = 'text'
 	export let placeholder: string | null | undefined = undefined
 
@@ -59,7 +58,6 @@
 		class="input-ctrl"
 		{type}
 		value={value || ''}
-		{files}
 		{placeholder}
 		on:input={onInput}
 		on:input
