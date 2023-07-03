@@ -124,6 +124,7 @@
 				const toIndex = getElementIndex(draggable)
 				moveItem(hash, toHash, fromIndex, toIndex)
 				draggable = null
+				await tick()
 				dispatch('change', list)
 			}
 		}

@@ -72,13 +72,17 @@
 	onMount(() => {
 		loadData()
 	})
+
+	function handleDraggableChange(e: CustomEvent) {
+		console.log(e.detail)
+	}
 </script>
 
 <Section title="Draggable">
 	<div>
 		<strong>Simple</strong>
 		<div class="scrollable">
-			<CDraggableList bind:list={photos} let:item uid="id">
+			<CDraggableList bind:list={photos} let:item uid="id" on:change={handleDraggableChange}>
 				<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
 					<img src={item.thumbnailUrl} alt="ssss" width="150" height="150" />
 					<p class="title">{item.title}</p>

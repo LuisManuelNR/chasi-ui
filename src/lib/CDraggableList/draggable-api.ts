@@ -73,7 +73,7 @@ export function cloneElement(el: Element) {
   clone.style.height = `${height}px`
   clone.style.pointerEvents = 'none'
   clone.style.transition = 'none'
-  clone.style.opacity = '0.5'
+  clone.style.opacity = '0.8'
 
   let x = 0
   let y = 0

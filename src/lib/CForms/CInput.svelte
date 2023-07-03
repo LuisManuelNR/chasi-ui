@@ -32,12 +32,12 @@
 	export let loading = false
 	export let rules: Rule[] = []
 
-	export let value: string = ''
+	export let value: string | null | undefined = undefined
 	export let valueAsDate: Date | null = null
 	export let valueAsNumber: number = NaN
-	export let files: FileList | null = null
+	export let files: FileList | null | undefined = undefined
 	export let type: AllowedTypes = 'text'
-	export let placeholder: string | null = ''
+	export let placeholder: string | null | undefined = undefined
 
 	let inputElement: HTMLInputElement | undefined
 
