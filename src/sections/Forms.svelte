@@ -60,14 +60,23 @@
 		formDataDemo.food = ['Fish', 'Pizza']
 		formDataDemo.acceptTerms = true
 	}
+
+	const test: Record<string, any> = {}
 </script>
 
 <Section title="Forms">
-	<CInput label="Nombre" placeholder="rapamparampa" />
 	<CInput label="Loading" loading />
 	<CInput label="disabled" value="poapdoapwd" disabled />
 
-	<CInput label="Number" type="number" />
+	<CInput label="Nombre" placeholder="rapamparampa" bind:value={test.nombre} />
+	<CInput label="Number" type="number" bind:value={test.number} />
+
+	<CSelect label="Slot select" let:toggle {items} itemText="state" filter>
+		<button class="btn" on:click={toggle}> a select </button>
+	</CSelect>
+
+	<pre>{JSON.stringify(test, null, 2)}</pre>
+
 	<CInput label="Date" type="date" />
 	<CInput label="Tel" type="tel" />
 	<CInput label="Email" type="email" />

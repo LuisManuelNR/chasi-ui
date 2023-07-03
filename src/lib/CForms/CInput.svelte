@@ -26,41 +26,23 @@
 		loading?: boolean
 		rules?: Rule[]
 		type?: AllowedTypes
+		value?: string | null | undefined
 	}
 
 	export let label = ''
 	export let loading = false
 	export let rules: Rule[] = []
 
-	export let value: string | null | undefined = undefined
-	export let valueAsDate: Date | null = null
-	export let valueAsNumber: number = NaN
+	export let value: any = undefined
 	export let files: FileList | null | undefined = undefined
 	export let type: AllowedTypes = 'text'
 	export let placeholder: string | null | undefined = undefined
 
-	let inputElement: HTMLInputElement | undefined
-
-	$: activeLabel =
-		type === 'date' ||
-		type === 'file' ||
-		Boolean(placeholder || value || valueAsDate || valueAsNumber)
-	$: updateDate(valueAsDate)
-	$: updateNumber(valueAsNumber)
+	$: activeLabel = type === 'date' || type === 'file' || Boolean(placeholder || value)
 
 	function onInput(e: Event) {
 		const input = e.target as HTMLInputElement
-		value = input.value
-		valueAsDate = input.valueAsDate
-		valueAsNumber = input.valueAsNumber
-		files = input.files
-	}
-
-	function updateDate(d: typeof valueAsDate) {
-		if (inputElement) inputElement.valueAsDate = d
-	}
-	function updateNumber(d: typeof valueAsNumber) {
-		if (inputElement) inputElement.valueAsNumber = d
+		value = type === 'number' ? +input.value : input.value
 	}
 </script>
 
@@ -69,17 +51,16 @@
 	{loading}
 	active={activeLabel}
 	disabled={$$restProps.disabled}
-	values={{ value, valueAsDate, valueAsNumber, files, checked: false }}
+	values={{ value, checked: false }}
 	{rules}
 >
 	<slot name="prepend" slot="prepend" />
 	<input
 		class="input-ctrl"
 		{type}
-		{value}
+		value={value || ''}
 		{files}
 		{placeholder}
-		bind:this={inputElement}
 		on:input={onInput}
 		on:input
 		on:change

@@ -1,8 +1,5 @@
 export type RuleParams = {
   value: string | null | undefined
-  valueAsDate: Date | null
-  valueAsNumber: number | null | undefined
-  files: FileList | null | undefined
   checked: boolean
 }
 type AsyncRule = (ruleParams: RuleParams) => Promise<true | string>
