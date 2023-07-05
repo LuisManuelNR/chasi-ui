@@ -10,6 +10,7 @@
 	export let visible = false
 	export let title = ''
 	export let text = ''
+	export let html = ''
 	export function close() {
 		visible = false
 		setTimeout(() => {
@@ -30,6 +31,11 @@
 			</div>
 			{#if text}
 				<p class="px-3 pb-3">{text}</p>
+			{/if}
+			{#if html}
+				<div class="px-3 pb-3">
+					{@html html}
+				</div>
 			{/if}
 		</slot>
 	</div>

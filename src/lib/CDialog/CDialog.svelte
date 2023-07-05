@@ -26,6 +26,7 @@
 		&::backdrop {
 			background-color: #0000006e;
 			animation: fade 0.2s ease;
+			pointer-events: none;
 		}
 	}
 </style>
