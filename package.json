@@ -12,7 +12,11 @@
       "svelte": "./dist/index.js"
     },
     "./styles/": "./dist/styles/",
-    "./actions": "./dist/Actions/index.js"
+    "./actions": "./dist/Actions/index.js",
+    "./CGraph": {
+      "types": "./dist/CGraph/index.d.ts",
+      "svelte": "./dist/CGraph/index.js"
+    }
   },
   "typesVersions": {
     "*": {

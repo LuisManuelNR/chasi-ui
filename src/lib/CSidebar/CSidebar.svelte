@@ -24,13 +24,13 @@
 	on:click={onClick}
 	on:keydown
 >
-	<aside>
-		<slot name="header" />
-		<nav class="nav-body">
-			<slot {close} {open} />
-		</nav>
-		<slot name="footer" />
-	</aside>
+	<!-- <aside> -->
+	<slot name="header" />
+	<nav class="nav-body">
+		<slot {close} {open} />
+	</nav>
+	<slot name="footer" />
+	<!-- </aside> -->
 </dialog>
 <slot name="action" />
 
