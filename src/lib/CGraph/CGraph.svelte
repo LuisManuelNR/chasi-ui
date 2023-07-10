@@ -79,7 +79,15 @@
 	}
 </script>
 
-<svg class="c-graph" width="100%" {height} use:panGraph use:zoomGraph use:setBases>
+<svg
+	class="c-graph"
+	width="100%"
+	{height}
+	use:panGraph
+	use:zoomGraph
+	use:setBases
+	xmlns="http://www.w3.org/2000/svg"
+>
 	<g transform="translate({marginLeft}, {marginTop})">
 		<slot />
 	</g>

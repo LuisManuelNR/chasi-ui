@@ -19,6 +19,9 @@
     "*": {
       "actions": [
         "./dist/Actions/index.d.ts"
+      ],
+      "CGraph": [
+        "./dist/CGraph/index.d.ts"
       ]
     }
   },
