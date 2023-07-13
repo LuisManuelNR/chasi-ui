@@ -14,6 +14,7 @@
 </script>
 
 <CSidebar openState let:open>
+	<div slot="header" class="pa-4">awdawdawd</div>
 	<a href="#Buttons" class="list-item">Buttons</a>
 	<a href="#Forms" class="list-item">Forms</a>
 	<a href="#Dialogs" class="list-item">Dialogs</a>
@@ -27,6 +28,7 @@
 	<button slot="action" class="btn fab icon" on:click={open}>
 		<CIcon icon={mdiMenu} />
 	</button>
+	<div slot="footer" class="pa-4">Hola soy el footer</div>
 </CSidebar>
 
 <div class="content grid-area gap-4 py-5">
