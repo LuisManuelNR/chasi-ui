@@ -77,17 +77,11 @@
 		rootWidth.set(containerW)
 		rootHeight.set(height - +marginTop - +marginBottom)
 	}
+	function setup(node: Element) {}
 </script>
 
 <svg class="c-graph" width="100%" {height} use:panGraph use:zoomGraph use:setBases>
 	<g transform="translate({marginLeft}, {marginTop})">
-		<slot />
+		<slot width={$rootWidth} height={$rootHeight} />
 	</g>
 </svg>
-
-<style lang="scss" global>
-	.c-graph {
-		user-select: none;
-		display: flex;
-	}
-</style>

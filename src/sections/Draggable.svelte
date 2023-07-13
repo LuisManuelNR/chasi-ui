@@ -82,14 +82,16 @@
 	<div>
 		<strong>Simple</strong>
 		<div class="scrollable">
-			<CDraggableList bind:list={photos} let:item uid="id" on:change={handleDraggableChange}>
-				<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
-					<img src={item.thumbnailUrl} alt="ssss" width="150" height="150" />
-					<p class="title">{item.title}</p>
-					<button class="btn icon ml-auto handler">
-						<CIcon icon={mdiDrag} />
-					</button>
-				</div>
+			<CDraggableList bind:list={photos} on:change={handleDraggableChange}>
+				{#each photos as photo (photo.id)}
+					<div class="d-flex align-center gap-2 draggable n-200 pa-2 mb-2">
+						<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
+						<p class="title">{photo.title}</p>
+						<button class="btn icon ml-auto handler">
+							<CIcon icon={mdiDrag} />
+						</button>
+					</div>
+				{/each}
 			</CDraggableList>
 		</div>
 		<div>
@@ -109,41 +111,36 @@
 			add item
 		</button>
 		<div class="two-list d-grid gap-2">
-			<CDraggableList bind:list={list1} group="two-list" let:item class="my-4 d-grid gap-4">
-				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
-					<div>
-						<p class="title">{item}</p>
+			<CDraggableList bind:list={list1} group="two-list" class="my-4 d-grid gap-4">
+				{#each list1 as item}
+					<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
+						<div>
+							<p class="title">{item}</p>
+						</div>
+						<button class="btn icon tonal ml-auto handler">
+							<CIcon icon={mdiDrag} />
+						</button>
 					</div>
-					<button class="btn icon tonal ml-auto handler">
-						<CIcon icon={mdiDrag} />
-					</button>
-				</div>
+				{/each}
 			</CDraggableList>
-			<CDraggableList bind:list={list2} group="two-list" let:item class="my-4 d-grid gap-4">
-				<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
-					<div>
-						<p class="title">{item}</p>
+			<CDraggableList bind:list={list2} group="two-list" class="my-4 d-grid gap-4">
+				{#each list2 as item}
+					<div class="d-flex align-center gap-2 n-200 pa-3 draggable">
+						<div>
+							<p class="title">{item}</p>
+						</div>
+						<button class="btn icon tonal ml-auto handler">
+							<CIcon icon={mdiDrag} />
+						</button>
 					</div>
-					<button class="btn icon tonal ml-auto handler">
-						<CIcon icon={mdiDrag} />
-					</button>
-				</div>
+				{/each}
 			</CDraggableList>
-			<div>
-				<pre>{JSON.stringify(list1, null, 2)}</pre>
-			</div>
-			<div>
-				<pre>{JSON.stringify(list2, null, 2)}</pre>
-			</div>
 		</div>
 	</div>
 
 	<div>
 		<strong>Nested tree</strong>
-		<Tree bind:list={nestedList} />
-		<div>
-			<pre>{JSON.stringify(nestedList, null, 2)}</pre>
-		</div>
+		<!-- <Tree bind:list={nestedList} /> -->
 	</div>
 </Section>
 
