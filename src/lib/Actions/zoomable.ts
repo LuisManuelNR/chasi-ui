@@ -22,7 +22,7 @@ export default function (node: HTMLElement | SVGElement, params?: ZoomableParams
       const centerY = (e.touches[0].pageY + e.touches[1].pageY) / 2
       params.onZoom(delta, { x: centerX, y: centerY }, true)
     }
-  }, 50)
+  }, 10)
 
   function touchStart(e: TouchEvent) {
     e.preventDefault()

@@ -23,7 +23,7 @@ export default function (node: HTMLElement | SVGElement, params?: PannableParams
     x = e.clientX
     y = e.clientY
     params.onMove(event, { x, y, dx, dy })
-  }, 50)
+  }, 10)
 
   function handleMousedown(event: MouseEvent | TouchEvent) {
     event.stopPropagation()
