@@ -89,7 +89,7 @@ export function throttle<T extends (...args: any) => any>(func: T, limit: number
       inThrottle = true
 
       setTimeout(() => (inThrottle = false), limit)
-
+      // @ts-ignore
       lastResult = func.apply(context, args)
     }
 

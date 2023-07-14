@@ -24,13 +24,13 @@
 	on:click={onClick}
 	on:keydown
 >
-	<!-- <aside> -->
-	<slot name="header" />
-	<nav class="nav-body">
-		<slot {close} {open} />
-	</nav>
-	<slot name="footer" />
-	<!-- </aside> -->
+	<aside>
+		<slot name="header" />
+		<nav class="nav-body">
+			<slot {close} {open} />
+		</nav>
+		<slot name="footer" />
+	</aside>
 </dialog>
 <slot name="action" />
 
@@ -66,6 +66,9 @@
 	}
 	aside {
 		height: 100%;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr auto;
 	}
 	:global(dialog.open-state + [slot='action']) {
 		z-index: 5;
