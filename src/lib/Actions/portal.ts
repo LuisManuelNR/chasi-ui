@@ -1,5 +1,5 @@
-export default function (node: HTMLElement, option: { target: string, prepend?: boolean }): { destroy: () => void } {
-  const targetNode = document.querySelector(option.target)
+export default function (node: HTMLElement | SVGElement, option: { target: string | Element, prepend?: boolean }) {
+  const targetNode = option.target instanceof Element ? option.target : document.querySelector(option.target)
   if (!targetNode) throw 'Target Element must exist on the DOM'
   if (option.prepend) {
     targetNode.prepend(node)
