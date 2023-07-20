@@ -3,8 +3,8 @@
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	align-items: center;
-	background-color: var(--surface-2);
-	color: var(--on-surface-2);
+	background-color: var(--s-2);
+	color: var(--on-s-2);
 	border-radius: var(--size-1);
 	box-shadow: var(--btn-shadow);
 	display: inline-flex;
@@ -22,7 +22,7 @@
 		scale 50ms cubic-bezier(.5, -.3, .1, 1.5);
 	will-change: scale;
 	position: relative;
-	outline-color: var(--surface-2);
+	outline-color: var(--s-2);
 	vertical-align: bottom;
 	text-decoration: none;
 
@@ -67,15 +67,15 @@
 		outline-width: 2px;
 		outline-style: solid;
 		outline-offset: -2px;
-		background-color: var(--surface-6);
+		background-color: var(--s-5);
 
 		&:not(.tonal) {
-			color: var(--on-surface-6);
+			color: var(--on-s-5);
 		}
 	}
 
 	&:where(.outlined) {
-		outline-color: var(--on-surface-6);
+		outline-color: var(--on-s-5);
 	}
 
 	&.tonal {
@@ -164,7 +164,7 @@
 		top: 50%;
 		width: 4px;
 		height: 50%;
-		background: var(--brand);
+		background: var(--accent);
 		border-radius: 999px;
 		transition: transform .15s ease;
 		transform: scale(var(--mark-scale)) translateY(-50%);
@@ -202,7 +202,7 @@
 			bottom: 4px;
 			width: 43%;
 			height: 4px;
-			background: var(--brand);
+			background: var(--accent);
 			border-radius: 999px;
 			transition: transform .15s ease;
 			transform: scale(var(--mark-scale)) translateX(-50%);

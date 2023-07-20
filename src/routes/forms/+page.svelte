@@ -2,7 +2,7 @@
 	import { CLabel } from '$lib'
 </script>
 
-<div class="d-flex gap-4 flex-column card n-300">
+<div class="d-flex gap-4 flex-column card mb-4">
 	<CLabel label="Text">
 		<input />
 	</CLabel>
@@ -38,5 +38,32 @@
 	</CLabel>
 	<CLabel label="week">
 		<input type="week" />
+	</CLabel>
+</div>
+
+<div class="d-flex gap-4 flex-column card">
+	<CLabel label="Text">
+		<input />
+	</CLabel>
+	<CLabel>
+		<input />
+	</CLabel>
+	<CLabel label="Text">
+		<input disabled />
+	</CLabel>
+	<CLabel>
+		<input disabled />
+	</CLabel>
+	<CLabel label="Text" loading>
+		<input />
+	</CLabel>
+	<CLabel loading>
+		<input />
+	</CLabel>
+	<CLabel label="Text">
+		<input placeholder="Escribe aqui...." />
+	</CLabel>
+	<CLabel>
+		<input placeholder="Escribe aqui...." />
 	</CLabel>
 </div>

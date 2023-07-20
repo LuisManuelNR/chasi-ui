@@ -10,7 +10,7 @@ export interface ThemeConfig {
 			brand: string[]
 			error: string[]
 			success: string[]
-			surface: string[]
+			s: string[]
 			[key: string]: string[]
 		}
 	}

@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let label = ''
 	export let loading = false
-	export let disabled = false
 
 	let hint = ''
 	let shake = false
@@ -11,7 +10,6 @@
 	class="c-label"
 	class:loading-inline={loading}
 	class:no-label={!label}
-	class:disabled
 	class:error-state={hint}
 	class:shake-animation={shake}
 >
@@ -21,7 +19,9 @@
 	<div class="prepend">
 		<slot name="prepend" />
 	</div>
-	<slot />
+	<div class="input-ctrl">
+		<slot />
+	</div>
 	<div class="append">
 		<slot name="append" />
 	</div>
@@ -30,9 +30,8 @@
 
 <style lang="scss">
 	:where(.c-label) {
-		--border-color-input: var(--n-300);
+		--border-color-input: var(--s-4);
 		border-bottom: 2px solid var(--border-color-input);
-		background-color: var(--n-400);
 		color: var(--text-color-input, inherit);
 		border-radius: var(--size-1);
 		transition: all 0.2s;
@@ -45,16 +44,10 @@
 		min-height: 48px;
 		padding-inline: var(--size-1);
 		isolation: isolate;
-
-		// &::after {
-		// 	content: '';
-		// 	position: absolute;
-		// 	inset: 0;
-		// 	background-color: hsla(0, 0%, 50%, 0.5);
-		// 	opacity: 0.1;
-		// 	border-radius: inherit;
-		// 	z-index: -1;
-		// }
+		backdrop-filter: brightness(0.95);
+		@media (prefers-color-scheme: dark) {
+			backdrop-filter: brightness(0.85);
+		}
 
 		&:focus-within {
 			--text-color-input: var(--brand);
@@ -64,7 +57,7 @@
 		&.no-label {
 			grid-template-areas: 'P I A';
 			grid-template-rows: 1fr;
-			> .label-text {
+			.label-text {
 				display: none;
 			}
 		}
@@ -82,7 +75,7 @@
 			--border-color-input: var(--error);
 		}
 
-		&.is-toggle {
+		&:has(input[type='radio'], input[type='checkbox']) {
 			background-color: transparent;
 			grid-template-columns: auto auto 1fr auto;
 			grid-template-rows: auto;
@@ -102,12 +95,11 @@
 			grid-area: L;
 			user-select: none;
 			pointer-events: none;
-			color: var(--on-n-100);
 			cursor: text;
 			white-space: nowrap;
 			backface-visibility: hidden;
-			-webkit-font-smoothing: subpixel-antialiased;
 			font-size: 1rem;
+			opacity: 0.8;
 		}
 
 		> .hint {
@@ -121,34 +113,38 @@
 			font-size: 0.9rem;
 			font-weight: 600;
 		}
-		:global(.prepend) {
+		.prepend {
 			grid-area: P;
 			display: grid;
 			place-content: center;
 		}
-		:global(.append) {
+		.append {
 			grid-area: A;
 			display: grid;
 			place-content: center;
 		}
-		> :global(.input-ctrl) {
+		.input-ctrl {
 			grid-area: I;
-			border: none;
-			outline: none;
-			width: 100%;
-			font-size: 1.1rem;
-			font-family: inherit;
-			background-color: transparent;
-			color: var(--on-n-100);
-			&:-webkit-autofill {
-				-webkit-box-shadow: 0 0 0 30px var(--n-400) inset;
-			}
-			&::placeholder {
-				color: hsla(0, 0%, 50%, 0.5);
-			}
-			&:disabled {
-				color: hsla(0, 0%, 50%, 0.5);
-				cursor: inherit;
+			display: flex;
+			:global(input) {
+				border: none;
+				outline: none;
+				width: 100%;
+				font-size: 1.1rem;
+				font-family: inherit;
+				background-color: transparent;
+				color: var(--on-s-1);
+				min-width: 4.5ch;
+				&:-webkit-autofill {
+					-webkit-box-shadow: 0 0 0 30px var(--s-5) inset;
+				}
+				&::placeholder {
+					color: var(--s-2);
+				}
+				&:disabled {
+					color: var(--on-s-4);
+					cursor: inherit;
+				}
 			}
 		}
 	}

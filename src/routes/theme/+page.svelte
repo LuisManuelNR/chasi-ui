@@ -3,7 +3,18 @@
 	import { generateTheme } from '$lib/bin/theme.js'
 	import { CLabel } from '$lib'
 	import { writable } from 'svelte/store'
+	import { onMount } from 'svelte'
 	const themes = writable<ThemeConfig>({
+		light: {
+			colorScheme: 'light',
+			colors: {
+				brand: ['#603ad1'],
+				accent: ['#e538ce'],
+				error: ['#D72638'],
+				success: ['#169873'],
+				s: ['#f9fafb', '#f0f1f4', '#e1e4ea', '#d3d7df', '#c4c9d4', '#b2b9c7']
+			}
+		},
 		dark: {
 			colorScheme: 'dark',
 			colors: {
@@ -11,37 +22,7 @@
 				accent: ['#E7d623'],
 				error: ['#D72638'],
 				success: ['#169873'],
-				surface: [
-					'#424b5c',
-					'#3b4453',
-					'#353c4a',
-					'#2e3540',
-					'#282d37',
-					'#21262e',
-					'#1a1e25',
-					'#14161c'
-				]
-			}
-		},
-		light: {
-			colorScheme: 'light',
-			colors: {
-				brand: ['#1a55e9'],
-				accent: ['#E7d623'],
-				error: ['#D72638'],
-				success: ['#169873'],
-				surface: [
-					'#424b5c',
-					'#3b4453',
-					'#353c4a',
-					'#2e3540',
-					'#282d37',
-					'#21262e',
-					'#1a1e25',
-					'#14161c',
-					'#0d0f12',
-					'#0d0f12'
-				]
+				s: ['#4d576a', '#424b5c', '#333a47', '#242932', '#1e2129', '#16181d']
 			}
 		}
 	})
@@ -52,12 +33,23 @@
 
 	$: compStyle = `<style>${result}</style>`
 
-	let currentTheme = 'dark'
-	$: currentColors = Object.keys($themes[currentTheme].colors)
+	let currentTheme = writable('dark')
+	$: currentColors = Object.keys($themes[$currentTheme].colors)
 
 	function copyCSS() {
 		navigator.clipboard.writeText(result)
 	}
+
+	onMount(() => {
+		const html = document.querySelector('html')!
+		currentTheme.subscribe((value) => {
+			if (value === 'dark') {
+				html.classList.add(`dark-theme`)
+			} else {
+				html.classList.remove(`dark-theme`)
+			}
+		})
+	})
 </script>
 
 <svelte:head>
@@ -66,30 +58,38 @@
 
 <div>
 	<h2>Theme</h2>
-	<div class="d-flex">
+	<div class="d-flex gap-3">
 		<CLabel label="Dark theme">
-			<input type="radio" value="dark" bind:group={currentTheme} />
+			<input type="radio" value="dark" bind:group={$currentTheme} />
 		</CLabel>
 		<CLabel label="Light theme">
-			<input type="radio" value="light" bind:group={currentTheme} />
+			<input type="radio" value="light" bind:group={$currentTheme} />
 		</CLabel>
 		<button class="btn" on:click={copyCSS}> Copy themes css </button>
 	</div>
-	<strong>Current theme: {currentTheme}</strong>
+	<strong>Current theme: {$currentTheme}</strong>
 	{#each currentColors as color}
-		<div class="d-flex flex-wrap">
-			{#if $themes[currentTheme].colors[color].length === 1}
+		{#if $themes[$currentTheme].colors[color].length === 1}
+			<div class="d-flex gap-2 mb-2">
 				<CLabel label={color}>
-					<input type="color" bind:value={$themes[currentTheme].colors[color][0]} />
+					<input bind:value={$themes[$currentTheme].colors[color][0]} />
 				</CLabel>
-			{:else}
-				{#each $themes[currentTheme].colors[color] as value, i}
+				<CLabel>
+					<input type="color" bind:value={$themes[$currentTheme].colors[color][0]} />
+				</CLabel>
+			</div>
+		{:else}
+			{#each $themes[$currentTheme].colors[color] as value, i}
+				<div class="d-flex gap-2 mb-2">
 					<CLabel label="{color}-{i + 1}">
+						<input bind:value />
+					</CLabel>
+					<CLabel>
 						<input type="color" bind:value />
 					</CLabel>
-				{/each}
-			{/if}
-		</div>
+				</div>
+			{/each}
+		{/if}
 	{/each}
 </div>
 
