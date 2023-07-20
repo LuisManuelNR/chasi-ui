@@ -144,7 +144,7 @@
 <div class="c-select" bind:this={selectElement} role="textbox" class:is-filter={filter}>
 	<div class="overlay" class:show-overlay={visibleMenu} />
 	<CMenu let:toggle bind:visible={visibleMenu} closeOnClick>
-		<slot slot="action" {toggle}>
+		<svelte:fragment slot="action">
 			<CInput
 				{label}
 				{loading}
@@ -159,7 +159,7 @@
 					<CIcon icon={mdiChevronDown} />
 				</svelte:fragment>
 			</CInput>
-		</slot>
+		</svelte:fragment>
 		{#if filter}
 			<div class="px-3 pt-2 pb-1 filter-input">
 				<CInput
@@ -246,7 +246,7 @@
 			padding: 0;
 		}
 		/* smartphones, touchscreens */
-		@media (hover: none) and (pointer: coarse) and (max-width: 900px) {
+		@media (hover: none) and (pointer: coarse) {
 			.show-overlay {
 				opacity: 1;
 			}

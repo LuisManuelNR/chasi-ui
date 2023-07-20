@@ -1,6 +1,6 @@
-.card {
-	background-color: var(--n-300);
-	border: 1px solid var(--n-200);
+:where(.card) {
+	background-color: var(--surface-4);
+	border: 1px solid var(--surface-2);
 	border-radius: var(--size-1);
 	padding: var(--size-3);
 }

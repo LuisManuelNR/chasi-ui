@@ -18,6 +18,7 @@ html {
 	--size-11: 7.5rem;
 	--size-12: 10rem;
 	--size-13: 15rem;
+
 	--font-size-00: .75rem;
 	--font-size-0: .85rem;
 	--font-size-1: 1rem;
@@ -28,13 +29,16 @@ html {
 	--font-size-6: 2.5rem;
 	--font-size-7: 3rem;
 	--font-size-8: 3.5rem;
+
 	--font-size-fluid-0: clamp(.75rem, 1.5vw, 1rem);
 	--font-size-fluid-1: clamp(1rem, 2vw, 1.5rem);
 	--font-size-fluid-2: clamp(1.5rem, 3vw, 2.3rem);
 	--font-size-fluid-3: clamp(2rem, 3vw, 2.6rem);
+
 	--size-content-1: 20ch;
 	--size-content-2: 45ch;
 	--size-content-3: 60ch;
+
 	--size-header-1: 20ch;
 	--size-header-2: 25ch;
 	--size-header-3: 35ch;

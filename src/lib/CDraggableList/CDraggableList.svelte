@@ -29,6 +29,9 @@
 	export let list: T[] = []
 	export let group: string = `default-group-${randomStr()}`
 	export let handlerSelector = '.handler'
+	export let ignoreHandler = '.ignore-handler'
+	// @ts-ignore
+	export let uid: T extends Record<string, any> ? keyof T : undefined = undefined
 	let klass = ''
 	export { klass as class }
 
@@ -61,6 +64,8 @@
 		onStart(event, coords) {
 			if ($ghost) return
 			const evTarget = event.target as HTMLElement
+			const isIgnore = evTarget.closest(ignoreHandler)
+			if (isIgnore) return
 			const handler = evTarget.closest(handlerSelector)
 			if (!handler) return
 			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
@@ -167,7 +172,9 @@
 </script>
 
 <div class="draggable-list {group} {klass}" data-ref={hash} use:pannable={actions}>
-	<slot />
+	{#each list as item, i (uid ? item[uid] : item)}
+		<slot {item} index={i} />
+	{/each}
 </div>
 
 <style>

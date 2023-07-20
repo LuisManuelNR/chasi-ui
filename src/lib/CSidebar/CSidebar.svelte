@@ -1,92 +1,68 @@
 <script lang="ts">
-	export let openState = false
+	import { slide, fade } from 'svelte/transition'
 	export let right = false
-
-	let dialogElement: HTMLDialogElement
-	function open() {
-		dialogElement.showModal()
-	}
-	function close() {
-		dialogElement.close()
-	}
-	function onClick(e: Event) {
-		if (e.target === dialogElement) {
-			close()
-		}
-	}
+	export let stayOpenOnDesktop = false
+	export let active = false
 </script>
 
-<dialog
-	class="card pa-0"
-	class:open-state={openState}
-	class:right
-	bind:this={dialogElement}
-	on:click={onClick}
-	on:keydown
->
-	<aside>
-		<slot name="header" />
-		<nav class="nav-body">
-			<slot {close} {open} />
-		</nav>
-		<slot name="footer" />
-	</aside>
-</dialog>
-<slot name="action" />
+{#if active || stayOpenOnDesktop}
+	<div
+		class="sidebar py-3"
+		transition:slide={{ axis: 'x', duration: 150 }}
+		class:right
+		class:stay={stayOpenOnDesktop && !active}
+	>
+		<aside class="card pa-0">
+			<div><slot name="header" /></div>
+			<nav class="nav-body">
+				<slot />
+			</nav>
+			<div><slot name="footer" /></div>
+		</aside>
+	</div>
+{/if}
+{#if active}
+	<button transition:fade={{ duration: 200 }} class="overlay" on:click={() => (active = false)}
+	></button>
+{/if}
 
 <style lang="scss">
 	@use '../styles/breakpoints.scss' as breakpoints;
-	:global(:root) {
-		--c-sidebar-container: initial;
-		--c-sidebar-width: 270px;
-	}
-	dialog {
-		height: 97%;
+	:where(.sidebar) {
+		height: 100%;
+		height: 100dvh;
+		top: 0;
 		width: 100%;
-		max-height: 100%;
-		max-width: var(--c-sidebar-width);
-		top: 1.5%;
+		max-width: var(--c-sidebar-width, 270px);
 		left: var(--size-2);
-		animation: slideToLeft 0.15s ease;
-		box-shadow: var(--shadow-3);
+		position: fixed;
+		z-index: 6;
+		animation: slideToRight 150ms ease;
+		&.right {
+			left: auto;
+			right: var(--size-2);
+		}
 		.nav-body {
-			height: 100%;
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
-		&::backdrop {
-			background-color: #0000006e;
-			animation: fade 0.2s ease;
+		aside {
+			height: 100%;
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+			box-shadow: var(--shadow-3);
+		}
+		@include breakpoints.md-down {
+			&.stay {
+				display: none;
+				pointer-events: none;
+			}
 		}
 	}
-	.right {
-		left: auto;
-		right: var(--size-2);
-		animation: slideToRight 0.15s ease;
-	}
-	aside {
-		height: 100%;
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: auto 1fr auto;
-	}
-	:global(dialog.open-state + [slot='action']) {
+	:where(.overlay) {
+		position: fixed;
+		inset: 0;
+		background-color: #00000096;
 		z-index: 5;
-		--c-sidebar-container: var(--c-sidebar-width);
-	}
-	:global(dialog.open-state) {
-		--c-sidebar-container: var(--c-sidebar-width);
-	}
-	@include breakpoints.sm-up {
-		:global(dialog.open-state + [slot='action']) {
-			z-index: -1;
-		}
-		:global(:root) {
-			--c-sidebar-container: var(--c-sidebar-width);
-		}
-		.open-state {
-			position: fixed;
-			display: block;
-		}
 	}
 </style>

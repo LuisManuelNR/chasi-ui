@@ -1,69 +1,19 @@
 <script lang="ts">
-	import { getContext, onDestroy } from 'svelte'
-	import type { Rule, RuleParams, FormValidator } from './rules'
-
 	export let label = ''
 	export let loading = false
-	export let rules: Rule[] = []
-	export let active = false
 	export let disabled = false
-	export let values: RuleParams
-	export let isToggle = false
 
-	let CLabel: HTMLLabelElement
 	let hint = ''
 	let shake = false
-
-	$: validate(values)
-
-	// if this input is inside a form, register this rules, so when the form is submitted can be validated
-	const formValidator = getContext<FormValidator[]>('validators')
-	if (formValidator) formValidator.push(validatorFunc)
-
-	async function validate(vls: RuleParams) {
-		if (!CLabel) return
-		let ilegal: string | true = ''
-		if (rules && rules.length) {
-			for (let i = 0; i < rules.length; i++) {
-				ilegal = await rules[i](vls)
-				if (ilegal !== true) {
-					break
-				}
-			}
-		}
-		hint = ilegal !== true ? ilegal : ''
-	}
-
-	async function validatorFunc() {
-		await validate(values)
-		if (hint) {
-			CLabel.addEventListener('animationend', () => (shake = false), { once: true })
-			shake = true
-		}
-		return hint
-	}
-
-	onDestroy(() => {
-		if (formValidator) {
-			// unregister from a form on destroy
-			const index = formValidator.indexOf(validatorFunc)
-			if (index > -1) {
-				formValidator.splice(index, 1)
-			}
-		}
-	})
 </script>
 
 <label
 	class="c-label"
 	class:loading-inline={loading}
-	class:active
 	class:no-label={!label}
 	class:disabled
 	class:error-state={hint}
 	class:shake-animation={shake}
-	class:is-toggle={isToggle}
-	bind:this={CLabel}
 >
 	<div class="label-text">
 		{label}
@@ -80,9 +30,7 @@
 
 <style lang="scss">
 	:where(.c-label) {
-		--border-color-input: hsla(0, 0%, 50%, 0.5);
-		--translate-label: 0px, 9px;
-		--scale-label: 1;
+		--border-color-input: var(--n-300);
 		border-bottom: 2px solid var(--border-color-input);
 		background-color: var(--n-400);
 		color: var(--text-color-input, inherit);
@@ -96,22 +44,23 @@
 		gap: 0.2rem;
 		min-height: 48px;
 		padding-inline: var(--size-1);
+		isolation: isolate;
 
-		&.active,
-		&:focus-within {
-			--translate-label: 0px, 0px;
-			--scale-label: 0.8;
-		}
-
-		&:has(input:-webkit-autofill) {
-			--translate-label: 0px, 0px;
-			--scale-label: 0.8;
-		}
+		// &::after {
+		// 	content: '';
+		// 	position: absolute;
+		// 	inset: 0;
+		// 	background-color: hsla(0, 0%, 50%, 0.5);
+		// 	opacity: 0.1;
+		// 	border-radius: inherit;
+		// 	z-index: -1;
+		// }
 
 		&:focus-within {
 			--text-color-input: var(--brand);
 			--border-color-input: var(--brand);
 		}
+
 		&.no-label {
 			grid-template-areas: 'P I A';
 			grid-template-rows: 1fr;
@@ -119,7 +68,7 @@
 				display: none;
 			}
 		}
-		&.disabled {
+		&:has(input[disabled]) {
 			cursor: not-allowed;
 			color: hsla(0, 0%, 50%, 0.5);
 			--text-color-input: currentColor;
@@ -134,8 +83,6 @@
 		}
 
 		&.is-toggle {
-			--translate-label: 0px, 0px;
-			--scale-label: 1;
 			background-color: transparent;
 			grid-template-columns: auto auto 1fr auto;
 			grid-template-rows: auto;
@@ -155,15 +102,12 @@
 			grid-area: L;
 			user-select: none;
 			pointer-events: none;
-			transform: translate(var(--translate-label)) scale(var(--scale-label));
-			transition: all 170ms;
 			color: var(--on-n-100);
-			transform-origin: left center;
 			cursor: text;
 			white-space: nowrap;
-			will-change: transform;
 			backface-visibility: hidden;
-			font-size: 1.1rem;
+			-webkit-font-smoothing: subpixel-antialiased;
+			font-size: 1rem;
 		}
 
 		> .hint {

@@ -1,22 +1,10 @@
-@keyframes fade {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
+.shake-animation {
+	animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+	perspective: 1000px;
 }
 
-@keyframes scale {
-	0% {
-		scale: 0.9;
-	}
-
-	100% {
-		scale: 1;
-	}
-}
 
 @keyframes shake {
 
@@ -42,13 +30,6 @@
 	}
 }
 
-.shake-animation {
-	animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
-	transform: translate3d(0, 0, 0);
-	backface-visibility: hidden;
-	perspective: 1000px;
-}
-
 @keyframes dropWave {
 	0% {
 		outline-width: 2px;
@@ -60,25 +41,5 @@
 		outline-width: 1px;
 		outline-color: #ffffff00;
 		outline-offset: 10px;
-	}
-}
-
-@keyframes slideToLeft {
-	0% {
-		translate: -100%;
-	}
-
-	100% {
-		translate: 0;
-	}
-}
-
-@keyframes slideToRight {
-	0% {
-		translate: 100%;
-	}
-
-	100% {
-		translate: 0;
 	}
 }

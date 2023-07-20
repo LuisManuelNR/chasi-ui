@@ -7,13 +7,12 @@
 @use './buttons.scss';
 @use './layout.scss';
 
-@use './theme.scss';
 @use './utils.scss';
 
 :root {
-	accent-color: var(--brand);
-	background-color: var(--n-400);
-	color: var(--on-n-400);
+	accent-color: var(--accent);
+	background-color: var(--surface-6);
+	color: var(--on-surface-6);
 	block-size: 100%;
 	min-height: 100vh;
 	scrollbar-gutter: stable;
@@ -34,7 +33,7 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	&:has(dialog[open]) {
+	&:has(dialog[open]:not(.sidebar)) {
 		/* prevent scroll when dialog is open */
 		overflow: hidden;
 	}
@@ -53,7 +52,7 @@
 		&::-webkit-scrollbar-thumb {
 			width: 4px;
 			height: 4px;
-			background-color: var(--on-n-400);
+			background-color: var(--on-surface-6);
 		}
 	}
 }

@@ -1,61 +1,54 @@
 {
-  "name": "@chasi/ui",
-  "version": "0.1.51",
-  "type": "module",
-  "main": "./dist/index.js",
-  "svelte": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/index.d.ts",
-      "svelte": "./dist/index.js"
-    },
-    "./styles/": "./dist/styles/",
-    "./actions": "./dist/Actions/index.js",
-    "./CGraph": "./dist/CGraph/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "actions": [
-        "./dist/Actions/index.d.ts"
-      ],
-      "CGraph": [
-        "./dist/CGraph/index.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "theme": "node package/scripts/theme.js",
-    "package": "svelte-package",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
-    "release": "npm run check && npm version patch && npm run package && npm publish --access public"
-  },
-  "devDependencies": {
-    "@sveltejs/package": "^2.0.2",
-    "@sveltejs/vite-plugin-svelte": "^2.2.0",
-    "@tsconfig/svelte": "^4.0.1",
-    "@types/node": "^20.1.0",
-    "prettier": "^2.8.8",
-    "prettier-plugin-svelte": "^2.10.0",
-    "sass": "^1.62.1",
-    "svelte": "^3.59.0",
-    "svelte-check": "^3.3.1",
-    "tslib": "^2.5.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5"
-  },
-  "peerDependencies": {
-    "svelte": "^3.55.1"
-  },
-  "dependencies": {
-    "@mdi/js": "^7.2.96",
-    "esm-env": "^1.0.0"
-  }
+	"name": "temp-ui-2",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build && npm run package",
+		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"prepublishOnly": "npm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "vitest",
+		"lint": "prettier --plugin-search-dir . --check .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"peerDependencies": {
+		"svelte": "^4.0.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.1.0",
+		"@sveltejs/kit": "^1.22.3",
+		"@sveltejs/package": "^2.2.0",
+		"@types/chroma-js": "^2.4.0",
+		"prettier": "^3.0.0",
+		"prettier-plugin-svelte": "^3.0.0",
+		"publint": "^0.1.16",
+		"svelte": "^4.1.0",
+		"svelte-check": "^3.4.6",
+		"tslib": "^2.6.0",
+		"typescript": "^5.1.6",
+		"vite": "^4.4.4",
+		"vitest": "^0.33.0"
+	},
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"dependencies": {
+		"@mdi/js": "^7.2.96",
+		"chroma-js": "^2.4.2",
+		"esm-env": "^1.0.0",
+		"sass": "^1.64.0"
+	}
 }

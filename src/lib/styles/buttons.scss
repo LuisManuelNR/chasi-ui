@@ -3,8 +3,8 @@
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	align-items: center;
-	background-color: var(--n-100);
-	color: var(--on-n-100);
+	background-color: var(--surface-2);
+	color: var(--on-surface-2);
 	border-radius: var(--size-1);
 	box-shadow: var(--btn-shadow);
 	display: inline-flex;
@@ -22,7 +22,7 @@
 		scale 50ms cubic-bezier(.5, -.3, .1, 1.5);
 	will-change: scale;
 	position: relative;
-	outline-color: var(--n-100);
+	outline-color: var(--surface-2);
 	vertical-align: bottom;
 	text-decoration: none;
 
@@ -67,15 +67,15 @@
 		outline-width: 2px;
 		outline-style: solid;
 		outline-offset: -2px;
-		background-color: var(--n-400);
+		background-color: var(--surface-6);
 
 		&:not(.tonal) {
-			color: var(--on-n-400);
+			color: var(--on-surface-6);
 		}
 	}
 
 	&:where(.outlined) {
-		outline-color: var(--on-n-400);
+		outline-color: var(--on-surface-6);
 	}
 
 	&.tonal {

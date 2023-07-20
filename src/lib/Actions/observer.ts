@@ -6,7 +6,7 @@ declare global {
   interface Window { observer: IntersectionObserver }
 }
 
-export default function (node: HTMLElement | SVGElement, { onIntersect, once = true }: ObserverParams): { destroy: () => void } {
+export default function (node: HTMLElement, { onIntersect, once = true }: ObserverParams): { destroy: () => void } {
   if (typeof window !== 'undefined') {
     if ('IntersectionObserver' in window) {
       window.observer = new IntersectionObserver(entries => {
