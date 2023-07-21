@@ -11,8 +11,8 @@
 
 :root {
 	accent-color: var(--accent);
-	background-color: var(--s-4);
-	color: var(--on-s-4);
+	background-color: var(--s-5);
+	color: var(--on-s-5);
 	block-size: 100%;
 	min-height: 100vh;
 	scrollbar-gutter: stable;
@@ -52,7 +52,7 @@
 		&::-webkit-scrollbar-thumb {
 			width: 4px;
 			height: 4px;
-			background-color: var(--on-s-4);
+			background-color: var(--on-s-5);
 		}
 	}
 }

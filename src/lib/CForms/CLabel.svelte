@@ -32,6 +32,7 @@
 	:where(.c-label) {
 		--border-color-input: var(--s-4);
 		border-bottom: 2px solid var(--border-color-input);
+		background-color: var(--s-6);
 		color: var(--text-color-input, inherit);
 		border-radius: var(--size-1);
 		transition: all 0.2s;
@@ -44,10 +45,6 @@
 		min-height: 48px;
 		padding-inline: var(--size-1);
 		isolation: isolate;
-		backdrop-filter: brightness(0.95);
-		@media (prefers-color-scheme: dark) {
-			backdrop-filter: brightness(0.85);
-		}
 
 		&:focus-within {
 			--text-color-input: var(--brand);

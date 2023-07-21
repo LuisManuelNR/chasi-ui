@@ -22,7 +22,7 @@
 				accent: ['#E7d623'],
 				error: ['#D72638'],
 				success: ['#169873'],
-				s: ['#4d576a', '#424b5c', '#333a47', '#242932', '#1e2129', '#16181d']
+				s: ['#38424F', '#2F3742', '#272E37', '#1F252C', '#191D23', '#14181C']
 			}
 		}
 	})
@@ -44,9 +44,11 @@
 		const html = document.querySelector('html')!
 		currentTheme.subscribe((value) => {
 			if (value === 'dark') {
-				html.classList.add(`dark-theme`)
+				html.classList.remove('ligth-theme')
+				html.classList.add('dark-theme')
 			} else {
-				html.classList.remove(`dark-theme`)
+				html.classList.add('light-theme')
+				html.classList.remove('dark-theme')
 			}
 		})
 	})
