@@ -3,8 +3,17 @@
 </script>
 
 <div class="d-flex gap-4 flex-column card mb-4">
-	<CLabel label="Text">
-		<input />
+	<CLabel label="Correo">
+		<input type="email" />
+	</CLabel>
+	<CLabel label="checkbox">
+		<input type="checkbox" />
+	</CLabel>
+	<CLabel label="checkbox">
+		<input type="checkbox" />
+	</CLabel>
+	<CLabel label="checkbox">
+		<input type="checkbox" />
 	</CLabel>
 	<CLabel label="checkbox">
 		<input type="checkbox" />
@@ -27,6 +36,12 @@
 	<CLabel label="radio">
 		<input type="radio" />
 	</CLabel>
+	<CLabel label="radio">
+		<input type="radio" />
+	</CLabel>
+	<CLabel label="radio">
+		<input type="radio" />
+	</CLabel>
 	<CLabel label="range">
 		<input type="range" />
 	</CLabel>
@@ -43,22 +58,22 @@
 
 <div class="d-flex gap-4 flex-column card">
 	<CLabel label="Text">
-		<input />
+		<input value="La patata" />
 	</CLabel>
 	<CLabel>
-		<input />
+		<input value="La patata" />
 	</CLabel>
 	<CLabel label="Text">
-		<input disabled />
+		<input disabled value="La patata" />
 	</CLabel>
 	<CLabel>
-		<input disabled />
+		<input disabled value="La patata" />
 	</CLabel>
 	<CLabel label="Text" loading>
 		<input />
 	</CLabel>
 	<CLabel loading>
-		<input />
+		<input value="La patata" />
 	</CLabel>
 	<CLabel label="Text">
 		<input placeholder="Escribe aqui...." />

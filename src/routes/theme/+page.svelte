@@ -8,21 +8,21 @@
 		light: {
 			colorScheme: 'light',
 			colors: {
-				brand: ['#603ad1'],
-				accent: ['#e538ce'],
+				brand: ['#c212f3'],
+				accent: ['#19acf5'],
 				error: ['#D72638'],
 				success: ['#169873'],
-				s: ['#f9fafb', '#f0f1f4', '#e1e4ea', '#d3d7df', '#c4c9d4', '#b2b9c7']
+				s: ['#F7F8F9', '#E9EBEF', '#DCDFE6', '#D0D4DD', '#C4C9D4', '#B8BECB']
 			}
 		},
 		dark: {
 			colorScheme: 'dark',
 			colors: {
-				brand: ['#7a55e9'],
-				accent: ['#E7d623'],
+				brand: ['#c212f3'],
+				accent: ['#19acf5'],
 				error: ['#D72638'],
 				success: ['#169873'],
-				s: ['#38424F', '#2F3742', '#272E37', '#1F252C', '#191D23', '#14181C']
+				s: ['#747F9C', '#59637E', '#464E63', '#373D4E', '#2C303D', '#222630']
 			}
 		}
 	})
@@ -95,9 +95,9 @@
 	{/each}
 </div>
 
-<div>
+<div class="typografy">
 	<h2>Tipografías</h2>
-	<strong>Tamaños</strong>
+	<p><strong>Tamaños</strong></p>
 	<p class="f-size-00">
 		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente hic velit quidem accusamus
 		rem. Earum?
@@ -108,8 +108,14 @@
 			rem. Earum?
 		</p>
 	{/each}
-	<strong>Tamaños fluidos</strong>
+	<p><strong>Tamaños fluidos</strong></p>
 	{#each Array.from({ length: 4 }) as _, i}
 		<p class="f-fluid-{i}">Lorem ipsum, dolor sit amet consectetur</p>
 	{/each}
 </div>
+
+<style>
+	.typografy > * {
+		margin-bottom: var(--size-3);
+	}
+</style>

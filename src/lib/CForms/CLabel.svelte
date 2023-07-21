@@ -30,9 +30,9 @@
 
 <style lang="scss">
 	:where(.c-label) {
-		--border-color-input: var(--s-4);
+		--border-color-input: var(--s-6);
 		border-bottom: 2px solid var(--border-color-input);
-		background-color: var(--s-6);
+		background-color: var(--s-5);
 		color: var(--text-color-input, inherit);
 		border-radius: var(--size-1);
 		transition: all 0.2s;
@@ -44,11 +44,12 @@
 		gap: 0.2rem;
 		min-height: 48px;
 		padding-inline: var(--size-1);
-		isolation: isolate;
 
 		&:focus-within {
-			--text-color-input: var(--brand);
-			--border-color-input: var(--brand);
+			--border-color-input: var(--accent);
+		}
+		&:has(:focus-visible) {
+			--text-color-input: var(--accent);
 		}
 
 		&.no-label {
@@ -61,10 +62,11 @@
 		&:has(input[disabled]) {
 			cursor: not-allowed;
 			color: hsla(0, 0%, 50%, 0.5);
+			background-color: hsla(0, 0%, 50%, 0.1);
 			--text-color-input: currentColor;
 			--border-color-input: currentColor;
-			> .label-text {
-				color: hsla(0, 0%, 50%, 0.5);
+			.label-text {
+				color: hsla(0, 0%, 50%, 0.8);
 			}
 		}
 		&.error-state {
@@ -76,10 +78,10 @@
 			background-color: transparent;
 			grid-template-columns: auto auto 1fr auto;
 			grid-template-rows: auto;
-			grid-template-areas: 'I P L A';
+			grid-template-areas: 'P I L A';
 			align-items: center;
 			gap: 0.5rem;
-			> .label-text {
+			.label-text {
 				font-size: 1.1rem;
 				cursor: inherit;
 			}
@@ -88,18 +90,16 @@
 			}
 		}
 
-		> .label-text {
+		.label-text {
 			grid-area: L;
 			user-select: none;
 			pointer-events: none;
 			cursor: text;
 			white-space: nowrap;
-			backface-visibility: hidden;
 			font-size: 1rem;
-			opacity: 0.8;
 		}
 
-		> .hint {
+		.hint {
 			color: var(--text-color-input);
 			user-select: none;
 			line-height: 1;
@@ -123,6 +123,8 @@
 		.input-ctrl {
 			grid-area: I;
 			display: flex;
+			align-items: center;
+			justify-content: center;
 			:global(input) {
 				border: none;
 				outline: none;
@@ -136,12 +138,20 @@
 					-webkit-box-shadow: 0 0 0 30px var(--s-5) inset;
 				}
 				&::placeholder {
-					color: var(--s-2);
+					color: hsla(0, 0%, 50%, 0.9);
 				}
 				&:disabled {
-					color: var(--on-s-4);
+					color: inherit;
 					cursor: inherit;
 				}
+			}
+			:global([type='checkbox']) {
+				width: var(--size-4);
+				height: var(--size-4);
+			}
+			:global([type='radio']) {
+				width: var(--size-4);
+				height: var(--size-4);
 			}
 		}
 	}
