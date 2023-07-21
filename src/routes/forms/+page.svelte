@@ -1,6 +1,29 @@
 <script lang="ts">
-	import { CLabel } from '$lib'
+	import { CLabel, CForm } from '$lib'
+	import type { Rule } from '$lib'
+
+	function handleSubmit() {
+		console.log('Form submit')
+	}
+
+	const required: Rule = (v) => !!v || 'Este campo es requerido'
+	const validEmail: Rule = (v: string) =>
+		v.endsWith('@gmail.com') || 'Email mal formado, (tiene que terminar con @gmail.com)'
 </script>
+
+<div class="card mb-4">
+	<CForm on:submit={handleSubmit}>
+		<div class="d-grid gap-3">
+			<CLabel label="Email" let:rules>
+				<input type="email" use:rules={[required, validEmail]} />
+			</CLabel>
+			<CLabel label="Password" let:rules>
+				<input type="password" use:rules={[required]} />
+			</CLabel>
+			<button class="btn"> submit </button>
+		</div>
+	</CForm>
+</div>
 
 <div class="d-flex gap-4 flex-column card mb-4">
 	<CLabel label="Correo">
@@ -53,32 +76,5 @@
 	</CLabel>
 	<CLabel label="week">
 		<input type="week" />
-	</CLabel>
-</div>
-
-<div class="d-flex gap-4 flex-column card">
-	<CLabel label="Text">
-		<input value="La patata" />
-	</CLabel>
-	<CLabel>
-		<input value="La patata" />
-	</CLabel>
-	<CLabel label="Text">
-		<input disabled value="La patata" />
-	</CLabel>
-	<CLabel>
-		<input disabled value="La patata" />
-	</CLabel>
-	<CLabel label="Text" loading>
-		<input />
-	</CLabel>
-	<CLabel loading>
-		<input value="La patata" />
-	</CLabel>
-	<CLabel label="Text">
-		<input placeholder="Escribe aqui...." />
-	</CLabel>
-	<CLabel>
-		<input placeholder="Escribe aqui...." />
 	</CLabel>
 </div>

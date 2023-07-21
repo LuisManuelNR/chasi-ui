@@ -1,9 +1,57 @@
 <script lang="ts">
+	import type { Action } from 'svelte/action'
+	import type { Rule } from './rules.js'
+	import { getContext } from 'svelte'
+
 	export let label = ''
 	export let loading = false
 
 	let hint = ''
 	let shake = false
+
+	const formValidator = getContext<Array<() => string | undefined> | undefined>('validators')
+
+	const rules: Action<HTMLInputElement | HTMLTextAreaElement, Rule[]> = (input, fns) => {
+		let indexForm = 0
+		if (formValidator) {
+			indexForm = formValidator.push(validator(fns, input)) - 1
+		}
+		const validationProcess = validate(fns, input)
+		input.addEventListener('input', validationProcess)
+		return {
+			destroy() {
+				if (formValidator && formValidator[indexForm]) {
+					formValidator.splice(indexForm, 1)
+				}
+				input.removeEventListener('input', validationProcess)
+			}
+		}
+	}
+
+	function validator(rules: Rule[], input: HTMLInputElement | HTMLTextAreaElement) {
+		return () => {
+			if (input) {
+				validate(rules, input)()
+				if (hint) shake = true
+				return hint
+			}
+		}
+	}
+
+	function validate(r: Rule[], input: HTMLInputElement | HTMLTextAreaElement) {
+		return () => {
+			let ilegal: string | true = ''
+			if (r.length) {
+				for (let i = 0; i < r.length; i++) {
+					ilegal = r[i](input.value)
+					if (ilegal !== true) {
+						break
+					}
+				}
+			}
+			hint = ilegal !== true ? ilegal : ''
+		}
+	}
 </script>
 
 <label
@@ -12,6 +60,7 @@
 	class:no-label={!label}
 	class:error-state={hint}
 	class:shake-animation={shake}
+	on:animationend={() => (shake = false)}
 >
 	<div class="label-text">
 		{label}
@@ -20,7 +69,7 @@
 		<slot name="prepend" />
 	</div>
 	<div class="input-ctrl">
-		<slot />
+		<slot {rules} />
 	</div>
 	<div class="append">
 		<slot name="append" />

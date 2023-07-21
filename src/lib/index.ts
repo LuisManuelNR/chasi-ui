@@ -11,3 +11,5 @@ export { default as CSidebar } from './CSidebar/CSidebar.svelte'
 export { default as CImageUploader } from './CImageUploader/CImageUploader.svelte'
 export { default as CDraggableList } from './CDraggableList/CDraggableList.svelte'
 export { default as CAvatar } from './CAvatar/CAvatar.svelte'
+
+export type { Rule } from './CForms/rules.js'
