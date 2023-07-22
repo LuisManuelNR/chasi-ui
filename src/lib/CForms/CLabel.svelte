@@ -174,6 +174,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			:global(textarea),
+			:global(select),
 			:global(input) {
 				border: none;
 				outline: none;

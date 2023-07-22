@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CLabel, CForm } from '$lib'
+	import { CLabel, CForm, CSelect } from '$lib'
 	import type { Rule } from '$lib'
 
 	function handleSubmit() {
@@ -9,11 +9,45 @@
 	const required: Rule = (v) => !!v || 'Este campo es requerido'
 	const validEmail: Rule = (v: string) =>
 		v.endsWith('@gmail.com') || 'Email mal formado, (tiene que terminar con @gmail.com)'
+
+	let items = [
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' }
+	]
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
+			<CSelect {items} itemText="state" />
 			<CLabel label="Email" let:rules>
 				<input type="email" use:rules={[required, validEmail]} />
 			</CLabel>
