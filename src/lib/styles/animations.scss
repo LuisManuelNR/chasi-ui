@@ -43,3 +43,23 @@
 		outline-offset: 10px;
 	}
 }
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes scale {
+	0% {
+		scale: 0.9;
+	}
+
+	100% {
+		scale: 1;
+	}
+}

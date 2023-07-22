@@ -1,5 +1,9 @@
+<script context="module" lang="ts">
+	const menus = new Set<() => void>()
+</script>
+
 <script lang="ts">
-	import { tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 
 	export let closeOnClick = false
 	export let visible = false
@@ -24,10 +28,13 @@
 	}
 
 	function openMenu() {
+		menus.forEach((v) => v())
 		visible = true
 	}
 	function closeMenu() {
-		visible = false
+		if (visible) {
+			visible = false
+		}
 	}
 	function toggle(e: MouseEvent | KeyboardEvent) {
 		e.stopPropagation()
@@ -37,12 +44,18 @@
 	function onContentClick(e: MouseEvent) {
 		if (!closeOnClick) e.stopPropagation()
 	}
+	onMount(() => {
+		menus.add(closeMenu)
+		return () => {
+			menus.delete(closeMenu)
+		}
+	})
 </script>
 
 <svelte:window on:click={closeMenu} on:scroll={resolveOrientation} />
 
 <div class="c-menu" bind:this={menuElement}>
-	<slot name="action">
+	<slot name="action" {toggle}>
 		<button class="btn" on:click={toggle}>open</button>
 	</slot>
 	{#if visible}
@@ -52,8 +65,9 @@
 			class="c-menu-content"
 			on:click={onContentClick}
 			on:keydown
+			role="menu"
 		>
-			<slot {toggle} {visible} />
+			<slot {visible} />
 		</div>
 	{/if}
 </div>
@@ -62,5 +76,8 @@
 	.c-menu-content {
 		position: fixed;
 		z-index: 99999;
+		box-shadow: var(--shadow-3);
+		border-bottom-left-radius: var(--size-1);
+		border-bottom-right-radius: var(--size-1);
 	}
 </style>

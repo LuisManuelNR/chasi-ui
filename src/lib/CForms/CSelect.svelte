@@ -1,11 +1,11 @@
 <script lang="ts">
-	import CInput from './CInput.svelte'
+	import CLabel from './CLabel.svelte'
 	import CMenu from '../CMenu/CMenu.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiChevronDown } from '@mdi/js'
 	import { createEventDispatcher, tick } from 'svelte'
 	import { BROWSER } from 'esm-env'
-	import type { Rule } from './rules'
+	import type { Rule } from './rules.js'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
@@ -141,33 +141,41 @@
 
 <svelte:window on:popstate={handlePopState} />
 
-<div class="c-select" bind:this={selectElement} role="textbox" class:is-filter={filter}>
+<div
+	class="c-select"
+	bind:this={selectElement}
+	role="textbox"
+	class:is-filter={filter}
+	class:active={visibleMenu}
+>
 	<div class="overlay" class:show-overlay={visibleMenu} />
-	<CMenu let:toggle bind:visible={visibleMenu} closeOnClick>
-		<svelte:fragment slot="action">
-			<CInput
-				{label}
-				{loading}
-				{rules}
-				value={selectText}
-				{disabled}
-				readonly
-				on:click={!disabled ? toggle : undefined}
-				on:keydown={handleKeyDown()}
-			>
+	<CMenu bind:visible={visibleMenu} closeOnClick>
+		<svelte:fragment let:toggle slot="action">
+			<CLabel {label} {loading}>
+				<input
+					type="text"
+					readonly
+					value={selectText}
+					{disabled}
+					on:click={toggle}
+					on:keydown={handleKeyDown()}
+				/>
 				<svelte:fragment slot="append">
 					<CIcon icon={mdiChevronDown} />
 				</svelte:fragment>
-			</CInput>
+			</CLabel>
 		</svelte:fragment>
 		{#if filter}
 			<div class="px-3 pt-2 pb-1 filter-input">
-				<CInput
-					autofocus
-					placeholder="Filtrar Lista"
-					on:input={onFilter}
-					on:keydown={handleKeyDown(true)}
-				/>
+				<CLabel>
+					<input
+						type="search"
+						placeholder="Filtrar Lista"
+						autofocus
+						on:input={onFilter}
+						on:keydown={handleKeyDown(true)}
+					/>
+				</CLabel>
 			</div>
 		{/if}
 		{#if !filteredItems.length}
@@ -178,6 +186,9 @@
 			{#each filteredItems as item, i}
 				<div
 					class="c-select-item"
+					role="option"
+					tabindex={i}
+					aria-selected={hoveredItem === i}
 					class:hovered={hoveredItem === i}
 					on:click={onSelectItem(item)}
 					on:mouseenter={() => (hoveredItem = i)}
@@ -194,6 +205,9 @@
 
 <style lang="scss">
 	:where(.c-select) {
+		&.active {
+			--text-color-input: var(--accent);
+		}
 		.overlay {
 			position: fixed;
 			inset: 0;
@@ -206,9 +220,10 @@
 		:global(.c-menu-content) {
 			padding: 0;
 		}
-		:global(.c-select-item) {
+		.c-select-item {
 			padding: var(--size-1) var(--size-3);
 			position: relative;
+			border-bottom: 1px solid var(--s-3);
 			&::before {
 				content: '';
 				position: absolute;
@@ -222,24 +237,20 @@
 				opacity: 0.15;
 			}
 			&.hovered {
-				color: var(--brand);
+				color: var(--accent);
 			}
-		}
-		:global(.c-label:not(.disabled)),
-		:global(:where(input[readonly])) {
-			cursor: pointer;
 		}
 		.filter-input {
 			position: sticky;
 			top: 0;
 			background-color: inherit;
 			z-index: 1;
-			:global(.c-label) {
-				margin: 0;
-			}
+			// :global(.c-label) {
+			// 	margin: 0;
+			// }
 		}
 		:global(.c-menu-content) {
-			background-color: var(--n-200);
+			background-color: var(--s-5);
 			max-height: 350px;
 			overflow-y: auto;
 			overflow-x: hidden;
@@ -254,6 +265,8 @@
 				inset: 16px !important;
 				width: auto !important;
 				height: 95dvh !important;
+				max-height: none;
+				border-radius: var(--size-1);
 			}
 			&.is-filter :global(.c-menu-content) {
 				height: auto;
@@ -264,7 +277,6 @@
 			}
 			.c-select-item {
 				padding: var(--size-3) var(--size-3);
-				border-bottom: 1px solid var(--n-300);
 			}
 		}
 	}

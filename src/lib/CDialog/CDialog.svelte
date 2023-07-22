@@ -8,7 +8,7 @@
 	}
 </script>
 
-<slot name="action">
+<slot name="action" {close} {open}>
 	<button class="btn" on:click={open}> open dialog </button>
 </slot>
 

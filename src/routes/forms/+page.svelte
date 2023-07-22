@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { CLabel, CForm, CSelect } from '$lib'
+	import { CLabel, CForm, CSelect, CIcon } from '$lib'
+	import { mdiFlag } from '@mdi/js'
 	import type { Rule } from '$lib'
 
 	function handleSubmit() {
@@ -47,7 +48,8 @@
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect {items} itemText="state" />
+			<CSelect label="País (filters)" {items} itemText="state" filter />
+			<CSelect label="País" {items} itemText="state" />
 			<CLabel label="Email" let:rules>
 				<input type="email" use:rules={[required, validEmail]} />
 			</CLabel>

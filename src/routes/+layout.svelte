@@ -7,7 +7,8 @@
 
 	const links = [
 		{ text: 'Theme/Classes', url: '/theme' },
-		{ text: 'Froms', url: '/forms' }
+		{ text: 'Froms', url: '/forms' },
+		{ text: 'Menus', url: '/menus' }
 	]
 	let sidebar = false
 </script>
