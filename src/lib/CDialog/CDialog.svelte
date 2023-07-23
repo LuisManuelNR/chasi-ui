@@ -1,5 +1,6 @@
 <script lang="ts">
 	let dialogElement: HTMLDialogElement
+
 	export function open() {
 		dialogElement.showModal()
 	}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CLabel, CForm, CSelect, CIcon } from '$lib'
+	import { CLabel, CForm, CSelect, CSelect2 } from '$lib'
 	import { mdiFlag } from '@mdi/js'
 	import type { Rule } from '$lib'
 
@@ -43,12 +43,16 @@
 		{ state: 'California', abbr: 'CA' },
 		{ state: 'New York', abbr: 'NY' }
 	]
+
+	const testForm = {
+		pais: { state: 'Georgia', abbr: 'GA' }
+	}
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect label="País (filters)" {items} itemText="state" filter />
+			<CSelect label="País" {items} itemText="state" filter />
 			<CSelect label="País" {items} itemText="state" />
 			<CLabel label="Email" let:rules>
 				<input type="email" use:rules={[required, validEmail]} />
@@ -59,6 +63,17 @@
 			<button class="btn"> submit </button>
 		</div>
 	</CForm>
+</div>
+
+<div class="card mb-4">
+	<CForm on:submit={handleSubmit}>
+		<div class="d-grid gap-3">
+			<CSelect label="Select" {items} bind:value={testForm.pais} itemText="state" filter />
+			<CSelect2 label="Select 2" {items} bind:value={testForm.pais} itemText="state" filter />
+			<button class="btn"> submit </button>
+		</div>
+	</CForm>
+	<pre>{JSON.stringify(testForm, null, 2)}</pre>
 </div>
 
 <div class="d-flex gap-4 flex-column card mb-4">
