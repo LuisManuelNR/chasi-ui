@@ -1,3 +1,5 @@
+import type { Action } from 'svelte/action'
+
 type Coord = {
   x: number
   y: number
@@ -9,7 +11,7 @@ export type PannableParams = {
   onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void
 }
 
-export default function (node: HTMLElement, params?: PannableParams): { destroy?: () => void } {
+const pannable: Action<HTMLElement, PannableParams> = (node: HTMLElement, params?: PannableParams) => {
   let x: number
   let y: number
 
@@ -66,3 +68,5 @@ export default function (node: HTMLElement, params?: PannableParams): { destroy?
     }
   }
 }
+
+export default pannable

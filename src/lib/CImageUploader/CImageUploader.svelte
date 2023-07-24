@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CDialog from '../CDialog/CDialog.svelte'
-	import { pannable, zoomable } from '../Actions'
+	import { pannable, zoomable } from '../Actions/index.js'
 
 	export let uploadFunction: (file: File) => Promise<void>
 	export let aspectRatio: string | number = '4/3'

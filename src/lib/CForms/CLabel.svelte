@@ -12,7 +12,7 @@
 	const formValidator = getContext<Array<() => string | undefined> | undefined>('validators')
 
 	const rules: Action<HTMLInputElement | HTMLTextAreaElement, Rule[]> = (input, fns) => {
-		let indexForm = 0
+		let indexForm = -1
 		if (formValidator) {
 			indexForm = formValidator.push(validator(fns, input)) - 1
 		}

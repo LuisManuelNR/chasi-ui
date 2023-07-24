@@ -6,7 +6,7 @@
 		getHeight,
 		randomStr,
 		getElementIndex
-	} from './draggable-api'
+	} from './draggable-api.js'
 
 	const ghost = writable<ReturnType<typeof cloneElement> | undefined>()
 	const selectedItem = writable<any | undefined>()
@@ -21,8 +21,8 @@
 </script>
 
 <script lang="ts">
-	import type { PannableParams } from '../Actions/pannable'
-	import { pannable } from '../Actions'
+	import type { PannableParams } from '../Actions/pannable.js'
+	import { pannable } from '../Actions/index.js'
 	import { createEventDispatcher, onMount, tick } from 'svelte'
 
 	type T = $$Generic

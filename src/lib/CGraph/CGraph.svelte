@@ -7,8 +7,8 @@
 <script lang="ts">
 	import { setContext } from 'svelte'
 	import { writable } from 'svelte/store'
-	import { pannable, zoomable } from '../Actions'
-	import { zoom } from './utils'
+	import { pannable, zoomable } from '../Actions/index.js'
+	import { zoom } from './utils.js'
 
 	export let height = 500
 

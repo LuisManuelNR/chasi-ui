@@ -1,11 +1,8 @@
 <script lang="ts">
+	import type { Rule } from './rules.js'
 	import CLabel from './CLabel.svelte'
-	import CMenu from '../CMenu/CMenu.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiChevronDown } from '@mdi/js'
-	import { createEventDispatcher, tick } from 'svelte'
-	import { BROWSER } from 'esm-env'
-	import type { Rule } from './rules.js'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
@@ -17,267 +14,179 @@
 	export let itemValue: X = undefined
 	export let value: any = ''
 	export let rules: Rule[] = []
+	export let loading = false
 	export let filter = false
 	export let disabled = false
-	export let loading = false
 	export let noDataText = 'No hay datos disponibles'
 
-	let filteredItems: typeof items = items
-	let visibleMenu = false
-	let hoveredItem = -1
-	let selectText: string | undefined = ''
-	let dispatch = createEventDispatcher()
-	let selectElement: HTMLDivElement
-	let dirty = false
+	let dialog: HTMLDialogElement
+	let filteredItems: T[] = items
+	let fitlerValue = ''
+	let cursor = -1
 
-	$: {
-		const currentValue = itemValue && value instanceof Object ? value[itemValue] : value
-		selectText = `${
-			//@ts-ignore
-			itemText && currentValue instanceof Object ? currentValue[itemText] : currentValue
-		}`
-	}
-	$: {
-		if (!visibleMenu) {
-			filteredItems = items
-			hoveredItem = -1
-			if (BROWSER && dirty && window.history.state === 'select open') {
-				window.history.back()
-			}
-		} else {
-			dirty = true
-			if (window.history.state !== 'select open') {
-				window.history.pushState('select open', '')
-			}
-		}
+	function open() {
+		fitlerValue = ''
+		cursor = -1
+		dialog.showModal()
 	}
 
-	function onSelectItem(v: T) {
-		const input = selectElement.querySelector('input')!
+	function selectItem(item: T) {
 		return () => {
 			// @ts-ignore
-			value = itemValue && v instanceof Object ? v[itemValue] : v
-			visibleMenu = false
-			input.focus()
-			dispatch('change', value)
+			value = itemValue && item instanceof Object ? item[itemValue] : item
+			dialog.close()
+			filteredItems = items
+			fitlerValue = ''
 		}
 	}
 
-	function onFilter(e: Event) {
-		hoveredItem = -1
-		const inputValue = (e.target as HTMLInputElement).value
+	function onFilter() {
 		filteredItems = items.filter((v: T) => {
 			const toNormalize = itemText && v instanceof Object ? v[itemText] : v
-			if (typeof toNormalize === 'string' || typeof toNormalize === 'number') {
-				const a = normalizeItems(`${toNormalize}`)
-				const b = normalizeItems(`${inputValue}`)
-				return a.indexOf(b) > -1
+			if (typeof toNormalize === 'string') {
+				const a = normalizeItems(toNormalize)
+				const b = normalizeItems(fitlerValue)
+				return a.startsWith(b)
 			}
 			return v
 		})
+		cursor = filteredItems.length ? 0 : -1
 	}
-
 	function normalizeItems(str: string) {
 		return str
+			.trim()
 			.toLowerCase()
 			.normalize('NFD')
 			.replace(/[\u0300-\u036F]/g, '')
 	}
 
-	function handleKeyDown(isFilter = false) {
-		return async (e: KeyboardEvent) => {
+	function handleKeyDown(el: 'select' | 'filter') {
+		return (e: KeyboardEvent) => {
 			if (disabled) return
 			const kUp = e.code === 'ArrowUp'
 			const kDown = e.code === 'ArrowDown'
 			const kSpace = e.code === 'Space'
 			const kTab = e.code === 'Tab'
 			const kEnter = e.code === 'Enter'
-			if ((kTab || kSpace) && visibleMenu && !isFilter) {
-				e.stopPropagation()
-				e.preventDefault()
-				visibleMenu = false
-				return
-			}
-			if (kUp || kDown || (kSpace && !isFilter)) {
-				visibleMenu = true
+			if (el === 'select' && (kSpace || kEnter)) {
+				open()
 				e.preventDefault()
 				e.stopPropagation()
 			}
-			if (kUp) {
-				hoveredItem -= hoveredItem <= 0 ? -filteredItems.length + 1 : 1
-				await tick()
-				scrollItemSelectIntoView()
-			}
-			if (kDown) {
-				hoveredItem += hoveredItem === filteredItems.length - 1 ? -filteredItems.length + 1 : 1
-				await tick()
-				scrollItemSelectIntoView()
-			}
-			if (kEnter) {
-				e.preventDefault()
-				e.stopPropagation()
-				const selected = filteredItems[hoveredItem]
-				if (selected) {
-					onSelectItem(selected)()
+			if (el === 'filter') {
+				if (kTab) {
+					e.stopPropagation()
+					e.preventDefault()
+					dialog.close()
+				}
+				if (kUp) {
+					cursor -= cursor <= 0 ? -filteredItems.length + 1 : 1
+					scrollItemSelectIntoView()
+				}
+				if (kDown) {
+					cursor += cursor === filteredItems.length - 1 ? -filteredItems.length + 1 : 1
+					scrollItemSelectIntoView()
+				}
+				if (kEnter) {
+					e.preventDefault()
+					e.stopPropagation()
+					const selected = filteredItems[cursor]
+					if (selected) {
+						selectItem(selected)()
+					}
 				}
 			}
 		}
 	}
 
 	function scrollItemSelectIntoView() {
-		const element = selectElement.querySelector('.c-select-item.hovered')
+		const element = dialog.querySelector('.list-item.selected')
 		if (!element) return
 		if ('scrollIntoViewIfNeeded' in element) {
 			//@ts-ignore
 			element.scrollIntoViewIfNeeded({ block: 'end' })
 		}
 	}
-	function handlePopState() {
-		if (visibleMenu) {
-			visibleMenu = false
-		}
-	}
+
+	$: displayText = (itemText ? value[itemText] : value) || ''
 </script>
 
-<svelte:window on:popstate={handlePopState} />
-
-<div
-	class="c-select"
-	bind:this={selectElement}
-	role="textbox"
-	class:is-filter={filter}
-	class:active={visibleMenu}
->
-	<div class="overlay" class:show-overlay={visibleMenu} />
-	<CMenu bind:visible={visibleMenu} closeOnClick>
-		<svelte:fragment let:toggle slot="action">
-			<CLabel {label} {loading}>
-				<input
-					type="text"
-					readonly
-					value={selectText}
-					{disabled}
-					on:click={toggle}
-					on:keydown={handleKeyDown()}
-				/>
-				<svelte:fragment slot="append">
-					<CIcon icon={mdiChevronDown} />
-				</svelte:fragment>
-			</CLabel>
+<slot {open} {displayText}>
+	<CLabel {label} {loading} let:rules={inputRules}>
+		<input
+			readonly
+			{disabled}
+			on:click={open}
+			value={displayText}
+			on:keydown={handleKeyDown('select')}
+		/>
+		<input hidden use:inputRules={rules} {value} />
+		<svelte:fragment slot="append">
+			<CIcon icon={mdiChevronDown} />
 		</svelte:fragment>
-		{#if filter}
-			<div class="px-3 pt-2 pb-1 filter-input">
-				<CLabel>
-					<input
-						type="search"
-						placeholder="Filtrar Lista"
-						autofocus
-						on:input={onFilter}
-						on:keydown={handleKeyDown(true)}
-					/>
-				</CLabel>
-			</div>
-		{/if}
+	</CLabel>
+</slot>
+
+<dialog bind:this={dialog}>
+	{#if filter}
+		<div class="filter-input mb-4">
+			<CLabel>
+				<input
+					placeholder="Filtrar Lista"
+					type="search"
+					bind:value={fitlerValue}
+					on:input={onFilter}
+					on:keydown={handleKeyDown('filter')}
+				/>
+			</CLabel>
+		</div>
+	{/if}
+	<div class="options">
 		{#if !filteredItems.length}
-			<div class="c-select-item">
+			<div class="px-4">
 				{noDataText}
 			</div>
 		{:else}
 			{#each filteredItems as item, i}
-				<div
-					class="c-select-item"
-					role="option"
-					tabindex={i}
-					aria-selected={hoveredItem === i}
-					class:hovered={hoveredItem === i}
-					on:click={onSelectItem(item)}
-					on:mouseenter={() => (hoveredItem = i)}
-					on:keydown|stopPropagation
-				>
+				<button class="list-item" class:selected={cursor === i} on:click={selectItem(item)}>
 					<slot name="item" {item} index={i}>
 						{itemText ? item[itemText] : item}
 					</slot>
-				</div>
+				</button>
 			{/each}
 		{/if}
-	</CMenu>
-</div>
+	</div>
+</dialog>
 
 <style lang="scss">
-	:where(.c-select) {
-		&.active {
-			--text-color-input: var(--accent);
-		}
-		.overlay {
-			position: fixed;
-			inset: 0;
+	input[readonly] {
+		cursor: initial;
+		user-select: none;
+	}
+	.options {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-1);
+	}
+	.filter-input {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+	}
+	dialog {
+		max-width: min(350px, 100vw);
+		height: 95dvh;
+		width: auto;
+		margin: auto;
+		animation: scale 0.1s ease;
+		box-shadow: var(--shadow-3);
+		background-color: var(--s-4);
+		border: 1px solid var(--s-3);
+		border-radius: var(--size-1);
+		&::backdrop {
 			background-color: #0000006e;
-			pointer-events: none;
-			opacity: 0;
-			transition: opacity 200ms ease;
-			z-index: 1;
-		}
-		:global(.c-menu-content) {
-			padding: 0;
-		}
-		.c-select-item {
-			padding: var(--size-1) var(--size-3);
-			position: relative;
-			border-bottom: 1px solid var(--s-3);
-			&::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				opacity: 0;
-				background-color: currentColor;
-				border-radius: inherit;
-				pointer-events: none;
-			}
-			&.hovered::before {
-				opacity: 0.15;
-			}
-			&.hovered {
-				color: var(--accent);
-			}
-		}
-		.filter-input {
-			position: sticky;
-			top: 0;
-			background-color: inherit;
-			z-index: 1;
-			// :global(.c-label) {
-			// 	margin: 0;
-			// }
-		}
-		:global(.c-menu-content) {
-			background-color: var(--s-5);
-			max-height: 350px;
-			overflow-y: auto;
-			overflow-x: hidden;
-			padding: 0;
-		}
-		/* smartphones, touchscreens */
-		@media (hover: none) and (pointer: coarse) {
-			.show-overlay {
-				opacity: 1;
-			}
-			:global(.c-menu-content) {
-				inset: 16px !important;
-				width: auto !important;
-				height: 95dvh !important;
-				max-height: none;
-				border-radius: var(--size-1);
-			}
-			&.is-filter :global(.c-menu-content) {
-				height: auto;
-				width: auto;
-				top: 16px;
-				max-height: 100%;
-				transform: translate(0, 0);
-			}
-			.c-select-item {
-				padding: var(--size-3) var(--size-3);
-			}
+			animation: fade 0.2s ease;
 		}
 	}
 </style>

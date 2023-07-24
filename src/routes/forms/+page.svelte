@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CLabel, CForm, CSelect, CSelect2 } from '$lib'
+	import { CLabel, CForm, CSelect } from '$lib'
 	import { mdiFlag } from '@mdi/js'
 	import type { Rule } from '$lib'
 
@@ -15,37 +15,37 @@
 		{ state: 'Florida', abbr: 'FL' },
 		{ state: 'Georgia', abbr: 'GA' },
 		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' },
-		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' },
-		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' },
-		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' },
-		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' },
-		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' },
-		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' },
-		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' },
-		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' },
-		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' },
-		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' },
-		{ state: 'New York', abbr: 'NY' }
+		{ state: 'California', abbr: 'CA' }
+		// { state: 'New York', abbr: 'NY' },
+		// { state: 'Florida', abbr: 'FL' },
+		// { state: 'Georgia', abbr: 'GA' },
+		// { state: 'Nebraska', abbr: 'NE' },
+		// { state: 'California', abbr: 'CA' },
+		// { state: 'New York', abbr: 'NY' },
+		// { state: 'Florida', abbr: 'FL' },
+		// { state: 'Georgia', abbr: 'GA' },
+		// { state: 'Nebraska', abbr: 'NE' },
+		// { state: 'California', abbr: 'CA' },
+		// { state: 'New York', abbr: 'NY' },
+		// { state: 'Florida', abbr: 'FL' },
+		// { state: 'Georgia', abbr: 'GA' },
+		// { state: 'Nebraska', abbr: 'NE' },
+		// { state: 'California', abbr: 'CA' },
+		// { state: 'New York', abbr: 'NY' },
+		// { state: 'Florida', abbr: 'FL' },
+		// { state: 'Georgia', abbr: 'GA' },
+		// { state: 'Nebraska', abbr: 'NE' },
+		// { state: 'California', abbr: 'CA' },
+		// { state: 'New York', abbr: 'NY' },
+		// { state: 'Florida', abbr: 'FL' },
+		// { state: 'Georgia', abbr: 'GA' },
+		// { state: 'Nebraska', abbr: 'NE' },
+		// { state: 'California', abbr: 'CA' },
+		// { state: 'New York', abbr: 'NY' }
 	]
 
 	const testForm = {
-		pais: { state: 'Georgia', abbr: 'GA' }
+		pais: undefined
 	}
 </script>
 
@@ -55,10 +55,10 @@
 			<CSelect label="País" {items} itemText="state" filter />
 			<CSelect label="País" {items} itemText="state" />
 			<CLabel label="Email" let:rules>
-				<input type="email" use:rules={[required, validEmail]} />
+				<input type="email" autocomplete="email" use:rules={[required, validEmail]} />
 			</CLabel>
 			<CLabel label="Password" let:rules>
-				<input type="password" use:rules={[required]} />
+				<input type="password" autocomplete="current-password" use:rules={[required]} />
 			</CLabel>
 			<button class="btn"> submit </button>
 		</div>
@@ -68,8 +68,13 @@
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect label="Select" {items} bind:value={testForm.pais} itemText="state" filter />
-			<CSelect2 label="Select 2" {items} bind:value={testForm.pais} itemText="state" filter />
+			<CSelect
+				label="Select 2"
+				{items}
+				bind:value={testForm.pais}
+				itemText="state"
+				rules={[required]}
+			/>
 			<button class="btn"> submit </button>
 		</div>
 	</CForm>
