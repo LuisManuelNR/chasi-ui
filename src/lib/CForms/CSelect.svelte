@@ -2,6 +2,7 @@
 	import type { Rule } from './rules.js'
 	import CLabel from './CLabel.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
+	import { createEventDispatcher } from 'svelte'
 	import { mdiChevronDown } from '@mdi/js'
 
 	type T = $$Generic
@@ -23,6 +24,7 @@
 	let filteredItems: T[] = items
 	let fitlerValue = ''
 	let cursor = -1
+	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
 		fitlerValue = ''
@@ -37,6 +39,7 @@
 			dialog.close()
 			filteredItems = items
 			fitlerValue = ''
+			distpach('change', item)
 		}
 	}
 
