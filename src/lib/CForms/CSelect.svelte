@@ -27,6 +27,7 @@
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
+		filteredItems = items
 		fitlerValue = ''
 		cursor = -1
 		dialog.showModal()

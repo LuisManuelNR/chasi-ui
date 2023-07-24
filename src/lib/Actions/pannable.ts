@@ -62,7 +62,7 @@ const pannable: Action<HTMLElement, PannableParams> = (node: HTMLElement, params
   node.addEventListener('touchstart', handleMousedown)
 
   return {
-    destroy() {
+    destroy: () => {
       node.removeEventListener('mousedown', handleMousedown)
       node.removeEventListener('touchstart', handleMousedown)
     }
