@@ -30,8 +30,6 @@
 	export let group: string = `default-group-${randomStr()}`
 	export let handlerSelector = '.handler'
 	export let ignoreHandler = '.ignore-handler'
-	// @ts-ignore
-	export let uid: T extends Record<string, any> ? keyof T : undefined = undefined
 	let klass = ''
 	export { klass as class }
 
@@ -172,13 +170,11 @@
 </script>
 
 <div class="draggable-list {group} {klass}" data-ref={hash} use:pannable={actions}>
-	{#each list as item, i (uid ? item[uid] : item)}
-		<slot {item} index={i} />
-	{/each}
+	<slot />
 </div>
 
 <style>
-	.selected {
+	:where(.selected) {
 		box-shadow: inset 0 0 20px var(--success);
 		transition: box-shadow 250ms ease;
 	}
