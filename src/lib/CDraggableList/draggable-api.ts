@@ -74,6 +74,8 @@ export function cloneElement(el: Element) {
   clone.style.pointerEvents = 'none'
   clone.style.transition = 'none'
   clone.style.opacity = '0.8'
+  clone.style.boxShadow = 'var(--shadow-4)'
+  clone.style.zIndex = '999999'
 
   let x = 0
   let y = 0
