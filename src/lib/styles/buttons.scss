@@ -182,9 +182,7 @@
 		pointer-events: none;
 	}
 
-	&.selected,
-	&:active,
-	&:focus-within {
+	&.selected {
 		--mark-scale: 1;
 		--item-opacity: 0.05;
 	}

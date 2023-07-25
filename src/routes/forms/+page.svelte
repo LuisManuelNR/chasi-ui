@@ -15,10 +15,10 @@
 		{ state: 'Florida', abbr: 'FL' },
 		{ state: 'Georgia', abbr: 'GA' },
 		{ state: 'Nebraska', abbr: 'NE' },
-		{ state: 'California', abbr: 'CA' }
-		// { state: 'New York', abbr: 'NY' },
-		// { state: 'Florida', abbr: 'FL' },
-		// { state: 'Georgia', abbr: 'GA' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' }
 		// { state: 'Nebraska', abbr: 'NE' },
 		// { state: 'California', abbr: 'CA' },
 		// { state: 'New York', abbr: 'NY' },
@@ -60,7 +60,7 @@
 			<CLabel label="Password" let:rules>
 				<input type="password" autocomplete="current-password" use:rules={[required]} />
 			</CLabel>
-			<button class="btn"> submit </button>
+			<button class="btn" type="submit"> submit </button>
 		</div>
 	</CForm>
 </div>

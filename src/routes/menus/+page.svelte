@@ -25,7 +25,7 @@
 			<button class="list-item">click</button>
 		</div>
 	</CMenu>
-	<CDialog let:close>
+	<CDialog let:close persistent>
 		<button class="btn" slot="action" let:open on:click={open}>incide a dialog</button>
 		<div class="d-flex gap-4">
 			<CMenu closeOnClick>

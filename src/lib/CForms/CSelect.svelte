@@ -2,6 +2,7 @@
 	import type { Rule } from './rules.js'
 	import CLabel from './CLabel.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
+	import CDialog from '../CDialog/CDialog.svelte'
 	import { createEventDispatcher } from 'svelte'
 	import { mdiChevronDown } from '@mdi/js'
 
@@ -20,24 +21,25 @@
 	export let disabled = false
 	export let noDataText = 'No hay datos disponibles'
 
-	let dialog: HTMLDialogElement
 	let filteredItems: T[] = items
 	let fitlerValue = ''
 	let cursor = -1
+	let dialog = false
+	let listElement: HTMLDivElement
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
 		filteredItems = items
 		fitlerValue = ''
 		cursor = -1
-		dialog.showModal()
+		dialog = true
 	}
 
 	function selectItem(item: T) {
 		return () => {
 			// @ts-ignore
 			value = itemValue && item instanceof Object ? item[itemValue] : item
-			dialog.close()
+			dialog = false
 			filteredItems = items
 			fitlerValue = ''
 			distpach('change', item)
@@ -78,10 +80,12 @@
 				e.stopPropagation()
 			}
 			if (el === 'filter') {
-				if (kTab) {
+				if (kTab || kUp || kDown || kEnter) {
 					e.stopPropagation()
 					e.preventDefault()
-					dialog.close()
+				}
+				if (kTab) {
+					dialog = false
 				}
 				if (kUp) {
 					cursor -= cursor <= 0 ? -filteredItems.length + 1 : 1
@@ -92,8 +96,6 @@
 					scrollItemSelectIntoView()
 				}
 				if (kEnter) {
-					e.preventDefault()
-					e.stopPropagation()
 					const selected = filteredItems[cursor]
 					if (selected) {
 						selectItem(selected)()
@@ -104,7 +106,7 @@
 	}
 
 	function scrollItemSelectIntoView() {
-		const element = dialog.querySelector('.list-item.selected')
+		const element = listElement.querySelector('.list-item.selected')
 		if (!element) return
 		if ('scrollIntoViewIfNeeded' in element) {
 			//@ts-ignore
@@ -131,44 +133,61 @@
 	</CLabel>
 </slot>
 
-<dialog bind:this={dialog}>
-	{#if filter}
-		<div class="filter-input mb-4">
-			<CLabel>
-				<input
-					placeholder="Filtrar Lista"
-					type="search"
-					bind:value={fitlerValue}
-					on:input={onFilter}
-					on:keydown={handleKeyDown('filter')}
-				/>
-			</CLabel>
-		</div>
-	{/if}
-	<div class="options">
-		{#if !filteredItems.length}
-			<div class="px-4">
-				{noDataText}
+<div class="select-list" class:with-filter={filter}>
+	<CDialog bind:active={dialog}>
+		{#if filter}
+			<div class="filter-input mb-4">
+				<CLabel>
+					<input
+						placeholder="Filtrar Lista"
+						type="search"
+						bind:value={fitlerValue}
+						on:input={onFilter}
+						on:keydown={handleKeyDown('filter')}
+					/>
+				</CLabel>
 			</div>
-		{:else}
-			{#each filteredItems as item, i}
-				<button class="list-item" class:selected={cursor === i} on:click={selectItem(item)}>
-					<slot name="item" {item} index={i}>
-						{itemText ? item[itemText] : item}
-					</slot>
-				</button>
-			{/each}
 		{/if}
-	</div>
-</dialog>
+		<div class="options" bind:this={listElement}>
+			{#if !filteredItems.length}
+				<div class="px-4">
+					{noDataText}
+				</div>
+			{:else}
+				{#each filteredItems as item, i}
+					<button
+						class="list-item"
+						class:selected={cursor === i}
+						on:click={selectItem(item)}
+						on:keydown={handleKeyDown('filter')}
+					>
+						<slot name="item" {item} index={i}>
+							{itemText ? item[itemText] : item}
+						</slot>
+					</button>
+				{/each}
+			{/if}
+		</div>
+	</CDialog>
+</div>
 
 <style lang="scss">
 	input[readonly] {
 		cursor: initial;
 		user-select: none;
 	}
+	.select-list {
+		--dialog-max-width: min(250px, 100vw);
+		&.with-filter {
+			:global(dialog) {
+				height: 95dvh;
+			}
+		}
+		:global(dialog) {
+			padding: 0;
+		}
+	}
 	.options {
-		height: 100%;
 		display: flex;
 		flex-direction: column;
 		gap: var(--size-1);
@@ -177,20 +196,5 @@
 		position: sticky;
 		top: 0;
 		z-index: 1;
-	}
-	dialog {
-		max-width: min(350px, 100vw);
-		height: 95dvh;
-		width: auto;
-		margin: auto;
-		animation: scale 0.1s ease;
-		box-shadow: var(--shadow-3);
-		background-color: var(--s-4);
-		border: 1px solid var(--s-3);
-		border-radius: var(--size-1);
-		&::backdrop {
-			background-color: #0000006e;
-			animation: fade 0.2s ease;
-		}
 	}
 </style>
