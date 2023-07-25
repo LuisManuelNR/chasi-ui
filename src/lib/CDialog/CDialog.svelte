@@ -29,16 +29,28 @@
 
 	async function observeActivity(activity: boolean) {
 		if (activity) {
+			history.pushState({ 'chasi:dialog': true }, '')
 			await tick()
 			dialogElement.showModal()
 			dirty = true
 		} else if (dirty && dialogElement) {
+			if ('chasi:dialog' in history.state) {
+				history.back()
+			}
 			dialogElement.close()
+		}
+	}
+
+	function handlePopState(e: PopStateEvent) {
+		if (active) {
+			active = false
 		}
 	}
 
 	$: BROWSER && observeActivity(active)
 </script>
+
+<svelte:window on:popstate={handlePopState} />
 
 <slot name="action" {close} {open} />
 

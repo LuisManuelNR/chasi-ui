@@ -114,7 +114,8 @@
 		}
 	}
 
-	$: displayText = (itemText ? value && value[itemText] : value) || ''
+	$: displayText =
+		(itemText && value instanceof Object && value !== null ? value[itemText] : value) || ''
 </script>
 
 <slot {open} {displayText}>

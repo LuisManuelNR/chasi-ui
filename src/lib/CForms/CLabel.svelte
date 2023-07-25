@@ -146,6 +146,7 @@
 			cursor: text;
 			white-space: nowrap;
 			font-size: 1rem;
+			opacity: 0.85;
 		}
 
 		.hint {

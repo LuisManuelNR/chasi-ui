@@ -18,34 +18,34 @@
 		{ state: 'California', abbr: 'CA' },
 		{ state: 'New York', abbr: 'NY' },
 		{ state: 'Florida', abbr: 'FL' },
-		{ state: 'Georgia', abbr: 'GA' }
-		// { state: 'Nebraska', abbr: 'NE' },
-		// { state: 'California', abbr: 'CA' },
-		// { state: 'New York', abbr: 'NY' },
-		// { state: 'Florida', abbr: 'FL' },
-		// { state: 'Georgia', abbr: 'GA' },
-		// { state: 'Nebraska', abbr: 'NE' },
-		// { state: 'California', abbr: 'CA' },
-		// { state: 'New York', abbr: 'NY' },
-		// { state: 'Florida', abbr: 'FL' },
-		// { state: 'Georgia', abbr: 'GA' },
-		// { state: 'Nebraska', abbr: 'NE' },
-		// { state: 'California', abbr: 'CA' },
-		// { state: 'New York', abbr: 'NY' },
-		// { state: 'Florida', abbr: 'FL' },
-		// { state: 'Georgia', abbr: 'GA' },
-		// { state: 'Nebraska', abbr: 'NE' },
-		// { state: 'California', abbr: 'CA' },
-		// { state: 'New York', abbr: 'NY' },
-		// { state: 'Florida', abbr: 'FL' },
-		// { state: 'Georgia', abbr: 'GA' },
-		// { state: 'Nebraska', abbr: 'NE' },
-		// { state: 'California', abbr: 'CA' },
-		// { state: 'New York', abbr: 'NY' }
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' },
+		{ state: 'Florida', abbr: 'FL' },
+		{ state: 'Georgia', abbr: 'GA' },
+		{ state: 'Nebraska', abbr: 'NE' },
+		{ state: 'California', abbr: 'CA' },
+		{ state: 'New York', abbr: 'NY' }
 	]
 
 	const testForm = {
-		pais: undefined
+		pais: 'California'
 	}
 	function sleep(ms = 1000) {
 		return new Promise((resolve) => setTimeout(resolve, ms))
@@ -90,6 +90,7 @@
 				{items}
 				bind:value={testForm.pais}
 				itemText="state"
+				itemValue="state"
 				rules={[required]}
 			/>
 			<button class="btn"> submit </button>
