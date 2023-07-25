@@ -47,12 +47,29 @@
 	const testForm = {
 		pais: undefined
 	}
+	function sleep(ms = 1000) {
+		return new Promise((resolve) => setTimeout(resolve, ms))
+	}
+	async function handleSelectChange(e: CustomEvent) {
+		await sleep(3000)
+		console.log('Select change', e.detail)
+	}
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect label="País" {items} itemText="state" filter />
+			<CSelect
+				label="País"
+				{items}
+				itemText="state"
+				let:open
+				let:displayText
+				filter
+				on:change={handleSelectChange}
+			>
+				<button class="btn" on:click={open}> pais con filtro: resultado {displayText} </button>
+			</CSelect>
 			<CSelect label="País" {items} itemText="state" />
 			<CLabel label="Email" let:rules>
 				<input type="email" autocomplete="email" use:rules={[required, validEmail]} />

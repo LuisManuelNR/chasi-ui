@@ -38,7 +38,7 @@
 	function selectItem(item: T) {
 		return () => {
 			// @ts-ignore
-			value = itemValue && item instanceof Object ? item[itemValue] : item
+			value = itemValue && item instanceof Object && item !== null ? item[itemValue] : item
 			dialog = false
 			filteredItems = items
 			fitlerValue = ''
@@ -114,7 +114,7 @@
 		}
 	}
 
-	$: displayText = (itemText ? value[itemText] : value) || ''
+	$: displayText = (itemText ? value && value[itemText] : value) || ''
 </script>
 
 <slot {open} {displayText}>
