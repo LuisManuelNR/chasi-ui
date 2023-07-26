@@ -53,14 +53,14 @@
 	}
 
 	&.icon {
-		--icon-size: 42px;
+		--default-size: var(--icon-size, 42px);
 		border-radius: 50%;
-		width: var(--icon-size);
-		height: var(--icon-size);
-		min-height: var(--icon-size);
-		max-height: var(--icon-size);
-		min-width: var(--icon-size);
-		max-width: var(--icon-size);
+		width: var(--default-size);
+		height: var(--default-size);
+		min-height: var(--default-size);
+		max-height: var(--default-size);
+		min-width: var(--default-size);
+		max-width: var(--default-size);
 		padding: 0;
 	}
 
