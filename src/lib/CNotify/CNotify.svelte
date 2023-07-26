@@ -10,6 +10,7 @@
 	export let visible = false
 	export let title = ''
 	export let text = ''
+	export let html = ''
 	export function close() {
 		visible = false
 		setTimeout(() => {
@@ -20,7 +21,7 @@
 </script>
 
 {#if visible}
-	<div transition:slide={{ duration: duration }} class="c-notify {type}">
+	<div transition:slide|global={{ duration: duration }} class="c-notify {type}">
 		<slot {close}>
 			<div class="d-flex align-center justify-between px-3 py-1">
 				<strong>{title}</strong>
@@ -30,6 +31,11 @@
 			</div>
 			{#if text}
 				<p class="px-3 pb-3">{text}</p>
+			{/if}
+			{#if html}
+				<div class="px-3 pb-3">
+					{@html html}
+				</div>
 			{/if}
 		</slot>
 	</div>

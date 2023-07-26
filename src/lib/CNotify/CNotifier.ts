@@ -4,6 +4,7 @@ import { BROWSER } from 'esm-env'
 type CNotifierParams = {
 	title: string
 	text?: string
+	html?: string
 	timeout?: number
 	target?: string
 }
@@ -16,7 +17,9 @@ if (BROWSER) {
 	}
 }
 
-function send({ title = '', text = '', timeout = 0, type = '', target = '.notifications-holder' }) {
+const DEFAULT_TIMEOUT = 4000
+
+function send({ title, text, html, timeout = DEFAULT_TIMEOUT, type, target = '.notifications-holder' }: CNotifierParams & { type: string }) {
 	const container = document.querySelector(target)
 	if (!container) throw 'Missing target element for Display notifications'
 	const noty = new CNotify({
@@ -25,6 +28,7 @@ function send({ title = '', text = '', timeout = 0, type = '', target = '.notifi
 			title,
 			text,
 			type,
+			html,
 			visible: true
 		},
 		intro: true
@@ -43,28 +47,16 @@ function send({ title = '', text = '', timeout = 0, type = '', target = '.notifi
 	})
 }
 
-const DEFAULT_TIMEOUT = 4000
-
-function error({
-	title = '',
-	text = '',
-	timeout = DEFAULT_TIMEOUT,
-	target
-}: CNotifierParams): void {
-	send({ title, text, timeout, type: 'error', target })
+function error(opt: CNotifierParams): void {
+	send({ ...opt, type: 'error' })
 }
 
-function info({ title = '', text = '', timeout = DEFAULT_TIMEOUT, target }: CNotifierParams): void {
-	send({ title, text, timeout, type: 'brand', target })
+function info(opt: CNotifierParams): void {
+	send({ ...opt, type: 'brand' })
 }
 
-function success({
-	title = '',
-	text = '',
-	timeout = DEFAULT_TIMEOUT,
-	target
-}: CNotifierParams): void {
-	send({ title, text, timeout, type: 'success', target })
+function success(opt: CNotifierParams): void {
+	send({ ...opt, type: 'success' })
 }
 
 export const CNotifier = {
