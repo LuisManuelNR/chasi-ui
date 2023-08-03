@@ -28,8 +28,6 @@ export default (node: HTMLElement, params?: PannableParams) => {
   }, 10)
 
   function handleMousedown(event: MouseEvent | TouchEvent) {
-    event.preventDefault()
-    event.stopPropagation()
     const e = event instanceof MouseEvent ? event : event.touches[0]
     x = Math.round(e.clientX)
     y = Math.round(e.clientY)
