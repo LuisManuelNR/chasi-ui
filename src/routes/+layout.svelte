@@ -9,7 +9,8 @@
 		{ text: 'Theme/Classes', url: '/theme' },
 		{ text: 'Froms', url: '/forms' },
 		{ text: 'Menus', url: '/menus' },
-		{ text: 'Draggable', url: '/draggable' }
+		{ text: 'Draggable', url: '/draggable' },
+		{ text: 'Avatar', url: '/avatar' }
 	]
 	let sidebar = false
 </script>

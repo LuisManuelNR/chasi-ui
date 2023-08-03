@@ -2,6 +2,7 @@
 	export let frame = false
 	export let text = ''
 	export let size = '48px'
+	export let src = ''
 
 	let klass = ''
 	export { klass as class }
@@ -11,9 +12,11 @@
 
 <div class="c-avatar {klass}" class:frame style="--size: {size};" title={text}>
 	<div class="c-avatar-container">
-		<slot>
+		{#if src}
+			<img {src} alt={text} />
+		{:else}
 			<span>{FirstLetter}</span>
-		</slot>
+		{/if}
 	</div>
 </div>
 
@@ -34,7 +37,8 @@
 			border-radius: inherit;
 			overflow: hidden;
 			text-transform: capitalize;
-			:global(img) {
+			background-color: var(--s-1);
+			img {
 				width: 100%;
 				transform: scale(var(--img-scale));
 				transition: transform 0.2s;

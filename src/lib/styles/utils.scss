@@ -205,13 +205,18 @@
 	box-shadow: none;
 
 	&::after {
-		content: '';
+		content: "";
 		position: absolute;
 		inset: 0;
 		user-select: none;
 		cursor: not-allowed;
 		backdrop-filter: grayscale(1);
 		filter: grayscale(1);
+		width: 100%;
+		height: 100%;
+		border-radius: inherit;
+		background: transparent;
+		transform: none;
 	}
 
 	&:active {
