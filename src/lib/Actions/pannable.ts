@@ -1,5 +1,4 @@
 import { throttle } from '$lib/CGraph/utils.js'
-import type { Action } from 'svelte/action'
 
 type Coord = {
   x: number
@@ -12,25 +11,28 @@ export type PannableParams = {
   onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void
 }
 
-const pannable: Action<HTMLElement, PannableParams> = (node: HTMLElement, params?: PannableParams) => {
+export default (node: HTMLElement, params?: PannableParams) => {
   let x: number
   let y: number
 
   const trotMove = throttle((event: MouseEvent | TouchEvent) => {
     if (!params || !params.onMove) return
     const e = event instanceof MouseEvent ? event : event.touches[0]
-    const dx = e.clientX - x
-    const dy = e.clientY - y
-    x = e.clientX
-    y = e.clientY
+    const evX = Math.round(e.clientX)
+    const evY = Math.round(e.clientY)
+    const dx = evX - x
+    const dy = evY - y
+    x = evX
+    y = evY
     params.onMove(event, { x, y, dx, dy })
   }, 10)
 
   function handleMousedown(event: MouseEvent | TouchEvent) {
+    event.preventDefault()
     event.stopPropagation()
     const e = event instanceof MouseEvent ? event : event.touches[0]
-    x = e.clientX
-    y = e.clientY
+    x = Math.round(e.clientX)
+    y = Math.round(e.clientY)
 
     if (params && params.onStart) {
       params.onStart(event, { x, y })
@@ -58,7 +60,7 @@ const pannable: Action<HTMLElement, PannableParams> = (node: HTMLElement, params
   }
 
   node.addEventListener('mousedown', handleMousedown)
-  node.addEventListener('touchstart', handleMousedown)
+  node.addEventListener('touchstart', handleMousedown, { passive: false })
 
   return {
     destroy: () => {
@@ -67,5 +69,3 @@ const pannable: Action<HTMLElement, PannableParams> = (node: HTMLElement, params
     }
   }
 }
-
-export default pannable

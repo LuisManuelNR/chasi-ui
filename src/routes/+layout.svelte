@@ -10,7 +10,8 @@
 		{ text: 'Froms', url: '/forms' },
 		{ text: 'Menus', url: '/menus' },
 		{ text: 'Draggable', url: '/draggable' },
-		{ text: 'Avatar', url: '/avatar' }
+		{ text: 'Avatar', url: '/avatar' },
+		{ text: 'Actions', url: '/actions' }
 	]
 	let sidebar = false
 </script>
