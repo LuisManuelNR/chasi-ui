@@ -1,3 +1,5 @@
+@use './breakpoints.scss' as breakpoints;
+
 :where(.card) {
 	background-color: var(--s-4);
 	border: 1px solid var(--s-3);
@@ -226,5 +228,29 @@
 	&:active {
 		scale: 1;
 		box-shadow: none;
+	}
+}
+
+.hidden-xs {
+	@include breakpoints.xs {
+		display: none;
+	}
+}
+
+.hidden-sm {
+	@include breakpoints.sm {
+		display: none;
+	}
+}
+
+.hidden-md {
+	@include breakpoints.md {
+		display: none;
+	}
+}
+
+.hidden-lg {
+	@include breakpoints.lg {
+		display: none;
 	}
 }
