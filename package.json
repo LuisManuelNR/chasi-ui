@@ -1,7 +1,11 @@
 {
 	"name": "@chasi/ui",
 	"version": "0.2.16",
+	"bin": {
+		"gen-theme": "./dist/bin/theme.js"
+	},
 	"scripts": {
+		"theme": "node ./dist/bin/theme.js",
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
 		"preview": "vite preview",

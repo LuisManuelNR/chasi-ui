@@ -13,3 +13,4 @@ export { default as CDraggableList } from './CDraggableList/CDraggableList.svelt
 export { default as CAvatar } from './CAvatar/CAvatar.svelte'
 
 export type { Rule } from './CForms/rules.js'
+export type { ThemeGeneratorConfig } from './theme.js'

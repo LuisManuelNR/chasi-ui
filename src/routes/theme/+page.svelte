@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { ThemeConfig } from '$lib/bin/theme.js'
-	import { generateTheme } from '$lib/bin/theme.js'
+	import type { ThemeConfig } from '$lib/theme.js'
+	import { generateTheme } from '$lib/theme.js'
 	import { CLabel } from '$lib'
 	import { writable } from 'svelte/store'
 	import { onMount } from 'svelte'
