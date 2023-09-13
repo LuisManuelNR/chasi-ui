@@ -5,13 +5,14 @@
 
 	export let active = false
 
-	function toggle() {
+	function toggle(e?: MouseEvent) {
+		if (e) e.stopPropagation()
 		active = !active
 	}
 </script>
 
 <div>
-	<slot name="action">
+	<slot name="action" {toggle} isOpen={active}>
 		<button
 			class="btn d-flex align-center pa-2 gap-2"
 			class:active
@@ -27,7 +28,7 @@
 	</slot>
 	{#if active}
 		<div transition:slide|local={{ duration: 180 }}>
-			<slot {toggle} isOpen={active} />
+			<slot />
 		</div>
 	{/if}
 </div>
