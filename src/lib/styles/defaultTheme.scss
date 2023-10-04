@@ -8,6 +8,8 @@
 	--on-error-light: #d8dee3;
 	--success-light: #169873;
 	--on-success-light: #d8dee3;
+	--bg-light: #C4C9D4;
+	--on-bg-light: #212529;
 	--s-light-1: #F7F8F9;
 	--on-s-light-1: #212529;
 	--s-light-2: #E9EBEF;
@@ -29,6 +31,8 @@
 	--on-error-dark: #d8dee3;
 	--success-dark: #169873;
 	--on-success-dark: #d8dee3;
+	--bg-dark: #2C303D;
+	--on-bg-dark: #d8dee3;
 	--s-dark-1: #747F9C;
 	--on-s-dark-1: #d8dee3;
 	--s-dark-2: #59637E;
@@ -54,6 +58,8 @@
 	--on-error: var(--on-error-light);
 	--success: var(--success-light);
 	--on-success: var(--on-success-light);
+	--bg: var(--bg-light);
+	--on-bg: var(--on-bg-light);
 	--s-1: var(--s-light-1);
 	--on-s-1: var(--on-s-light-1);
 	--s-2: var(--s-light-2);
@@ -79,6 +85,8 @@
 		--on-error: var(--on-error-dark);
 		--success: var(--success-dark);
 		--on-success: var(--on-success-dark);
+		--bg: var(--bg-dark);
+		--on-bg: var(--on-bg-dark);
 		--s-1: var(--s-dark-1);
 		--on-s-1: var(--on-s-dark-1);
 		--s-2: var(--s-dark-2);
@@ -105,6 +113,8 @@
 	--on-error: var(--on-error-light);
 	--success: var(--success-light);
 	--on-success: var(--on-success-light);
+	--bg: var(--bg-light);
+	--on-bg: var(--on-bg-light);
 	--s-1: var(--s-light-1);
 	--on-s-1: var(--on-s-light-1);
 	--s-2: var(--s-light-2);
@@ -129,6 +139,8 @@
 	--on-error: var(--on-error-dark);
 	--success: var(--success-dark);
 	--on-success: var(--on-success-dark);
+	--bg: var(--bg-dark);
+	--on-bg: var(--on-bg-dark);
 	--s-1: var(--s-dark-1);
 	--on-s-1: var(--on-s-dark-1);
 	--s-2: var(--s-dark-2);
@@ -185,6 +197,17 @@
 
 .success-text {
 	color: var(--success)
+}
+
+.bg {
+	background-color: var(--bg);
+	outline-color: var(--bg);
+	border-color: var(--bg);
+	color: var(--on-bg);
+}
+
+.bg-text {
+	color: var(--bg)
 }
 
 .s-1 {
