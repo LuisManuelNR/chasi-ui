@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { pannable, zoomable } from '$lib/Actions/index.js'
+	import { pannable, zoomable, observer } from '$lib/Actions/index.js'
 
 	let scale = 1
 	let x = 0
@@ -23,21 +23,26 @@
 			}
 		}
 	}
+
+	function onIntersect(name: string) {
+		return () => {
+			console.log('im in viewport mom!!!', name)
+		}
+	}
 </script>
 
 <pat-tata>
-	<div use:setup>
-		<!-- <pre>scale: {scale}</pre> -->
+	<!-- <div use:setup>
 		<aa-bb>
 			<p>scale: {scale}</p>
 			<p>x: {x}</p>
 			<p>y: {y}</p>
 		</aa-bb>
-	</div>
+	</div> -->
 
-	<div></div>
-	<div></div>
-	<div></div>
+	<div use:observer={{ onIntersect: onIntersect('EL Primero'), once: true }}></div>
+	<div use:observer={{ onIntersect: onIntersect('EL Segundo') }}></div>
+	<div use:observer={{ onIntersect: onIntersect('EL Tercero'), once: true }}></div>
 </pat-tata>
 
 <style>
@@ -46,7 +51,7 @@
 	}
 	div {
 		background-color: var(--s-3);
-		height: 600px;
+		height: 1000px;
 		display: grid;
 		place-content: center;
 		user-select: none;
