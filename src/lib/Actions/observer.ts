@@ -13,10 +13,9 @@ export default function (node: HTMLElement, { onIntersect, once = true }: Observ
         entries.forEach(entry => {
           const isIntersecting = entry.isIntersecting || entry.intersectionRatio > 0
           if (!isIntersecting) return
-          const target = entry.target
           onIntersect(entry)
           if (once) {
-            window.observer.unobserve(target)
+            window.observer.unobserve(node)
           }
         })
       })
