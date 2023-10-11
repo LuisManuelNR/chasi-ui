@@ -73,11 +73,13 @@
 </div>
 
 <style lang="scss">
-	.c-menu-content {
-		position: fixed;
-		z-index: 99999;
-		box-shadow: var(--shadow-3);
-		border-bottom-left-radius: var(--size-1);
-		border-bottom-right-radius: var(--size-1);
+	@layer ChasiMenu {
+		.c-menu-content {
+			position: fixed;
+			z-index: 99999;
+			box-shadow: var(--shadow-3);
+			border-bottom-left-radius: var(--size-1);
+			border-bottom-right-radius: var(--size-1);
+		}
 	}
 </style>

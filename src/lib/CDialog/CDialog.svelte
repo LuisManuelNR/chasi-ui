@@ -62,15 +62,17 @@
 {/if}
 
 <style lang="scss">
-	:where(dialog) {
-		max-width: var(--dialog-max-width, 70ch);
-		width: auto;
-		margin: auto;
-		animation: scale 0.1s ease;
-		box-shadow: var(--shadow-3);
-		&::backdrop {
-			background-color: #0000006e;
-			animation: fade 0.2s ease;
+	@layer ChasiDialog {
+		dialog {
+			max-width: var(--dialog-max-width, 70ch);
+			width: auto;
+			margin: auto;
+			animation: scale 0.1s ease;
+			box-shadow: var(--shadow-3);
+			&::backdrop {
+				background-color: #0000006e;
+				animation: fade 0.2s ease;
+			}
 		}
 	}
 </style>

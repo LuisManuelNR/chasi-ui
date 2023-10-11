@@ -1,6 +1,5 @@
 @use './reset.scss';
 @use './variables.scss';
-@use './breakpoints.scss';
 @use './typography.scss';
 @use './animations.scss';
 
@@ -9,50 +8,52 @@
 
 @use './utils.scss';
 
-:root {
-	accent-color: var(--accent);
-	background-color: var(--bg);
-	color: var(--on-bg);
-	block-size: 100%;
-	min-height: 100vh;
-	scrollbar-gutter: stable;
-	padding-inline: var(--size-4);
+@layer ChasiRoot {
+	:root {
+		accent-color: var(--accent);
+		background-color: var(--bg);
+		color: var(--on-bg);
+		block-size: 100%;
+		min-height: 100vh;
+		scrollbar-gutter: stable;
+		padding-inline: var(--size-4);
 
-	*,
-	*::after,
-	*::before {
-		box-sizing: border-box;
-	}
-
-	scroll-behavior: smooth;
-	line-height: 1.5;
-	font-size: 100%;
-	/*16px*/
-	-webkit-text-size-adjust: 100%;
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-
-	&:has(dialog[open]:not(.sidebar)) {
-		/* prevent scroll when dialog is open */
-		overflow: hidden;
-	}
-
-	* {
-		&::-webkit-scrollbar-track {
-			background-color: transparent;
+		*,
+		*::after,
+		*::before {
+			box-sizing: border-box;
 		}
 
-		&::-webkit-scrollbar {
-			width: 4px;
-			height: 4px;
-			background-color: transparent;
+		scroll-behavior: smooth;
+		line-height: 1.5;
+		font-size: 100%;
+		/*16px*/
+		-webkit-text-size-adjust: 100%;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+
+		&:has(dialog[open]:not(.sidebar)) {
+			/* prevent scroll when dialog is open */
+			overflow: hidden;
 		}
 
-		&::-webkit-scrollbar-thumb {
-			width: 4px;
-			height: 4px;
-			background-color: var(--on-s-6);
+		* {
+			&::-webkit-scrollbar-track {
+				background-color: transparent;
+			}
+
+			&::-webkit-scrollbar {
+				width: 4px;
+				height: 4px;
+				background-color: transparent;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				width: 4px;
+				height: 4px;
+				background-color: var(--on-s-6);
+			}
 		}
 	}
 }

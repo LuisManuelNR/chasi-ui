@@ -234,33 +234,35 @@
 </CDialog>
 
 <style lang="scss">
-	.c-fileuploader {
-		--padding: 25px;
-		max-height: 85vh;
-		aspect-ratio: var(--aspect-ratio);
-		margin: 0 auto;
-		.preview {
-			padding: var(--padding);
-			box-shadow: inset 0 0 0 var(--padding) #0000006e;
-			overflow: hidden;
-			cursor: grab;
-			user-select: none;
-			.cropp-zone {
-				border: 2px solid white;
-				position: relative;
-				&::before {
-					content: '';
-					display: block;
-					padding-bottom: calc(100% / (var(--aspect-ratio)));
-				}
-				:global(img) {
-					position: absolute;
-					transform: translate(var(--tx), var(--ty));
-					width: var(--iw);
-					height: var(--ih);
-					top: 0;
-					left: 0;
-					z-index: -1;
+	@layer ChasiImageUploader {
+		.c-fileuploader {
+			--padding: 25px;
+			max-height: 85vh;
+			aspect-ratio: var(--aspect-ratio);
+			margin: 0 auto;
+			.preview {
+				padding: var(--padding);
+				box-shadow: inset 0 0 0 var(--padding) #0000006e;
+				overflow: hidden;
+				cursor: grab;
+				user-select: none;
+				.cropp-zone {
+					border: 2px solid white;
+					position: relative;
+					&::before {
+						content: '';
+						display: block;
+						padding-bottom: calc(100% / (var(--aspect-ratio)));
+					}
+					:global(img) {
+						position: absolute;
+						transform: translate(var(--tx), var(--ty));
+						width: var(--iw);
+						height: var(--ih);
+						top: 0;
+						left: 0;
+						z-index: -1;
+					}
 				}
 			}
 		}

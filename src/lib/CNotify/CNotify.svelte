@@ -42,12 +42,14 @@
 {/if}
 
 <style lang="scss">
-	.c-notify {
-		width: 100%;
-		margin-bottom: 16px;
-		border-radius: var(--size-1);
-		position: relative;
-		overflow: hidden;
+	@layer ChasiNotify {
+		.c-notify {
+			width: 100%;
+			margin-bottom: 16px;
+			border-radius: var(--size-1);
+			position: relative;
+			overflow: hidden;
+		}
 	}
 	:global(.notifications-holder) {
 		position: fixed;
