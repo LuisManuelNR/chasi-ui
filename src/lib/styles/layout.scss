@@ -1,3 +1,4 @@
+@use './container.scss' as container;
 @use './breakpoints.scss' as breakpoints;
 
 .d-flex {
@@ -34,6 +35,41 @@
 	}
 
 	@include breakpoints.lg {
+		grid-template-areas: var(--lg-area);
+		grid-template-columns: var(--lg-columns);
+	}
+}
+
+.d-grid-container {
+	display: grid;
+	--xs-area: initial;
+	--xs-columns: initial;
+
+	--sm-area: var(--xs-area);
+	--sm-columns: var(--xs-columns);
+
+	--md-area: var(--sm-area);
+	--md-columns: var(--sm-columns);
+
+	--lg-area: var(--md-area);
+	--lg-columns: var(--md-columns);
+
+	@include container.xs {
+		grid-template-areas: var(--xs-area);
+		grid-template-columns: var(--xs-columns);
+	}
+
+	@include container.sm {
+		grid-template-areas: var(--sm-area);
+		grid-template-columns: var(--sm-columns);
+	}
+
+	@include container.md {
+		grid-template-areas: var(--md-area);
+		grid-template-columns: var(--md-columns);
+	}
+
+	@include container.lg {
 		grid-template-areas: var(--lg-area);
 		grid-template-columns: var(--lg-columns);
 	}

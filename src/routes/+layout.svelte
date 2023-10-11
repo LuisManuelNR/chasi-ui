@@ -11,7 +11,8 @@
 		{ text: 'Menus', url: '/menus' },
 		{ text: 'Draggable', url: '/draggable' },
 		{ text: 'Avatar', url: '/avatar' },
-		{ text: 'Actions', url: '/actions' }
+		{ text: 'Actions', url: '/actions' },
+		{ text: 'Container', url: '/container' }
 	]
 	let sidebar = false
 </script>

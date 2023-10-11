@@ -1,0 +1,74 @@
+// exacto
+@mixin xs {
+  @container (min-width: 0px) and (max-width: 576px) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @container (min-width: 576px) and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin md {
+  @container (min-width: 768px) and (max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @container (min-width: 992px) {
+    @content;
+  }
+}
+
+// exacto y hacia arriba
+@mixin xs-up {
+  @container (min-width: 0px) {
+    @content;
+  }
+}
+
+@mixin sm-up {
+  @container (min-width: 576px) {
+    @content;
+  }
+}
+
+@mixin md-up {
+  @container (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin lg-up {
+  @container (min-width: 992px) {
+    @content;
+  }
+}
+
+// exacto y hacia abajo
+@mixin xs-down {
+  @container (max-width: 0px) {
+    @content;
+  }
+}
+
+@mixin sm-down {
+  @container (max-width: 576px) {
+    @content;
+  }
+}
+
+@mixin md-down {
+  @container (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin lg-down {
+  @container (max-width: 992px) {
+    @content;
+  }
+}
