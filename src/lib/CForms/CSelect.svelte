@@ -173,29 +173,31 @@
 </div>
 
 <style lang="scss">
-	input[readonly] {
-		cursor: initial;
-		user-select: none;
-	}
-	.select-list {
-		--dialog-max-width: min(250px, 100vw);
-		&.with-filter {
+	@layer ChasiSelect {
+		input[readonly] {
+			cursor: initial;
+			user-select: none;
+		}
+		.select-list {
+			--dialog-max-width: min(250px, 100vw);
+			&.with-filter {
+				:global(dialog) {
+					height: 95dvh;
+				}
+			}
 			:global(dialog) {
-				height: 95dvh;
+				padding: 0;
 			}
 		}
-		:global(dialog) {
-			padding: 0;
+		.options {
+			display: flex;
+			flex-direction: column;
+			gap: var(--size-1);
 		}
-	}
-	.options {
-		display: flex;
-		flex-direction: column;
-		gap: var(--size-1);
-	}
-	.filter-input {
-		position: sticky;
-		top: 0;
-		z-index: 1;
+		.filter-input {
+			position: sticky;
+			top: 0;
+			z-index: 1;
+		}
 	}
 </style>
