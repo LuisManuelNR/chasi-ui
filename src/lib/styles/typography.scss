@@ -59,7 +59,7 @@
 }
 
 @for $i from 1 through 9 {
-	.f-w-#{i} {
+	.f-w-#{$i} {
 		font-weight: 100 * $i;
 	}
 }
