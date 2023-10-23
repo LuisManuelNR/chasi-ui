@@ -33,8 +33,8 @@
 			await tick()
 			dialogElement.showModal()
 			dirty = true
-		} else if (dirty && dialogElement && history.state && typeof history.state === 'object') {
-			if ('chasi:dialog' in history.state) {
+		} else if (dirty && dialogElement) {
+			if (history.state && typeof history.state === 'object' && 'chasi:dialog' in history.state) {
 				history.back()
 			}
 			dialogElement.close()
