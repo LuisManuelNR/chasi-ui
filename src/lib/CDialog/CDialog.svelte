@@ -34,7 +34,7 @@
 			dialogElement.showModal()
 			dirty = true
 		} else if (dirty && dialogElement) {
-			if ('chasi:dialog' in history.state) {
+			if (history.state && typeof history.state === 'object' && 'chasi:dialog' in history.state) {
 				history.back()
 			}
 			dialogElement.close()
