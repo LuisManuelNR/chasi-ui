@@ -118,58 +118,60 @@
 		(itemText && value instanceof Object && value !== null ? value[itemText] : value) || ''
 </script>
 
-<slot {open} {displayText}>
-	<CLabel {label} {loading} let:rules={inputRules}>
-		<input
-			readonly
-			{disabled}
-			on:click={open}
-			value={displayText}
-			on:keydown={handleKeyDown('select')}
-		/>
-		<input hidden use:inputRules={rules} {value} />
-		<svelte:fragment slot="append">
-			<CIcon icon={mdiChevronDown} />
-		</svelte:fragment>
-	</CLabel>
-</slot>
+<div class="c-select-ctrl">
+	<slot {open} {displayText}>
+		<CLabel {label} {loading} let:rules={inputRules}>
+			<input
+				readonly
+				{disabled}
+				on:click={open}
+				value={displayText}
+				on:keydown={handleKeyDown('select')}
+			/>
+			<input hidden use:inputRules={rules} {value} />
+			<svelte:fragment slot="append">
+				<CIcon icon={mdiChevronDown} />
+			</svelte:fragment>
+		</CLabel>
+	</slot>
 
-<div class="select-list" class:with-filter={filter}>
-	<CDialog bind:active={dialog}>
-		{#if filter}
-			<div class="filter-input mb-4">
-				<CLabel>
-					<input
-						placeholder="Filtrar Lista"
-						type="search"
-						bind:value={fitlerValue}
-						on:input={onFilter}
-						on:keydown={handleKeyDown('filter')}
-					/>
-				</CLabel>
-			</div>
-		{/if}
-		<div class="options" bind:this={listElement}>
-			{#if !filteredItems.length}
-				<div class="px-4">
-					{noDataText}
+	<div class="select-list" class:with-filter={filter}>
+		<CDialog bind:active={dialog}>
+			{#if filter}
+				<div class="filter-input mb-4">
+					<CLabel>
+						<input
+							placeholder="Filtrar Lista"
+							type="search"
+							bind:value={fitlerValue}
+							on:input={onFilter}
+							on:keydown={handleKeyDown('filter')}
+						/>
+					</CLabel>
 				</div>
-			{:else}
-				{#each filteredItems as item, i}
-					<button
-						class="list-item"
-						class:selected={cursor === i}
-						on:click={selectItem(item)}
-						on:keydown={handleKeyDown('filter')}
-					>
-						<slot name="item" {item} index={i}>
-							{itemText ? item[itemText] : item}
-						</slot>
-					</button>
-				{/each}
 			{/if}
-		</div>
-	</CDialog>
+			<div class="options" bind:this={listElement}>
+				{#if !filteredItems.length}
+					<div class="px-4">
+						{noDataText}
+					</div>
+				{:else}
+					{#each filteredItems as item, i}
+						<button
+							class="list-item"
+							class:selected={cursor === i}
+							on:click={selectItem(item)}
+							on:keydown={handleKeyDown('filter')}
+						>
+							<slot name="item" {item} index={i}>
+								{itemText ? item[itemText] : item}
+							</slot>
+						</button>
+					{/each}
+				{/if}
+			</div>
+		</CDialog>
+	</div>
 </div>
 
 <style lang="scss">
