@@ -26,7 +26,7 @@
 	let cursor = -1
 	let dialog = false
 	let listElement: HTMLDivElement
-	let selectedItem: T | undefined
+	let selectedItem: T
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
@@ -121,7 +121,7 @@
 </script>
 
 <div class="c-select-ctrl">
-	<slot {open} {displayText} {selectedItem}>
+	<slot {open} {displayText}>
 		<CLabel {label} {loading} let:rules={inputRules}>
 			<svelte:fragment slot="prepend">
 				{#if selectedItem}
