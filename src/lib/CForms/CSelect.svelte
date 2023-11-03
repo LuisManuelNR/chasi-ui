@@ -26,10 +26,6 @@
 	let cursor = -1
 	let dialog = false
 	let listElement: HTMLDivElement
-	// @ts-ignore
-	let selectedItem: T = items.find((v) =>
-		itemValue && v instanceof Object && v !== null ? v[itemValue] === value : v === v
-	)
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
@@ -43,7 +39,6 @@
 		return () => {
 			// @ts-ignore
 			value = itemValue && item instanceof Object && item !== null ? item[itemValue] : item
-			selectedItem = item
 			dialog = false
 			filteredItems = items
 			fitlerValue = ''
@@ -126,11 +121,7 @@
 <div class="c-select-ctrl">
 	<slot {open} {displayText}>
 		<CLabel {label} {loading} let:rules={inputRules}>
-			<svelte:fragment slot="prepend">
-				{#if selectedItem}
-					<slot name="prepend" {selectedItem} />
-				{/if}
-			</svelte:fragment>
+			<slot name="prepend" slot="prepend" />
 			<input
 				readonly
 				{disabled}
