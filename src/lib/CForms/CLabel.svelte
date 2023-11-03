@@ -17,6 +17,17 @@
 			indexForm = formValidator.push(validator(fns, input)) - 1
 		}
 		const validationProcess = validate(fns, input)
+		//@ts-ignore
+		const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
+		Object.defineProperty(input, 'value', {
+			get() {
+				return get.call(this)
+			},
+			set(newVal) {
+				set.call(this, newVal)
+				input.dispatchEvent(new Event('input', { bubbles: true }))
+			}
+		})
 		input.addEventListener('input', validationProcess)
 		return {
 			destroy() {

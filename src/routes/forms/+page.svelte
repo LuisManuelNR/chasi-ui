@@ -54,30 +54,66 @@
 		await sleep(3000)
 		console.log('Select change', e.detail)
 	}
+
+	let countryDefault: (typeof items)[number]
+	let testEmail: string = ''
+	function changeCountry() {
+		countryDefault = { state: 'Florida', abbr: 'FL' }
+	}
+	function changeemail() {
+		if (testEmail === 'no-es-valido') {
+			testEmail = 'valido@gmail.com'
+		} else {
+			testEmail = 'no-es-valido'
+		}
+	}
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect
+			<!-- <CSelect
 				label="País"
 				{items}
 				itemText="state"
 				let:open
 				let:displayText
-				filterBy="abbr"
+				filterBy="state"
 				on:change={handleSelectChange}
 			>
 				<button class="btn" on:click={open}> pais con filtro: resultado {displayText} </button>
-			</CSelect>
-			<CSelect label="País" {items} itemText="state" />
+			</CSelect> -->
+			<CSelect
+				label="País"
+				{items}
+				itemText="state"
+				filterBy="state"
+				rules={[required]}
+				value={countryDefault}
+			/>
 			<CLabel label="Email" let:rules>
-				<input type="email" autocomplete="email" use:rules={[required, validEmail]} />
+				<input
+					type="email"
+					autocomplete="email"
+					use:rules={[required, validEmail]}
+					value={testEmail}
+				/>
 			</CLabel>
+			<!-- <CLabel label="Email" required validEmail>
+				<input
+					type="email"
+					autocomplete="email"
+					value={testEmail}
+				/>
+			</CLabel> -->
 			<CLabel label="Password" let:rules>
 				<input type="password" autocomplete="current-password" use:rules={[required]} />
 			</CLabel>
-			<button class="btn" type="submit"> submit </button>
+			<div>
+				<button class="btn" type="submit"> submit </button>
+				<button class="btn" on:click={changeCountry}> set pais from outside </button>
+				<button class="btn" on:click={changeemail}> set email from outside </button>
+			</div>
 		</div>
 	</CForm>
 </div>
