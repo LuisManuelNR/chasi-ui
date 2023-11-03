@@ -65,7 +65,7 @@
 				itemText="state"
 				let:open
 				let:displayText
-				filter
+				filterBy="abbr"
 				on:change={handleSelectChange}
 			>
 				<button class="btn" on:click={open}> pais con filtro: resultado {displayText} </button>

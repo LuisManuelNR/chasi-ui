@@ -13,11 +13,12 @@
 	// @ts-ignore
 	export let itemText: X = undefined
 	// @ts-ignore
+	export let filterBy: X | boolean = false
+	// @ts-ignore
 	export let itemValue: X = undefined
 	export let value: any = ''
 	export let rules: Rule[] = []
 	export let loading = false
-	export let filter = false
 	export let disabled = false
 	export let noDataText = 'No hay datos disponibles'
 
@@ -48,7 +49,8 @@
 
 	function onFilter() {
 		filteredItems = items.filter((v: T) => {
-			const toNormalize = itemText && v instanceof Object ? v[itemText] : v
+			const toNormalize =
+				filterBy && typeof filterBy === 'string' && v instanceof Object ? v[filterBy] : v
 			if (typeof toNormalize === 'string') {
 				const a = normalizeItems(toNormalize)
 				const b = normalizeItems(fitlerValue)
@@ -136,9 +138,9 @@
 		</CLabel>
 	</slot>
 
-	<div class="select-list" class:with-filter={filter}>
+	<div class="select-list" class:with-filter={filterBy}>
 		<CDialog bind:active={dialog}>
-			{#if filter}
+			{#if filterBy}
 				<div class="filter-input mb-4">
 					<CLabel>
 						<input
