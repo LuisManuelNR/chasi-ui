@@ -26,6 +26,7 @@
 	let cursor = -1
 	let dialog = false
 	let listElement: HTMLDivElement
+	let selectedItem: T
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
@@ -39,6 +40,7 @@
 		return () => {
 			// @ts-ignore
 			value = itemValue && item instanceof Object && item !== null ? item[itemValue] : item
+			selectedItem = item
 			dialog = false
 			filteredItems = items
 			fitlerValue = ''
@@ -119,8 +121,9 @@
 </script>
 
 <div class="c-select-ctrl">
-	<slot {open} {displayText}>
+	<slot {open} {displayText} {selectedItem}>
 		<CLabel {label} {loading} let:rules={inputRules}>
+			<slot name="prepend" slot="prepend" {selectedItem} />
 			<input
 				readonly
 				{disabled}
