@@ -26,7 +26,10 @@
 	let cursor = -1
 	let dialog = false
 	let listElement: HTMLDivElement
-	let selectedItem: T
+	// @ts-ignore
+	let selectedItem: T = items.find((v) =>
+		itemValue && v instanceof Object && v !== null ? v[itemValue] === value : v === v
+	)
 	const distpach = createEventDispatcher<{ change: T }>()
 
 	function open() {
