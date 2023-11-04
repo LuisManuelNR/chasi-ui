@@ -9,12 +9,12 @@
 	let hint = ''
 	let shake = false
 
-	const formValidator = getContext<Array<() => string | undefined> | undefined>('validators')
+	const formValidator = getContext<Set<() => string | undefined> | undefined>('validators')
 
 	const rules: Action<HTMLInputElement | HTMLTextAreaElement, Rule[]> = (input, fns) => {
-		let indexForm = -1
+		const vfunc = validator(fns, input)
 		if (formValidator) {
-			indexForm = formValidator.push(validator(fns, input)) - 1
+			formValidator.add(vfunc)
 		}
 		const validationProcess = validate(fns, input)
 		//@ts-ignore
@@ -31,8 +31,8 @@
 		input.addEventListener('input', validationProcess)
 		return {
 			destroy() {
-				if (formValidator && formValidator[indexForm]) {
-					formValidator.splice(indexForm, 1)
+				if (formValidator) {
+					formValidator.delete(vfunc)
 				}
 				input.removeEventListener('input', validationProcess)
 			}

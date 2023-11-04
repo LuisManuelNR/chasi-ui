@@ -67,6 +67,10 @@
 			testEmail = 'no-es-valido'
 		}
 	}
+	let visibleCountry = true
+	function toggleCountryVisibility() {
+		visibleCountry = !visibleCountry
+	}
 </script>
 
 <div class="card mb-4">
@@ -83,14 +87,18 @@
 			>
 				<button class="btn" on:click={open}> pais con filtro: resultado {displayText} </button>
 			</CSelect> -->
-			<CSelect
-				label="País"
-				{items}
-				itemText="state"
-				filterBy="state"
-				rules={[required]}
-				value={countryDefault}
-			/>
+			{#if visibleCountry}
+				<CSelect
+					label="País"
+					{items}
+					itemText="state"
+					filterBy="state"
+					rules={[required]}
+					value={countryDefault}
+				/>
+			{:else}
+				country field was hidden
+			{/if}
 			<CLabel label="Email" let:rules>
 				<input
 					type="email"
@@ -99,13 +107,6 @@
 					value={testEmail}
 				/>
 			</CLabel>
-			<!-- <CLabel label="Email" required validEmail>
-				<input
-					type="email"
-					autocomplete="email"
-					value={testEmail}
-				/>
-			</CLabel> -->
 			<CLabel label="Password" let:rules>
 				<input type="password" autocomplete="current-password" use:rules={[required]} />
 			</CLabel>
@@ -113,6 +114,7 @@
 				<button class="btn" type="submit"> submit </button>
 				<button class="btn" on:click={changeCountry}> set pais from outside </button>
 				<button class="btn" on:click={changeemail}> set email from outside </button>
+				<button class="btn" on:click={toggleCountryVisibility}> hide/show country </button>
 			</div>
 		</div>
 	</CForm>

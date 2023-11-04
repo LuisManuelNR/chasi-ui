@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, setContext } from 'svelte'
 
-	const validator: Array<() => string> = []
+	const validator = new Set<() => string>()
 	setContext('validators', validator)
 
 	const dispatch = createEventDispatcher<{ submit: SubmitEvent }>()
@@ -14,13 +14,12 @@
 			if (!selector) return
 		} else if (submiter.getAttribute('type') !== 'submit') return
 		let invalidForm = false
-		for (let i = 0; i < validator.length; i++) {
-			const f = validator[i]
+		validator.forEach((f) => {
 			const invalidInput = f()
 			if (invalidInput) {
 				invalidForm = true
 			}
-		}
+		})
 		if (!invalidForm) {
 			dispatch('submit', e)
 		} else {
