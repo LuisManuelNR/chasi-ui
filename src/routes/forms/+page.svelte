@@ -71,6 +71,7 @@
 	function toggleCountryVisibility() {
 		visibleCountry = !visibleCountry
 	}
+	let testAbbr = 'CA'
 </script>
 
 <div class="card mb-4">
@@ -92,10 +93,12 @@
 					label="País"
 					{items}
 					itemText="state"
+					itemValue="abbr"
 					filterBy="state"
 					rules={[required]}
-					value={countryDefault}
+					bind:value={testAbbr}
 				/>
+				<p>selected country: {testAbbr}</p>
 			{:else}
 				country field was hidden
 			{/if}

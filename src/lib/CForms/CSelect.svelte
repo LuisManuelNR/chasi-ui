@@ -5,6 +5,7 @@
 	import CDialog from '../CDialog/CDialog.svelte'
 	import { createEventDispatcher } from 'svelte'
 	import { mdiChevronDown } from '@mdi/js'
+	import { BROWSER } from 'esm-env'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
@@ -43,7 +44,6 @@
 			dialog = false
 			filteredItems = items
 			fitlerValue = ''
-			distpach('change', item)
 		}
 	}
 
@@ -60,6 +60,7 @@
 		})
 		cursor = filteredItems.length ? 0 : -1
 	}
+
 	function normalizeItems(str: string) {
 		return str
 			.trim()
@@ -116,14 +117,26 @@
 		}
 	}
 
+	$: selectedItem =
+		BROWSER && value && items.find((v) => (itemValue ? v[itemValue] == value : v == value))
 	$: displayText =
-		(itemText && value instanceof Object && value !== null ? value[itemText] : value) || ''
+		(itemText && selectedItem instanceof Object && selectedItem !== null
+			? selectedItem[itemText]
+			: selectedItem) || ''
+	let oldSelectedItem = selectedItem
+	let dirty = false
+	$: if (selectedItem && selectedItem !== oldSelectedItem) {
+		if (dirty) {
+			distpach('change', selectedItem)
+		}
+		dirty = true
+	}
 </script>
 
 <div class="c-select-ctrl">
-	<slot {open} {displayText}>
+	<slot {open} {selectedItem}>
 		<CLabel {label} {loading} let:rules={inputRules}>
-			<slot name="prepend" slot="prepend" />
+			<slot name="prepend" slot="prepend" {selectedItem} />
 			<input
 				readonly
 				{disabled}
