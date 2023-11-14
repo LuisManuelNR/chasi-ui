@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { BROWSER } from 'esm-env'
+	import { tick } from 'svelte'
+
 	export let active = false
 	export let persistent = false
 
@@ -22,6 +25,19 @@
 			if (!persistent) active = false
 		}
 	}
+
+	let dirty = false
+	async function observeActivity(show: boolean) {
+		if (show) {
+			await tick()
+			dialogElement.showModal()
+			dirty = true
+		} else if (dirty && dialogElement) {
+			dialogElement.close()
+		}
+	}
+
+	$: BROWSER && observeActivity(active)
 </script>
 
 <slot name="action" {close} {open} />
