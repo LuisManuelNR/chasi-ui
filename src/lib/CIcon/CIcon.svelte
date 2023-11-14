@@ -12,5 +12,7 @@
 <style lang="scss">
 	.c-icon {
 		fill: currentColor;
+		min-width: fit-content;
+		min-height: fit-content;
 	}
 </style>

@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { BROWSER } from 'esm-env'
-	import { tick } from 'svelte'
-
 	export let active = false
 	export let persistent = false
 
 	let dialogElement: HTMLDialogElement
-	let dirty = false
 
 	function open() {
 		active = true
@@ -26,31 +22,7 @@
 			if (!persistent) active = false
 		}
 	}
-
-	async function observeActivity(activity: boolean) {
-		if (activity) {
-			history.pushState({ 'chasi:dialog': true }, '')
-			await tick()
-			dialogElement.showModal()
-			dirty = true
-		} else if (dirty && dialogElement) {
-			if (history.state && typeof history.state === 'object' && 'chasi:dialog' in history.state) {
-				history.back()
-			}
-			dialogElement.close()
-		}
-	}
-
-	function handlePopState(e: PopStateEvent) {
-		if (active) {
-			active = false
-		}
-	}
-
-	$: BROWSER && observeActivity(active)
 </script>
-
-<svelte:window on:popstate={handlePopState} />
 
 <slot name="action" {close} {open} />
 
