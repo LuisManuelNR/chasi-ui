@@ -141,7 +141,11 @@
 				grid-template-rows: auto;
 				grid-template-areas: 'P I L A';
 				align-items: center;
-				gap: 0.5rem;
+				gap: 0;
+				padding-inline: 0;
+				.prepend:not(:empty) {
+					margin-right: var(--size-2);
+				}
 				.label-text {
 					font-size: 1.1rem;
 					cursor: inherit;
@@ -212,10 +216,14 @@
 				:global([type='checkbox']) {
 					width: var(--size-4);
 					height: var(--size-4);
+					min-width: var(--size-4);
+					margin-right: var(--size-2);
 				}
 				:global([type='radio']) {
 					width: var(--size-4);
 					height: var(--size-4);
+					min-width: var(--size-4);
+					margin-right: var(--size-2);
 				}
 			}
 		}

@@ -145,6 +145,12 @@
 		<input type="email" />
 	</CLabel>
 	<CLabel label="checkbox">
+		<img
+			slot="prepend"
+			src="https://imagessl.casadellibro.com/t1e/flag/ES.png"
+			alt="banderita"
+			width="38px"
+		/>
 		<input type="checkbox" />
 	</CLabel>
 	<CLabel label="checkbox">
