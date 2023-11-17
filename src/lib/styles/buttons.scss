@@ -26,6 +26,7 @@
 		outline-color: var(--s-2);
 		vertical-align: bottom;
 		text-decoration: none;
+		min-width: fit-content;
 
 		&::after {
 			content: '';
@@ -157,6 +158,7 @@
 		align-items: center;
 		font-weight: 600;
 		min-height: 42px;
+		min-width: fit-content;
 
 		&::after {
 			content: "";
