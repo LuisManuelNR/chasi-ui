@@ -100,7 +100,7 @@
 			position: relative;
 			display: grid;
 			grid-template-columns: auto 1fr auto;
-			grid-template-rows: 1.03rem 1fr;
+			grid-template-rows: auto 1fr;
 			grid-template-areas: 'P L A' 'P I A';
 			gap: 0.2rem;
 			min-height: 48px;
@@ -147,8 +147,9 @@
 					margin-right: var(--size-2);
 				}
 				.label-text {
-					font-size: 1.1rem;
 					cursor: inherit;
+					white-space: initial;
+					font-size: 0.9rem;
 				}
 				&:not(&.error-state) {
 					--border-color-input: transparent;
@@ -161,8 +162,12 @@
 				pointer-events: none;
 				cursor: text;
 				white-space: nowrap;
-				font-size: 1rem;
+				font-size: 0.9rem;
 				opacity: 0.85;
+				line-height: normal;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				padding-top: 2px;
 			}
 
 			.hint {
@@ -172,7 +177,6 @@
 				position: absolute;
 				bottom: -1.2rem;
 				transform: translateZ(0);
-				white-space: nowrap;
 				font-size: 0.9rem;
 				font-weight: 600;
 			}

@@ -102,17 +102,20 @@
 			{:else}
 				country field was hidden
 			{/if}
-			<CLabel label="Email" let:rules>
-				<input
-					type="email"
-					autocomplete="email"
-					use:rules={[required, validEmail]}
-					value={testEmail}
-				/>
-			</CLabel>
-			<CLabel label="Password" let:rules>
-				<input type="password" autocomplete="current-password" use:rules={[required]} />
-			</CLabel>
+			<div class="d-flex gap-2 align-center">
+				<CLabel label="Email" let:rules>
+					<input
+						type="email"
+						autocomplete="email"
+						use:rules={[required, validEmail]}
+						value={testEmail}
+					/>
+				</CLabel>
+				<CLabel label="Password" let:rules>
+					<input type="password" autocomplete="current-password" use:rules={[required]} />
+				</CLabel>
+				<button class="btn"> submit </button>
+			</div>
 			<div>
 				<button class="btn" type="submit"> submit </button>
 				<button class="btn" on:click={changeCountry}> set pais from outside </button>
