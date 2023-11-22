@@ -173,12 +173,32 @@
 			.hint {
 				color: var(--text-color-input);
 				user-select: none;
-				line-height: 1;
 				position: absolute;
-				bottom: -1.2rem;
 				transform: translateZ(0);
 				font-size: 0.9rem;
 				font-weight: 600;
+				top: 100%;
+				z-index: 1;
+				width: 100%;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				white-space: initial;
+				overflow: hidden;
+				-webkit-line-clamp: 1;
+				outline: 0px solid var(--bg);
+				border-radius: inherit;
+				transition: all 150ms ease;
+				line-height: normal;
+			}
+			&:focus-within {
+				.hint:not(:empty) {
+					overflow: auto;
+					display: initial;
+					background-color: var(--bg);
+					z-index: 1;
+					translate: 0 12px;
+					outline-width: 6px;
+				}
 			}
 			.prepend {
 				grid-area: P;

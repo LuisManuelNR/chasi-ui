@@ -9,7 +9,8 @@
 
 	const required: Rule = (v) => !!v || 'Este campo es requerido'
 	const validEmail: Rule = (v: string) =>
-		v.endsWith('@gmail.com') || 'Email mal formado, (tiene que terminar con @gmail.com)'
+		v.endsWith('@gmail.com') ||
+		'Email mal formado, (tiene que terminar con @gmail.com) o algo por el estilo'
 
 	let items = [
 		{ state: 'Florida', abbr: 'FL' },
