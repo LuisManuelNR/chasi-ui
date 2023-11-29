@@ -102,7 +102,6 @@
 			grid-template-columns: auto 1fr auto;
 			grid-template-rows: auto 1fr;
 			grid-template-areas: 'P L A' 'P I A';
-			width: 100%;
 			min-height: 48px;
 			padding-inline: var(--size-2);
 
@@ -187,6 +186,7 @@
 				border-top-right-radius: 0;
 				transition: all 150ms ease;
 				padding-inline: var(--size-2);
+				font-weight: 500;
 			}
 			.prepend {
 				grid-area: P;
