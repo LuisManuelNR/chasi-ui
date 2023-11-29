@@ -7,7 +7,7 @@
 		console.log('Form submit')
 	}
 
-	const required: Rule = (v) => !!v || 'Este campo es requerido'
+	const required: Rule = (v) => !!v || 'Este campo es requerido y es un error muy largo'
 	const validEmail: Rule = (v: string) =>
 		v.endsWith('@gmail.com') ||
 		'Email mal formado, (tiene que terminar con @gmail.com) o algo por el estilo'
@@ -103,7 +103,7 @@
 			{:else}
 				country field was hidden
 			{/if}
-			<div class="d-flex gap-2 align-center">
+			<div class="d-flex gap-2 align-center mb-4">
 				<CLabel label="Email" let:rules>
 					<input
 						type="email"

@@ -102,9 +102,9 @@
 			grid-template-columns: auto 1fr auto;
 			grid-template-rows: auto 1fr;
 			grid-template-areas: 'P L A' 'P I A';
-			gap: 0.2rem;
+			width: 100%;
 			min-height: 48px;
-			padding-inline: var(--size-1);
+			padding-inline: var(--size-2);
 
 			&:focus-within {
 				--border-color-input: var(--accent);
@@ -141,8 +141,8 @@
 				grid-template-rows: auto;
 				grid-template-areas: 'P I L A';
 				align-items: center;
-				gap: 0;
 				padding-inline: 0;
+				min-height: auto;
 				.prepend:not(:empty) {
 					margin-right: var(--size-2);
 				}
@@ -173,32 +173,20 @@
 			.hint {
 				color: var(--text-color-input);
 				user-select: none;
+				pointer-events: none;
 				position: absolute;
-				transform: translateZ(0);
 				font-size: 0.9rem;
-				font-weight: 600;
 				top: 100%;
 				z-index: 1;
 				width: 100%;
-				display: -webkit-box;
-				-webkit-box-orient: vertical;
-				white-space: initial;
 				overflow: hidden;
-				-webkit-line-clamp: 1;
-				outline: 0px solid var(--bg);
+				text-overflow: ellipsis;
+				text-wrap: nowrap;
 				border-radius: inherit;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
 				transition: all 150ms ease;
-				line-height: normal;
-			}
-			&:focus-within {
-				.hint:not(:empty) {
-					overflow: auto;
-					display: initial;
-					background-color: var(--bg);
-					z-index: 1;
-					translate: 0 12px;
-					outline-width: 6px;
-				}
+				padding-inline: var(--size-2);
 			}
 			.prepend {
 				grid-area: P;
