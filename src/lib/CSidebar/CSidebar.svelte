@@ -1,17 +1,12 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition'
 	export let right = false
-	export let stayOpenOnDesktop = false
 	export let active = false
+	export let hideOverlay: boolean | 'only-mobile' | 'only-desktop' = false
 </script>
 
-{#if active || stayOpenOnDesktop}
-	<div
-		class="sidebar py-3"
-		transition:slide={{ axis: 'x', duration: 150 }}
-		class:right
-		class:stay={stayOpenOnDesktop && !active}
-	>
+{#if active}
+	<div class="sidebar py-3" transition:slide={{ axis: 'x', duration: 150 }} class:right>
 		<aside class="card pa-0">
 			<div><slot name="header" /></div>
 			<nav class="nav-body">
@@ -21,8 +16,11 @@
 		</aside>
 	</div>
 {/if}
-{#if active}
-	<button transition:fade={{ duration: 200 }} class="overlay" on:click={() => (active = false)}
+{#if active && (typeof hideOverlay === 'string' || hideOverlay === false)}
+	<button
+		transition:fade={{ duration: 200 }}
+		class="overlay {hideOverlay}"
+		on:click={() => (active = false)}
 	></button>
 {/if}
 
@@ -53,18 +51,22 @@
 				grid-template-rows: auto 1fr auto;
 				box-shadow: var(--shadow-3);
 			}
-			@include breakpoints.md-down {
-				&.stay {
-					display: none;
-					pointer-events: none;
-				}
-			}
 		}
 		.overlay {
 			position: fixed;
 			inset: 0;
 			background-color: #00000096;
 			z-index: 5;
+			@include breakpoints.md-down {
+				&.only-mobile {
+					display: none;
+				}
+			}
+			@include breakpoints.md-up {
+				&.only-desktop {
+					display: none;
+				}
+			}
 		}
 	}
 </style>

@@ -14,10 +14,10 @@
 		{ text: 'Actions', url: '/actions' },
 		{ text: 'Container', url: '/container' }
 	]
-	let sidebar = false
+	let sidebar = true
 </script>
 
-<CSidebar bind:active={sidebar} stayOpenOnDesktop>
+<CSidebar bind:active={sidebar} hideOverlay="only-desktop">
 	{#each links as link}
 		<a class="list-item" class:selected={$page.url.pathname === link.url} href={link.url}
 			>{link.text}</a
