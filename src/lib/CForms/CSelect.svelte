@@ -54,7 +54,7 @@
 			if (typeof toNormalize === 'string') {
 				const a = normalizeItems(toNormalize)
 				const b = normalizeItems(fitlerValue)
-				return a.startsWith(b)
+				return a.includes(b)
 			}
 			return v
 		})
@@ -124,12 +124,9 @@
 			? selectedItem[itemText]
 			: selectedItem) || ''
 	let oldSelectedItem = selectedItem
-	let dirty = false
 	$: if (selectedItem && selectedItem !== oldSelectedItem) {
-		if (dirty) {
-			distpach('change', selectedItem)
-		}
-		dirty = true
+		distpach('change', selectedItem)
+		oldSelectedItem = selectedItem
 	}
 </script>
 
