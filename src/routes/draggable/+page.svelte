@@ -2,6 +2,7 @@
 	import { CDraggableList, CIcon } from '$lib'
 	import { mdiDrag } from '@mdi/js'
 	import { onMount } from 'svelte'
+	import Tree from './Tree.svelte'
 
 	type Photo = {
 		albumId: number
@@ -17,10 +18,42 @@
 		const response = await fetch(url)
 		photos = await response.json()
 	}
+	let familyData = [
+		{
+			nombre: 'Raíz',
+			hijos: [
+				{
+					nombre: 'Hijo1',
+					hijos: [
+						{
+							nombre: 'Nieto1',
+							hijos: []
+						}
+					]
+				},
+				{
+					nombre: 'Hijo2',
+					hijos: [
+						{
+							nombre: 'Nieto2',
+							hijos: []
+						},
+						{
+							nombre: 'Nieto3',
+							hijos: []
+						}
+					]
+				}
+			]
+		}
+	]
+
 	onMount(() => {
 		loadData()
 	})
 </script>
+
+<Tree bind:family={familyData}></Tree>
 
 <CDraggableList bind:list={photos}>
 	{#each photos as photo (photo.id)}

@@ -69,6 +69,7 @@
 			draggable = handler.closest(DRAGGABBLE_SELECTOR) as HTMLElement
 			if (!draggable) return
 			event.preventDefault()
+			event.stopPropagation()
 			$scroller = createScroller(draggable, coords.x, coords.y)
 		},
 		onMove(event, coords) {
