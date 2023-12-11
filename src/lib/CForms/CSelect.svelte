@@ -23,12 +23,18 @@
 	export let disabled = false
 	export let noDataText = 'No hay datos disponibles'
 
-	let filteredItems: T[] = items
+	let filteredItems: T[] = []
 	let fitlerValue = ''
 	let cursor = -1
 	let dialog = false
 	let listElement: HTMLDivElement
 	const distpach = createEventDispatcher<{ change: T }>()
+
+	$: renovateFilteredItems(items)
+
+	function renovateFilteredItems(list: T[]) {
+		filteredItems = list
+	}
 
 	function open() {
 		filteredItems = items
