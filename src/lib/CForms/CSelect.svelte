@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { isEqual } from '$lib/utils.js'
+
 	import type { Rule } from './rules.js'
 	import CLabel from './CLabel.svelte'
 	import CIcon from '../CIcon/CIcon.svelte'
@@ -124,7 +126,9 @@
 	}
 
 	$: selectedItem =
-		BROWSER && value && items.find((v) => (itemValue ? v[itemValue] == value : v == value))
+		BROWSER &&
+		value &&
+		items.find((v) => (itemValue ? isEqual(v[itemValue], value) : isEqual(v, value)))
 	$: displayText =
 		(itemText && selectedItem instanceof Object && selectedItem !== null
 			? selectedItem[itemText]
