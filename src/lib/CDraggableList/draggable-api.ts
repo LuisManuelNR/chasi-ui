@@ -66,6 +66,7 @@ export function runOnFrames(callback: () => void, fps = 30) {
 export function cloneElement(el: Element) {
   const { top, left, width, height } = el.getBoundingClientRect()
   const clone = el.cloneNode(true) as HTMLElement
+  clone.classList.add('ghost')
   clone.style.position = 'fixed'
   clone.style.top = `${top}px`
   clone.style.left = `${left}px`
