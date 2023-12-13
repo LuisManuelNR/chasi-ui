@@ -35,8 +35,8 @@
 
 	const DRAGGABBLE_SELECTOR = '.draggable'
 	const dispatch = createEventDispatcher<{
-		addItem: { list: T[]; item: T }
-		removeItem: { list: T[]; item: T }
+		addItem: { list: T[]; item: T; index: number }
+		removeItem: { list: T[]; item: T; index: number }
 	}>()
 
 	let displace: ReturnType<typeof createDisplacement>
@@ -133,13 +133,13 @@
 		const index = e.detail === undefined || e.detail === null ? list.length : e.detail
 		list.splice(index, 0, $selectedItem)
 		list = list
-		dispatch('addItem', { list, item: $selectedItem })
+		dispatch('addItem', { list, item: $selectedItem, index })
 	}
 	function removeItem(e: CustomEvent) {
 		const index = e.detail === undefined || e.detail === null ? list.length - 1 : e.detail
 		$selectedItem = list.splice(index, 1)[0]
 		list = list
-		dispatch('removeItem', { list, item: $selectedItem })
+		dispatch('removeItem', { list, item: $selectedItem, index })
 	}
 
 	function createDisplacement(selectedElement: HTMLElement) {
