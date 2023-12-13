@@ -35,7 +35,8 @@
 
 	const DRAGGABBLE_SELECTOR = '.draggable'
 	const dispatch = createEventDispatcher<{
-		change: T[]
+		addItem: { list: T[]; item: T }
+		removeItem: { list: T[]; item: T }
 	}>()
 
 	let displace: ReturnType<typeof createDisplacement>
@@ -56,8 +57,8 @@
 
 	let lastDropZone: HTMLElement | null
 	let draggable: HTMLElement | null
-	let fromIndex = 0
 
+	let fromIndex = 0
 	const actions: PannableParams = {
 		onStart(event, coords) {
 			if ($ghost) return
@@ -123,8 +124,6 @@
 				const toIndex = getElementIndex(draggable)
 				moveItem(hash, toHash, fromIndex, toIndex)
 				draggable = null
-				await tick()
-				dispatch('change', list)
 			}
 		}
 	}
@@ -134,11 +133,13 @@
 		const index = e.detail === undefined || e.detail === null ? list.length : e.detail
 		list.splice(index, 0, $selectedItem)
 		list = list
+		dispatch('addItem', { list, item: $selectedItem })
 	}
 	function removeItem(e: CustomEvent) {
 		const index = e.detail === undefined || e.detail === null ? list.length - 1 : e.detail
 		$selectedItem = list.splice(index, 1)[0]
 		list = list
+		dispatch('removeItem', { list, item: $selectedItem })
 	}
 
 	function createDisplacement(selectedElement: HTMLElement) {

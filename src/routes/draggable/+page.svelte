@@ -51,11 +51,15 @@
 	onMount(() => {
 		loadData()
 	})
+
+	function handleChange(e: any) {
+		console.log(e.detail)
+	}
 </script>
 
 <Tree bind:family={familyData}></Tree>
 
-<CDraggableList bind:list={photos}>
+<CDraggableList bind:list={photos} on:addItem={handleChange}>
 	{#each photos as photo (photo.id)}
 		<div class="d-flex align-center gap-2 draggable s-2 pa-2 mb-2">
 			<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
