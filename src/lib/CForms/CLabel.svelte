@@ -92,7 +92,7 @@
 			grid-template-columns: auto 1fr auto;
 			grid-template-rows: auto 1fr;
 			grid-template-areas: 'P L A' 'P I A';
-			min-height: 48px;
+			height: 48px;
 			padding-inline: var(--size-2);
 
 			&:focus-within {
@@ -143,6 +143,10 @@
 				&:not(&.error-state) {
 					--border-color-input: transparent;
 				}
+			}
+			&:has(textarea) {
+				height: auto;
+				min-height: 48px;
 			}
 
 			.label-text {
