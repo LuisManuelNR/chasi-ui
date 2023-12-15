@@ -46,9 +46,6 @@
 </pat-tata>
 
 <style>
-	aa-bb {
-		width: 400px;
-	}
 	div {
 		background-color: var(--s-3);
 		height: 1000px;

@@ -1,68 +1,57 @@
 <script lang="ts">
-	import type { Action } from 'svelte/action'
-	import type { Rule } from './rules.js'
-	import { getContext } from 'svelte'
+	import type { Rule } from '$lib'
+	import { getContext, onMount } from 'svelte'
 
 	export let label = ''
 	export let loading = false
+	export let rules: Array<Rule<any>> | undefined = undefined
 
 	let hint = ''
 	let shake = false
+	let value = ''
 
-	const formValidator = getContext<Set<() => string | undefined> | undefined>('validators')
+	const formValidator = getContext<Set<() => void> | undefined>('validators')
 
-	const rules: Action<HTMLInputElement | HTMLTextAreaElement, Rule[]> = (input, fns) => {
-		const vfunc = validator(fns, input)
-		if (formValidator) {
-			formValidator.add(vfunc)
+	function handleInputEvent(e: any) {
+		if (!rules?.length) return
+		if (e instanceof CustomEvent) value = e.detail
+		else if (e.target instanceof HTMLInputElement) {
+			if (e.target.type === 'checkbox' || e.target.type === 'radio') value = e.target.checked
+			else value = e.target.value
 		}
-		const validationProcess = validate(fns, input)
-		//@ts-ignore
-		const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
-		Object.defineProperty(input, 'value', {
-			get() {
-				return get.call(this)
-			},
-			set(newVal) {
-				set.call(this, newVal)
-				input.dispatchEvent(new Event('input', { bubbles: true }))
-			}
-		})
-		input.addEventListener('input', validationProcess)
-		return {
-			destroy() {
-				if (formValidator) {
-					formValidator.delete(vfunc)
-				}
-				input.removeEventListener('input', validationProcess)
-			}
-		}
+		validate(value)
 	}
 
-	function validator(rules: Rule[], input: HTMLInputElement | HTMLTextAreaElement) {
-		return () => {
-			if (input) {
-				validate(rules, input)()
-				if (hint) shake = true
+	export function validate(v: any) {
+		if (!rules?.length) return true
+		let ilegal: string | true
+		hint = ''
+		for (let i = 0; i < rules.length; i++) {
+			if (typeof rules[i] !== 'function') return true
+			ilegal = rules[i](v)
+			if (ilegal !== true) {
+				hint = ilegal
 				return hint
 			}
 		}
 	}
 
-	function validate(r: Rule[], input: HTMLInputElement | HTMLTextAreaElement) {
-		return () => {
-			let ilegal: string | true = ''
-			if (r.length) {
-				for (let i = 0; i < r.length; i++) {
-					ilegal = r[i](input.value)
-					if (ilegal !== true) {
-						break
-					}
-				}
-			}
-			hint = ilegal !== true ? ilegal : ''
+	function toValidaror() {
+		validate(value)
+		if (hint) shake = true
+		return hint
+	}
+
+	function appendRuleToForm() {
+		if (formValidator) {
+			formValidator.add(toValidaror)
+			return () => formValidator.delete(toValidaror)
 		}
 	}
+
+	onMount(() => {
+		return appendRuleToForm()
+	})
 </script>
 
 <label
@@ -72,6 +61,7 @@
 	class:error-state={hint}
 	class:shake-animation={shake}
 	on:animationend={() => (shake = false)}
+	on:input={handleInputEvent}
 >
 	<div class="label-text">
 		{label}
@@ -80,7 +70,7 @@
 		<slot name="prepend" />
 	</div>
 	<div class="input-ctrl">
-		<slot {rules} />
+		<slot />
 	</div>
 	<div class="append">
 		<slot name="append" />

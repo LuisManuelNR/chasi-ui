@@ -8,6 +8,7 @@
 	const links = [
 		{ text: 'Theme/Classes', url: '/theme' },
 		{ text: 'Froms', url: '/forms' },
+		{ text: 'Select', url: '/select' },
 		{ text: 'Menus', url: '/menus' },
 		{ text: 'Draggable', url: '/draggable' },
 		{ text: 'Avatar', url: '/avatar' },

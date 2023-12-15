@@ -8,11 +8,11 @@
 {#if active}
 	<div class="sidebar py-3" transition:slide={{ axis: 'x', duration: 150 }} class:right>
 		<aside class="card pa-0">
-			<div><slot name="header" /></div>
+			<slot name="header" />
 			<nav class="nav-body">
 				<slot />
 			</nav>
-			<div><slot name="footer" /></div>
+			<slot name="footer" />
 		</aside>
 	</div>
 {/if}

@@ -1,14 +1,17 @@
 <script lang="ts">
-	import { CLabel, CForm, CSelect } from '$lib'
+	import { CLabel, CForm, CSelect, CNotifier } from '$lib'
 	import { mdiFlag } from '@mdi/js'
 	import type { Rule } from '$lib'
 
 	function handleSubmit() {
-		console.log('Form submit')
+		CNotifier.info({ title: 'Form submit' })
 	}
 
-	const required: Rule = (v) => !!v || 'Este campo es requerido y es un error muy largo'
-	const validEmail: Rule = (v: string) =>
+	const requiredCountry = (v: (typeof items)[number]) => {
+		return v.abbr === 'NY' || 'El pais debe ser Nueva York!!!'
+	}
+	const required = (v: any) => !!v || 'Este campo es requerido y es un error muy largo'
+	const validEmail = (v: string) =>
 		v.endsWith('@gmail.com') ||
 		'Email mal formado, (tiene que terminar con @gmail.com) o algo por el estilo'
 
@@ -45,21 +48,18 @@
 		{ state: 'New York', abbr: 'NY' }
 	]
 
-	const testForm = {
-		pais: 'California'
-	}
+	const testForm = {}
 	function sleep(ms = 1000) {
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
-	async function handleSelectChange(e: CustomEvent) {
-		await sleep(3000)
-		console.log('Select change', e.detail)
+	function handleSelectChange(e: CustomEvent) {
+		CNotifier.info({ title: JSON.stringify(e.detail, null, 2) })
 	}
 
 	let countryDefault: (typeof items)[number]
 	let testEmail: string = ''
 	function changeCountry() {
-		countryDefault = { state: 'Florida', abbr: 'FL' }
+		countryDefault = { state: 'Cuba', abbr: 'CU' }
 	}
 	function changeemail() {
 		if (testEmail === 'no-es-valido') {
@@ -72,48 +72,45 @@
 	function toggleCountryVisibility() {
 		visibleCountry = !visibleCountry
 	}
-	let testAbbr = 'CA'
+	let testAbbr: any
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<!-- <CSelect
+			<CSelect
 				label="País"
 				{items}
-				itemText="state"
-				let:open
-				let:displayText
+				placeholder="Selecciona algo plis"
+				bind:value={countryDefault}
+				let:item
 				filterBy="state"
-				on:change={handleSelectChange}
+				on:select-item={handleSelectChange}
 			>
-				<button class="btn" on:click={open}> pais con filtro: resultado {displayText} </button>
-			</CSelect> -->
+				{item.state}
+			</CSelect>
 			{#if visibleCountry}
 				<CSelect
 					label="País"
 					{items}
-					itemText="state"
-					itemValue="abbr"
 					filterBy="state"
-					rules={[required]}
-					bind:value={testAbbr}
-				/>
-				<p>selected country: {testAbbr}</p>
+					rules={[requiredCountry]}
+					bind:value={countryDefault}
+					placeholder="Selecciona algo plis"
+					let:item
+				>
+					{item.state}
+				</CSelect>
+				<p>selected country: {JSON.stringify(countryDefault, null, 2)}</p>
 			{:else}
 				country field was hidden
 			{/if}
 			<div class="d-flex gap-2 align-center mb-4">
-				<CLabel label="Email" let:rules>
-					<input
-						type="email"
-						autocomplete="email"
-						use:rules={[required, validEmail]}
-						value={testEmail}
-					/>
+				<CLabel label="Email" rules={[required, validEmail]}>
+					<input type="email" autocomplete="email" bind:value={testEmail} />
 				</CLabel>
-				<CLabel label="Password" let:rules>
-					<input type="password" autocomplete="current-password" use:rules={[required]} />
+				<CLabel label="Password" rules={[required]}>
+					<input type="password" autocomplete="current-password" />
 				</CLabel>
 				<button class="btn"> submit </button>
 			</div>
@@ -125,81 +122,4 @@
 			</div>
 		</div>
 	</CForm>
-</div>
-
-<div class="card mb-4">
-	<CForm on:submit={handleSubmit}>
-		<div class="d-grid gap-3">
-			<CSelect
-				label="Select 2"
-				{items}
-				bind:value={testForm.pais}
-				itemText="state"
-				itemValue="state"
-				rules={[required]}
-			/>
-			<button class="btn"> submit </button>
-		</div>
-	</CForm>
-	<pre>{JSON.stringify(testForm, null, 2)}</pre>
-</div>
-
-<div class="d-flex gap-4 flex-column card mb-4">
-	<CLabel label="Correo">
-		<input type="email" />
-	</CLabel>
-	<CLabel label="checkbox">
-		<img
-			slot="prepend"
-			src="https://imagessl.casadellibro.com/t1e/flag/ES.png"
-			alt="banderita"
-			width="38px"
-		/>
-		<input type="checkbox" />
-	</CLabel>
-	<CLabel label="checkbox">
-		<input type="checkbox" />
-	</CLabel>
-	<CLabel label="checkbox">
-		<input type="checkbox" />
-	</CLabel>
-	<CLabel label="checkbox">
-		<input type="checkbox" />
-	</CLabel>
-	<CLabel label="color">
-		<input type="color" />
-	</CLabel>
-	<CLabel label="date">
-		<input type="date" />
-	</CLabel>
-	<CLabel label="datetime-local">
-		<input type="datetime-local" />
-	</CLabel>
-	<CLabel label="month">
-		<input type="month" />
-	</CLabel>
-	<CLabel label="number">
-		<input type="number" />
-	</CLabel>
-	<CLabel label="radio">
-		<input type="radio" />
-	</CLabel>
-	<CLabel label="radio">
-		<input type="radio" />
-	</CLabel>
-	<CLabel label="radio">
-		<input type="radio" />
-	</CLabel>
-	<CLabel label="range">
-		<input type="range" />
-	</CLabel>
-	<CLabel label="time">
-		<input type="time" />
-	</CLabel>
-	<CLabel label="url">
-		<input type="url" />
-	</CLabel>
-	<CLabel label="week">
-		<input type="week" />
-	</CLabel>
 </div>

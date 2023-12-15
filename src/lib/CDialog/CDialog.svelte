@@ -4,6 +4,7 @@
 
 	export let active = false
 	export let persistent = false
+	export let ssrRender = false
 
 	let dialogElement: HTMLDialogElement
 
@@ -42,10 +43,14 @@
 
 <slot name="action" {close} {open} />
 
-{#if active}
+{#if ssrRender || active}
 	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 	<dialog class="card" bind:this={dialogElement} on:click={handleClick} on:keydown={handlekeydown}>
-		<slot {close} {open} />
+		<slot name="header" />
+		<div class="body">
+			<slot {close} {open} />
+		</div>
+		<slot name="footer" />
 	</dialog>
 {/if}
 
@@ -61,6 +66,14 @@
 				background-color: #0000006e;
 				animation: fade 0.2s ease;
 			}
+		}
+		.body {
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		.card {
+			display: grid;
+			grid-template-rows: auto 1fr auto;
 		}
 	}
 </style>
