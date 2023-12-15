@@ -27,24 +27,23 @@
 	let virtualList = items
 	const dispatch = createEventDispatcher<{ 'select-item': T }>()
 
-	async function onListChange(list: T[]) {
+	let valueIsTrusted = false
+	async function onListChange(list: T[], val?: T) {
 		virtualList = list
-		if (!list.length) return (value = undefined)
-		selectedIndex = list.findIndex((v) => isEqual(v, value))
-		if (selectedIndex !== -1) {
-			value = list[selectedIndex]
+		if (!valueIsTrusted && list && list.length && value) {
+			selectedIndex = list.findIndex((v) => isEqual(v, value))
+			if (selectedIndex !== -1) setValue(value)
+			else value = undefined
 		}
-	}
-
-	async function onValueChange(val?: T) {
 		if (inputElement && rules && rules.length) {
 			await tick()
 			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: val }))
 		}
+		valueIsTrusted = false
 	}
-
 	function setValue(val: T) {
 		return async () => {
+			valueIsTrusted = true
 			value = val
 			dialog = false
 			dispatch('select-item', value)
@@ -115,31 +114,36 @@
 		if (currentBtn) currentBtn.focus()
 	}
 
-	$: BROWSER && onListChange(items)
-	$: BROWSER && onValueChange(value)
+	$: BROWSER && onListChange(items, value)
 	$: BROWSER && fitlerValue && filterList()
 </script>
 
 <div class="c-select">
-	<CLabel {label} {loading} {rules}>
-		<button class="text-left full-width d-flex align-center gap-2" {disabled} on:click={openSelect}>
-			{#if items.length}
-				{#if value}
-					<slot item={value} isList={false}>
-						{value}
-					</slot>
+	<slot name="input-ctrl" open={openSelect}>
+		<CLabel {label} {loading} {rules}>
+			<button
+				class="text-left full-width d-flex align-center gap-2"
+				{disabled}
+				on:click={openSelect}
+			>
+				{#if items.length}
+					{#if value}
+						<slot item={value} isList={false}>
+							{value}
+						</slot>
+					{:else}
+						<span class="info-text">{placeholder}</span>
+					{/if}
 				{:else}
-					<span class="info-text">{placeholder}</span>
+					<span class="info-text">{noDataText}</span>
 				{/if}
-			{:else}
-				<span class="info-text">{noDataText}</span>
-			{/if}
-		</button>
-		<input hidden bind:this={inputElement} />
-		<svelte:fragment slot="append">
-			<CIcon icon={mdiChevronDown} />
-		</svelte:fragment>
-	</CLabel>
+			</button>
+			<input hidden bind:this={inputElement} />
+			<svelte:fragment slot="append">
+				<CIcon icon={mdiChevronDown} />
+			</svelte:fragment>
+		</CLabel>
+	</slot>
 
 	{#if items.length && virtualList}
 		<CDialog bind:active={dialog}>

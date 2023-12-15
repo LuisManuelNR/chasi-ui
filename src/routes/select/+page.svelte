@@ -35,6 +35,10 @@
 	function validateSelect(value: Photo) {
 		return value.url.endsWith('96') || 'La url debe terminar en 96!!'
 	}
+	$: {
+		selectValue
+		console.log('veces que cambio el selectValue')
+	}
 </script>
 
 <div class="card">

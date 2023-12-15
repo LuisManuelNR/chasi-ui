@@ -58,8 +58,14 @@
 
 	let countryDefault: (typeof items)[number]
 	let testEmail: string = ''
+	let fakeCountry = false
 	function changeCountry() {
-		countryDefault = { state: 'Cuba', abbr: 'CU' }
+		if (fakeCountry) {
+			countryDefault = { state: 'Cuba', abbr: 'Cu' }
+		} else {
+			countryDefault = { state: 'Georgia', abbr: 'GA' }
+		}
+		fakeCountry = !fakeCountry
 	}
 	function changeemail() {
 		if (testEmail === 'no-es-valido') {
@@ -73,12 +79,16 @@
 		visibleCountry = !visibleCountry
 	}
 	let testAbbr: any
+	$: {
+		countryDefault
+		console.log('veces que cambio country')
+	}
 </script>
 
 <div class="card mb-4">
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
-			<CSelect
+			<!-- <CSelect
 				label="País"
 				{items}
 				placeholder="Selecciona algo plis"
@@ -87,8 +97,11 @@
 				filterBy="state"
 				on:select-item={handleSelectChange}
 			>
+				<button class="btn" slot="input-ctrl" let:open on:click={open}
+					>Slot de select como button</button
+				>
 				{item.state}
-			</CSelect>
+			</CSelect> -->
 			{#if visibleCountry}
 				<CSelect
 					label="País"
