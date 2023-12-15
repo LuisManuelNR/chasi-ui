@@ -17,7 +17,7 @@
 	export let noDataText = 'No hay datos disponibles'
 	export let placeholder = ''
 	// @ts-ignore
-	export let filterBy: X | false = false
+	export let filterBy: X | boolean = false
 
 	let selectedIndex = -1
 	let dialog = false
@@ -53,9 +53,10 @@
 
 	function filterList() {
 		cursor = 0
+		if (!filterBy) return (virtualList = items)
 		virtualList = items.filter((v) => {
-			if (!filterBy) return true
-			const value = `${v[filterBy]}`
+			//@ts-ignore
+			const value = `${v[filterBy] || v}`
 			const a = normalizeItems(value)
 			const b = normalizeItems(fitlerValue)
 			return a.includes(b)
