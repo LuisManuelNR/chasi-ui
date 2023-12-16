@@ -1,4 +1,4 @@
-import { throttle } from '$lib/CGraph/utils.js'
+import { throttle } from '../utils.js'
 
 type ZoomableParams = {
   onZoom?: (delta: number, center: { x: number, y: number }, isTouch: boolean) => void
