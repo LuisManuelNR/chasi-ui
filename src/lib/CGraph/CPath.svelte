@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Base, Domain } from './CGraph.svelte'
 	import { getContext } from 'svelte'
-	import { min, max, linearScale } from './utils.js'
+	import { min, max, linearScale } from '../utils.js'
 	export let color = 'steelblue'
 	export let width: number | string = 3
 	export let dasharray = ''

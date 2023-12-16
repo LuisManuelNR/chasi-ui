@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Base, Domain } from './CGraph.svelte'
 	import { getContext } from 'svelte'
-	import { linearScale } from './utils.js'
+	import { linearScale } from '../utils.js'
 
 	export let x: number | string = 15
 	export let y: number | string = 15

@@ -2,7 +2,7 @@
 	import type { Writable } from 'svelte/store'
 	import type { Base, Domain } from './CGraph.svelte'
 	import { getContext } from 'svelte'
-	import { linearScale, ticks } from './utils.js'
+	import { linearScale, ticks } from '../utils.js'
 	export let domain: Domain = [0, 1]
 	export let ticksNumber: number | string = 10
 	export let label = ''
