@@ -39,16 +39,18 @@
 		}
 	}
 
+	let dirty = false
 	async function setValue(val?: T) {
 		value = val
 		dialog = false
 		if (value) {
 			dispatch('select-item', value)
 		}
-		if (inputElement && rules && rules.length) {
+		if (dirty && inputElement && rules && rules.length) {
 			await tick()
 			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: value }))
 		}
+		dirty = true
 	}
 
 	function filterList() {
