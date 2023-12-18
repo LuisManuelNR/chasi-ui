@@ -18,8 +18,8 @@
 	export let placeholder = ''
 	// @ts-ignore
 	export let filterBy: X | boolean = false
+	export let selected: (v: T) => boolean = (v) => isEqual(v, value)
 
-	let selectedIndex = -1
 	let dialog = false
 	let cursor = -1
 	let fitlerValue = ''
@@ -27,31 +27,32 @@
 	let virtualList = items
 	const dispatch = createEventDispatcher<{ 'select-item': T }>()
 
-	let valueIsTrusted = false
-	async function onListChange(list: T[], val?: T) {
+	async function onListChange(list: T[]) {
 		virtualList = list
-		if (!valueIsTrusted && list && list.length && value) {
-			selectedIndex = list.findIndex((v) => isEqual(v, value))
-			if (selectedIndex !== -1) setValue(value)
-			else value = undefined
+		if (list && list.length) {
+			const finded = list.find(selected)
+			if (finded) {
+				setValue(finded)
+			} else {
+				setValue(undefined)
+			}
+		}
+	}
+
+	async function setValue(val?: T) {
+		value = val
+		dialog = false
+		if (value) {
+			dispatch('select-item', value)
 		}
 		if (inputElement && rules && rules.length) {
 			await tick()
-			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: val }))
-		}
-		valueIsTrusted = false
-	}
-	function setValue(val: T) {
-		return async () => {
-			valueIsTrusted = true
-			value = val
-			dialog = false
-			dispatch('select-item', value)
+			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: value }))
 		}
 	}
 
 	function filterList() {
-		cursor = 0
+		cursor = -1
 		if (!filterBy) return (virtualList = items)
 		virtualList = items.filter((v) => {
 			//@ts-ignore
@@ -70,7 +71,7 @@
 		if (intro) {
 			e.stopPropagation()
 			e.preventDefault()
-			setValue(virtualList[cursor])()
+			setValue(virtualList[cursor])
 		}
 		if (!kUp && !kDown && !intro) {
 			focusElement('#c-select-filter')
@@ -91,7 +92,7 @@
 
 	function openSelect() {
 		if (!items.length) return
-		cursor = 0
+		cursor = -1
 		fitlerValue = ''
 		virtualList = items
 		dialog = true
@@ -114,7 +115,8 @@
 		if (currentBtn) currentBtn.focus()
 	}
 
-	$: BROWSER && onListChange(items, value)
+	//@ts-ignore
+	$: BROWSER && selected && onListChange(items)
 	$: BROWSER && fitlerValue && filterList()
 </script>
 
@@ -168,7 +170,7 @@
 					<button
 						class="list-item full-width"
 						class:selected={cursor === i}
-						on:click={setValue(item)}
+						on:click={() => setValue(item)}
 						on:keydown={handleKeyDown}
 					>
 						<slot {item} isList={true}>

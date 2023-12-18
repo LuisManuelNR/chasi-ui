@@ -35,10 +35,7 @@
 	function validateSelect(value: Photo) {
 		return value.url.endsWith('96') || 'La url debe terminar en 96!!'
 	}
-	$: {
-		selectValue
-		console.log('veces que cambio el selectValue')
-	}
+	let urlPreview = 'https://via.placeholder.com/150/d32776'
 </script>
 
 <div class="card">
@@ -53,6 +50,7 @@
 			<div>
 				<strong>Selected value</strong>
 				<pre>{JSON.stringify(selectValue, null, 2)}</pre>
+				<p><strong>thumbnailUrl only bind</strong>: {urlPreview}</p>
 			</div>
 
 			<!-- <CSelect
@@ -70,21 +68,24 @@
 			<!-- <CLabel label="Test rules" rules={[required]}>
 				<input bind:value={inputValue} />
 			</CLabel> -->
-			<!-- {#if selectVisible}
+			{#if selectVisible}
 				<CSelect
 					items={photos}
-					{loading}
-					{disabled}
 					let:item
-					bind:value={selectValue}
 					rules={[required, validateSelect]}
 					filterBy="url"
+					bind:value={selectValue}
+					selected={(item) => item.thumbnailUrl === urlPreview}
+					on:select-item={(e) => (urlPreview = e.detail.thumbnailUrl)}
 				>
 					{item.url}
 				</CSelect>
-			{/if} -->
+			{/if}
 
 			<p>Con foto en el input y titulo en los items</p>
+			<button class="btn" on:click={() => (urlPreview = 'https://via.placeholder.com/150/771796')}>
+				change thumnail
+			</button>
 			<CSelect
 				items={photos}
 				{loading}
@@ -92,9 +93,10 @@
 				let:item
 				let:isList
 				placeholder="Selecciona algo guay"
-				bind:value={selectValue}
 				rules={[required]}
 				filterBy="title"
+				selected={(item) => item.thumbnailUrl === urlPreview}
+				on:select-item={(e) => (urlPreview = e.detail.thumbnailUrl)}
 			>
 				{#if isList}
 					<img src="https://i.pravatar.cc/100?u={item.id}" alt={item.title} width="100" />
