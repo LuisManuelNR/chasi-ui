@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { CDraggableList } from '$lib'
-	import type { Familiy } from './type.js'
+	// import { CDraggableList } from '$lib'
+	// import type { Familiy } from './type.js'
 
-	export let family: Familiy[] = []
+	// export let family: Familiy[] = []
 
-	function handleChange(e: any) {
-		console.log(e.detail)
-	}
+	// function handleChange(e: any) {
+	// 	console.log(e.detail)
+	// }
 </script>
 
-<CDraggableList
+<!-- <CDraggableList
 	bind:list={family}
 	group="family"
 	on:addItem={handleChange}
@@ -25,4 +25,4 @@
 			</div>
 		</div>
 	{/each}
-</CDraggableList>
+</CDraggableList> -->
