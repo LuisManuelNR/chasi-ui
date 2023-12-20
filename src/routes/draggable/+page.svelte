@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { CDraggableList, CIcon } from '$lib'
+	import { CIcon, CNotifier } from '$lib'
+	import { draggable } from '$lib/Actions/index.js'
+	import { isAnimating } from '$lib/utils.js'
 	import { mdiDrag } from '@mdi/js'
-	import { onMount } from 'svelte'
-	import Tree from './Tree.svelte'
+	import { onMount, tick } from 'svelte'
+	import { flip } from 'svelte/animate'
+	// import Tree from './Tree.svelte'
 
 	type Photo = {
 		albumId: number
@@ -14,59 +17,69 @@
 	let photos: Photo[] = []
 
 	async function loadData() {
-		const url = 'https://jsonplaceholder.typicode.com/photos?_limit=7'
+		const url = 'https://jsonplaceholder.typicode.com/photos?_limit=5'
 		const response = await fetch(url)
-		photos = await response.json()
+		const list = (await response.json()) as Photo[]
+		photos = list.map((p) => ({ ...p, thumbnailUrl: `https://i.pravatar.cc/70?u=${p.id}` }))
 	}
-	let familyData = [
-		{
-			nombre: 'Raíz',
-			hijos: [
-				{
-					nombre: 'Hijo1',
-					hijos: [
-						{
-							nombre: 'Nieto1',
-							hijos: []
-						}
-					]
-				},
-				{
-					nombre: 'Hijo2',
-					hijos: [
-						{
-							nombre: 'Nieto2',
-							hijos: []
-						},
-						{
-							nombre: 'Nieto3',
-							hijos: []
-						}
-					]
-				}
-			]
-		}
-	]
+
+	function sleep(ms = 3000) {
+		return new Promise((resolve) => setTimeout(resolve, ms))
+	}
+
+	function makeDraggable(node: HTMLElement) {
+		return draggable(node, {
+			duration: 250,
+			handlerSelector: '.handler',
+			onStart() {
+				//
+			},
+			onMove(source, target) {
+				const targetItem = target.closest('[data-index]')
+				if (!targetItem) return
+				if (isAnimating(targetItem)) return
+				const targetIndex = targetItem.getAttribute('data-index')
+				if (!targetIndex) return
+				const sourceIndex = source.getAttribute('data-index')
+				if (!sourceIndex) return
+				if (sourceIndex === targetIndex) return
+				const photo = photos.splice(+sourceIndex, 1)[0]
+				photos.splice(+targetIndex, 0, photo)
+				photos = photos
+			},
+			onDrop(source, target, coords) {
+				//
+			}
+		})
+	}
 
 	onMount(() => {
 		loadData()
 	})
-
-	function handleChange(e: any) {
-		console.log(e.detail)
-	}
 </script>
 
-<Tree bind:family={familyData}></Tree>
+<!-- <Tree bind:family={familyData}></Tree> -->
 
-<CDraggableList bind:list={photos} on:addItem={handleChange}>
-	{#each photos as photo (photo.id)}
-		<div class="d-flex align-center gap-2 draggable s-2 pa-2 mb-2">
-			<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
-			<p class="title">{photo.title}</p>
-			<button class="btn icon ml-auto handler">
-				<CIcon icon={mdiDrag} />
-			</button>
+<h2>Sort list on move item</h2>
+<div class="list-wrapper">
+	{#each photos as photo, i (photo.id)}
+		<div animate:flip={{ duration: 250 }} use:makeDraggable data-index={i} class="item s-2">
+			<div class="d-grid gap-2 pa-2 mb-2" style:--xs-columns="150px 1fr auto">
+				<img src={photo.thumbnailUrl} alt="ssss" width="150" height="150" />
+				<div>
+					<p class="f-size-3">{photo.id}</p>
+					<p>{photo.title}</p>
+				</div>
+				<button class="btn icon ml-auto handler">
+					<CIcon icon={mdiDrag} />
+				</button>
+			</div>
 		</div>
 	{/each}
-</CDraggableList>
+</div>
+
+<style>
+	.list-wrapper {
+		overflow: hidden;
+	}
+</style>

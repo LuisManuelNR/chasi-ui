@@ -4,7 +4,7 @@ type ZoomableParams = {
   onZoom?: (delta: number, center: { x: number, y: number }, isTouch: boolean) => void
 }
 
-export default (node: HTMLElement, params: ZoomableParams) => {
+export default function (node: HTMLElement, params: ZoomableParams) {
   let dist: number
 
   const trotZoom = throttle((e: Event) => {

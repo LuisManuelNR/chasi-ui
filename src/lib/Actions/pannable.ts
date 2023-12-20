@@ -6,12 +6,12 @@ type Coord = {
 }
 
 export type PannableParams = {
-  onStart?: (event: MouseEvent | TouchEvent, coords: Coord) => void
+  onStart?: (event: MouseEvent | TouchEvent, coords: Coord) => void | false
   onMove?: (event: MouseEvent | TouchEvent, coords: Coord & { dx: number, dy: number }) => void
   onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void
 }
 
-export default (node: HTMLElement, params?: PannableParams) => {
+export default function (node: HTMLElement, params?: PannableParams) {
   let x: number
   let y: number
 
@@ -32,20 +32,19 @@ export default (node: HTMLElement, params?: PannableParams) => {
     x = Math.round(e.clientX)
     y = Math.round(e.clientY)
 
-    if (params && params.onStart) {
-      params.onStart(event, { x, y })
+    if (params && params.onStart && params.onStart(event, { x, y }) !== false) {
+      window.addEventListener('mousemove', trotMove)
+      window.addEventListener('mouseup', handleMouseup)
+      window.addEventListener('touchmove', trotMove)
+      window.addEventListener('touchend', handleMouseup)
     }
-
-    window.addEventListener('mousemove', trotMove)
-    window.addEventListener('mouseup', handleMouseup)
-    window.addEventListener('touchmove', trotMove)
-    window.addEventListener('touchend', handleMouseup)
   }
 
   function handleMouseup(event: MouseEvent | TouchEvent) {
     const e = event instanceof MouseEvent ? event : event.changedTouches[0]
     x = e.clientX
     y = e.clientY
+
 
     if (params && params.onEnd) {
       params.onEnd(event, { x, y })

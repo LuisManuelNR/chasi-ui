@@ -126,3 +126,46 @@ export function throttle<T extends (...args: any) => any>(func: T, limit: number
     return lastResult
   }
 }
+
+export function isAnimating(element: Element) {
+  const animations = element.getAnimations()
+  if (animations.length > 0) {
+    return true
+  }
+
+  const computedStyles = window.getComputedStyle(element)
+  const transitions = computedStyles.transitionProperty.split(', ')
+
+  for (let i = 0; i < transitions.length; i++) {
+    const duration = parseFloat(computedStyles.transitionDuration.split(', ')[i])
+
+    if (duration > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export function runOnFrames(fps = 30, callback: () => void) {
+  const interval = 1000 / fps
+  let now: number
+  let then = Date.now()
+  let delta: number
+
+  let requestId: number
+  function update() {
+    requestId = requestAnimationFrame(update)
+
+    now = Date.now()
+    delta = now - then
+
+    if (delta > interval) {
+      then = now - (delta % interval)
+
+      callback()
+    }
+  }
+  update()
+  return () => cancelAnimationFrame(requestId)
+}

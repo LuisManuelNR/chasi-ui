@@ -9,7 +9,6 @@ export { default as CLabel } from './CForms/CLabel.svelte'
 export { default as CSelect } from './CForms/CSelect.svelte'
 export { default as CSidebar } from './CSidebar/CSidebar.svelte'
 export { default as CImageUploader } from './CImageUploader/CImageUploader.svelte'
-export { default as CDraggableList } from './CDraggableList/CDraggableList.svelte'
 export { default as CAvatar } from './CAvatar/CAvatar.svelte'
 export * from './CGraph/index.js'
 
