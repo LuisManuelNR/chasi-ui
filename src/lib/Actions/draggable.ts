@@ -1,3 +1,4 @@
+import { BROWSER } from 'esm-env'
 import pannable from './pannable.js'
 
 type DraggableEvent<C> = (source: HTMLElement, target: HTMLElement, coords: C) => void | Promise<void>
@@ -10,10 +11,34 @@ type DraggableOption = {
   duration?: number
 }
 
+if (BROWSER) {
+  if (!document.querySelector('#draggable-styles')) {
+    const style = document.createElement('style')
+    style.setAttribute('id', 'draggable-styles')
+    style.innerHTML = `
+      [data-draggable-item].ghost {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        transition: none;
+        z-index: 9999;
+        box-shadow: var(--shadow-4);
+      }
+      :where([data-draggable-item].dragged) {
+        opacity: 0;
+        transition: none !important;
+        animation: none !important;
+        pointer-events: none;
+      }`
+    document.getElementsByTagName('head')[0].appendChild(style)
+  }
+}
+
 export default function (node: HTMLElement, { onDrop, onMove, onStart, handlerSelector, duration = 250 }: DraggableOption) {
   let ghostElement: ReturnType<typeof createGhost> | null = null
-  createStyles()
   const handler = handlerSelector ? node.querySelector(handlerSelector) : node
+  node.setAttribute('data-draggable-item', '')
   return pannable(node, {
     onStart(e, coords) {
       const evTarget = e.target as HTMLElement
@@ -67,29 +92,5 @@ function createGhost(node: HTMLElement) {
         node.classList.remove('dragged')
       }, duration)
     }
-  }
-}
-
-function createStyles() {
-  if (!document.querySelector('#draggable-styles')) {
-    const style = document.createElement('style')
-    style.setAttribute('id', 'draggable-styles')
-    style.innerHTML = `
-      .ghost {
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        transition: none;
-        z-index: 9999;
-        box-shadow: var(--shadow-4);
-      }
-      .dragged {
-        opacity: 0.5;
-        transition: none !important;
-        animation: none !important;
-        pointer-events: none;
-      }`
-    document.getElementsByTagName('head')[0].appendChild(style)
   }
 }
