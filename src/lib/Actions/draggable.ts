@@ -1,12 +1,11 @@
 import { BROWSER } from 'esm-env'
 import pannable from './pannable.js'
 
-type DraggableEvent<C> = (source: HTMLElement, target: HTMLElement, coords: C) => void | Promise<void>
-
+type ReturnTypeDrop = HTMLElement | void
 type DraggableOption = {
-  onDrop?: DraggableEvent<{ x: number, y: number }>
-  onMove?: DraggableEvent<{ x: number, y: number, dx: number, dy: number }>
-  onStart?: DraggableEvent<{ x: number, y: number }>
+  onDrop?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number }) => ReturnTypeDrop | Promise<ReturnTypeDrop>
+  onMove?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number, dx: number, dy: number }) => void
+  onStart?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number }) => void
   handlerSelector?: string
   duration?: number
 }
@@ -26,6 +25,9 @@ if (BROWSER) {
         box-shadow: var(--shadow-4);
       }
       :where([data-draggable-item].dragged) {
+        opacity: 0;
+        transition: none !important;
+        animation: none !important;
         pointer-events: none;
       }`
     document.getElementsByTagName('head')[0].appendChild(style)
@@ -55,8 +57,12 @@ export default function (node: HTMLElement, { onDrop, onMove, onStart, handlerSe
     },
     async onEnd(event, coords) {
       const target = event.target as HTMLElement
-      onDrop && await onDrop(node, target, coords)
-      ghostElement && ghostElement.dispose(duration)
+      let ghostTarget = node
+      if (onDrop) {
+        const newTarget = await onDrop(node, target, coords)
+        if (newTarget) ghostTarget = newTarget
+      }
+      ghostElement && ghostElement.dispose(duration, ghostTarget)
       ghostElement = null
     }
   })
@@ -80,8 +86,8 @@ function createGhost(node: HTMLElement) {
       gy += dy
       clone.style.transform = `translate3d(${gx}px, ${gy}px, 0)`
     },
-    dispose(duration: number) {
-      const { left, top } = node.getBoundingClientRect()
+    dispose(duration: number, target: HTMLElement) {
+      const { left, top } = target.getBoundingClientRect()
       clone.style.transition = `transform ${duration}ms ease`
       clone.style.transform = `translate3d(${left}px, ${top}px, 0)`
       setTimeout(() => {
