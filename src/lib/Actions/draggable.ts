@@ -26,9 +26,6 @@ if (BROWSER) {
         box-shadow: var(--shadow-4);
       }
       :where([data-draggable-item].dragged) {
-        opacity: 0;
-        transition: none !important;
-        animation: none !important;
         pointer-events: none;
       }`
     document.getElementsByTagName('head')[0].appendChild(style)
