@@ -5,17 +5,19 @@ type Coord = {
   y: number
 }
 
+type MoveCoords = Coord & { dx: number, dy: number }
+
 export type PannableParams = {
-  onStart?: (event: MouseEvent | TouchEvent, coords: Coord) => void | false
-  onMove?: (event: MouseEvent | TouchEvent, coords: Coord & { dx: number, dy: number }) => void
-  onEnd?: (event: MouseEvent | TouchEvent, coords: Coord) => void
+  onStart?: (e: MouseEvent | TouchEvent, coords: Coord) => void | false
+  onMove?: (e: MouseEvent | TouchEvent, coords: MoveCoords) => void
+  onEnd?: (e: MouseEvent | TouchEvent, coords: Coord) => void
 }
 
 export default function (node: HTMLElement, params?: PannableParams) {
   let x: number
   let y: number
 
-  const trotMove = throttle((event: MouseEvent | TouchEvent) => {
+  function handleMove(event: MouseEvent | TouchEvent) {
     if (!params || !params.onMove) return
     const e = event instanceof MouseEvent ? event : event.touches[0]
     const evX = Math.round(e.clientX)
@@ -25,7 +27,7 @@ export default function (node: HTMLElement, params?: PannableParams) {
     x = evX
     y = evY
     params.onMove(event, { x, y, dx, dy })
-  }, 10)
+  }
 
   function handleMousedown(event: MouseEvent | TouchEvent) {
     const e = event instanceof MouseEvent ? event : event.touches[0]
@@ -33,9 +35,9 @@ export default function (node: HTMLElement, params?: PannableParams) {
     y = Math.round(e.clientY)
 
     if (params && params.onStart && params.onStart(event, { x, y }) !== false) {
-      window.addEventListener('mousemove', trotMove)
+      window.addEventListener('mousemove', handleMove)
       window.addEventListener('mouseup', handleMouseup)
-      window.addEventListener('touchmove', trotMove)
+      window.addEventListener('touchmove', handleMove)
       window.addEventListener('touchend', handleMouseup)
     }
   }
@@ -50,9 +52,9 @@ export default function (node: HTMLElement, params?: PannableParams) {
       params.onEnd(event, { x, y })
     }
 
-    window.removeEventListener('mousemove', trotMove)
+    window.removeEventListener('mousemove', handleMove)
     window.removeEventListener('mouseup', handleMouseup)
-    window.removeEventListener('touchmove', trotMove)
+    window.removeEventListener('touchmove', handleMove)
     window.removeEventListener('touchend', handleMouseup)
   }
 

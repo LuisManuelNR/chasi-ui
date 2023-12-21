@@ -1,15 +1,6 @@
 import { BROWSER } from 'esm-env'
 import pannable from './pannable.js'
 
-type ReturnTypeDrop = HTMLElement | void
-type DraggableOption = {
-  onDrop?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number }) => ReturnTypeDrop | Promise<ReturnTypeDrop>
-  onMove?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number, dx: number, dy: number }) => void
-  onStart?: (source: HTMLElement, target: HTMLElement, coords: { x: number, y: number }) => void
-  handlerSelector?: string
-  duration?: number
-}
-
 if (BROWSER) {
   if (!document.querySelector('#draggable-styles')) {
     const style = document.createElement('style')
@@ -34,33 +25,45 @@ if (BROWSER) {
   }
 }
 
-export default function (node: HTMLElement, { onDrop, onMove, onStart, handlerSelector, duration = 250 }: DraggableOption) {
+type ReturnTypeDrop = { ghostDuration: number, ghostTarget: HTMLElement } | void
+type Coord = { x: number, y: number }
+type MoveCoords = Coord & { dx: number, dy: number }
+type DraggableOption<T = null> = {
+  onStart?: (e: MouseEvent | TouchEvent, coords: Coord) => void | false
+  onMove?: (e: MouseEvent | TouchEvent, coords: MoveCoords) => void
+  onEnd?: (e: MouseEvent | TouchEvent, coords: Coord) => ReturnTypeDrop | Promise<ReturnTypeDrop>
+  handlerSelector?: string
+}
+
+export default function <T>(node: HTMLElement, { onStart, onMove, onEnd, handlerSelector }: DraggableOption<T>) {
   let ghostElement: ReturnType<typeof createGhost> | null = null
-  const handler = handlerSelector ? node.querySelector(handlerSelector) : node
   node.setAttribute('data-draggable-item', '')
   return pannable(node, {
     onStart(e, coords) {
       const evTarget = e.target as HTMLElement
-      if (handler !== evTarget) return false
+      const handler = handlerSelector ? evTarget.closest(handlerSelector) : evTarget.closest('[data-draggable-item]')
+      if (!handler) return false
       e.preventDefault()
       e.stopPropagation()
-      onStart && onStart(node, evTarget, coords)
+      if (onStart) return onStart(e, coords)
     },
-    onMove(event, coords) {
+    onMove(e, coords) {
       if (ghostElement) {
         ghostElement.update(coords.dx, coords.dy)
-        const target = event.target as HTMLElement
-        onMove && onMove(node, target, coords)
+        onMove && onMove(e, coords)
       } else {
         ghostElement = createGhost(node)
       }
     },
-    async onEnd(event, coords) {
-      const target = event.target as HTMLElement
+    async onEnd(e, coords) {
       let ghostTarget = node
-      if (onDrop) {
-        const newTarget = await onDrop(node, target, coords)
-        if (newTarget) ghostTarget = newTarget
+      let duration = 250
+      if (onEnd) {
+        const returnedGhostSettings = await onEnd(e, coords)
+        if (returnedGhostSettings) {
+          ghostTarget = returnedGhostSettings.ghostTarget
+          duration = returnedGhostSettings.ghostDuration
+        }
       }
       ghostElement && ghostElement.dispose(duration, ghostTarget)
       ghostElement = null
@@ -76,11 +79,10 @@ function createGhost(node: HTMLElement) {
   clone.style.height = `${height}px`
   let gx = left
   let gy = top
-  node.classList.add('dragged')
   clone.style.transform = `translate3d(${gx}px, ${gy}px, 0)`
   document.body.append(clone)
+  node.classList.add('dragged')
   return {
-    el: clone,
     update(dx: number, dy: number) {
       gx += dx
       gy += dy

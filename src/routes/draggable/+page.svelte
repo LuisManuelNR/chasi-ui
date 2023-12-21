@@ -29,26 +29,23 @@
 
 	function makeDraggable(node: HTMLElement) {
 		return draggable(node, {
-			duration: 250,
 			handlerSelector: '.handler',
 			onStart() {
 				//
 			},
-			onMove(source, target) {
+			onMove(e, coords) {
+				const target = e.target as HTMLElement
 				const targetItem = target.closest('[data-index]')
 				if (!targetItem) return
 				if (isAnimating(targetItem)) return
 				const targetIndex = targetItem.getAttribute('data-index')
 				if (!targetIndex) return
-				const sourceIndex = source.getAttribute('data-index')
+				const sourceIndex = node.getAttribute('data-index')
 				if (!sourceIndex) return
 				if (sourceIndex === targetIndex) return
 				const photo = photos.splice(+sourceIndex, 1)[0]
 				photos.splice(+targetIndex, 0, photo)
 				photos = photos
-			},
-			onDrop(source, target, coords) {
-				//
 			}
 		})
 	}
