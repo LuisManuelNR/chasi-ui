@@ -1,13 +1,19 @@
 <script lang="ts">
 	import type { Rule } from '$lib'
 	import { CLabel, CIcon, CDialog } from '$lib'
-	import { mdiChevronDown, mdiMagnify } from '@mdi/js'
 	import { isEqual } from '$lib/utils.js'
+	import { mdiChevronDown, mdiMagnify } from '@mdi/js'
 	import { BROWSER } from 'esm-env'
-	import { createEventDispatcher, tick } from 'svelte'
+	import { onMount, tick } from 'svelte'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
+
+	interface $$Slots {
+		default: { item: T; isList: boolean }
+		'input-ctrl': { open: () => void }
+	}
+
 	export let items: T[] = []
 	export let value: T | undefined = undefined
 	export let label = ''
@@ -19,31 +25,24 @@
 	// @ts-ignore
 	export let filterBy: X | boolean = false
 	export let selected: (v: T) => boolean = (v) => isEqual(v, value)
+	export let onSelect: (v: T) => void = () => {}
 
 	let dialog = false
 	let cursor = -1
 	let fitlerValue = ''
 	let inputElement: HTMLInputElement
 	let virtualList = items
-	const dispatch = createEventDispatcher<{ 'select-item': T }>()
 
-	async function onListChange(list: T[]) {
-		virtualList = list
-		if (list && list.length) {
-			const finded = list.find(selected)
-			if (finded) {
-				setValue(finded)
-			} else {
-				setValue(undefined)
-			}
-		}
-	}
+	onMount(() => {
+		const finded = items.find(selected)
+		setValue(finded)
+	})
 
 	async function setValue(val?: T) {
 		value = val
 		dialog = false
 		if (value) {
-			dispatch('select-item', value)
+			onSelect(value)
 		}
 		if (inputElement && rules && rules.length) {
 			await tick()
@@ -115,8 +114,6 @@
 		if (currentBtn) currentBtn.focus()
 	}
 
-	//@ts-ignore
-	$: BROWSER && selected && onListChange(items)
 	$: BROWSER && fitlerValue && filterList()
 </script>
 

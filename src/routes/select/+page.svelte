@@ -22,6 +22,7 @@
 	let disabled = false
 	let selectVisible = true
 	let selectValue: Photo
+	let pototo = 0
 
 	function onSubmit() {
 		CNotifier.success({ title: 'Form submited' })
@@ -68,6 +69,7 @@
 			<!-- <CLabel label="Test rules" rules={[required]}>
 				<input bind:value={inputValue} />
 			</CLabel> -->
+			<h1>{urlPreview}</h1>
 			{#if selectVisible}
 				<CSelect
 					items={photos}
@@ -75,7 +77,6 @@
 					rules={[required, validateSelect]}
 					filterBy="url"
 					bind:value={selectValue}
-					selected={(item) => item.thumbnailUrl === urlPreview}
 					on:select-item={(e) => (urlPreview = e.detail.thumbnailUrl)}
 				>
 					{item.url}
@@ -96,7 +97,7 @@
 				rules={[required]}
 				filterBy="title"
 				selected={(item) => item.thumbnailUrl === urlPreview}
-				on:select-item={(e) => (urlPreview = e.detail.thumbnailUrl)}
+				onSelect={(item) => (urlPreview = item.thumbnailUrl)}
 			>
 				{#if isList}
 					<img src="https://i.pravatar.cc/100?u={item.id}" alt={item.title} width="100" />
