@@ -34,8 +34,7 @@
 	let virtualList = items
 
 	onMount(() => {
-		const finded = items.find(selected)
-		setValue(finded)
+		value = items.find(selected)
 	})
 
 	async function setValue(val?: T) {
