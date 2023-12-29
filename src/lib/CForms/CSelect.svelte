@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { Rule } from '$lib'
 	import { CLabel, CIcon, CDialog } from '$lib'
-	import { isEqual } from '$lib/utils.js'
 	import { mdiChevronDown, mdiMagnify } from '@mdi/js'
 	import { BROWSER } from 'esm-env'
-	import { onMount, tick } from 'svelte'
+	import { tick } from 'svelte'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
@@ -24,7 +23,6 @@
 	export let placeholder = ''
 	// @ts-ignore
 	export let filterBy: X | boolean = false
-	export let selected: (v: T) => boolean = (v) => isEqual(v, value)
 	export let onSelect: (v: T) => void = () => {}
 
 	let dialog = false
@@ -32,10 +30,6 @@
 	let fitlerValue = ''
 	let inputElement: HTMLInputElement
 	let virtualList = items
-
-	onMount(() => {
-		value = items.find(selected)
-	})
 
 	async function setValue(val?: T) {
 		value = val
@@ -89,7 +83,6 @@
 	}
 
 	function openSelect() {
-		if (!items.length) return
 		cursor = -1
 		fitlerValue = ''
 		virtualList = items
@@ -124,16 +117,12 @@
 				{disabled}
 				on:click={openSelect}
 			>
-				{#if items.length}
-					{#if value}
-						<slot item={value} isList={false}>
-							{value}
-						</slot>
-					{:else}
-						<span class="info-text">{placeholder}</span>
-					{/if}
+				{#if value}
+					<slot item={value} isList={false}>
+						{value}
+					</slot>
 				{:else}
-					<span class="info-text">{noDataText}</span>
+					<span class="info-text">{placeholder}</span>
 				{/if}
 			</button>
 			<input hidden bind:this={inputElement} />
@@ -143,25 +132,25 @@
 		</CLabel>
 	</slot>
 
-	{#if items.length && virtualList}
-		<CDialog bind:active={dialog}>
-			<div slot="header" class="mb-2">
-				{#if filterBy}
-					<CLabel>
-						<svelte:fragment slot="prepend">
-							<CIcon icon={mdiMagnify}></CIcon>
-						</svelte:fragment>
-						<input
-							id="c-select-filter"
-							autocomplete="off"
-							bind:value={fitlerValue}
-							on:keydown={handleKeyDown}
-							type="search"
-						/>
-					</CLabel>
-				{/if}
-			</div>
-			<div class="item-list">
+	<CDialog bind:active={dialog}>
+		<div slot="header">
+			{#if filterBy && items.length}
+				<CLabel>
+					<svelte:fragment slot="prepend">
+						<CIcon icon={mdiMagnify}></CIcon>
+					</svelte:fragment>
+					<input
+						id="c-select-filter"
+						autocomplete="off"
+						bind:value={fitlerValue}
+						on:keydown={handleKeyDown}
+						type="search"
+					/>
+				</CLabel>
+			{/if}
+		</div>
+		<div class="item-list">
+			{#if virtualList && virtualList.length}
 				{#each virtualList as item, i}
 					<button
 						class="list-item full-width"
@@ -174,9 +163,11 @@
 						</slot>
 					</button>
 				{/each}
-			</div>
-		</CDialog>
-	{/if}
+			{:else}
+				<span class="d-flex justify-center">{noDataText}</span>
+			{/if}
+		</div>
+	</CDialog>
 </div>
 
 <style>

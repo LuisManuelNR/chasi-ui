@@ -25,7 +25,7 @@ if (BROWSER) {
   }
 }
 
-type ReturnTypeDrop = { ghostDuration: number, ghostTarget: HTMLElement } | void
+type ReturnTypeDrop = { ghostDuration?: number, ghostTarget?: HTMLElement } | void
 type Coord = { x: number, y: number }
 type MoveCoords = Coord & { dx: number, dy: number }
 type DraggableOption<T = null> = {
@@ -61,8 +61,8 @@ export default function <T>(node: HTMLElement, { onStart, onMove, onEnd, handler
       if (onEnd) {
         const returnedGhostSettings = await onEnd(e, coords)
         if (returnedGhostSettings) {
-          ghostTarget = returnedGhostSettings.ghostTarget
-          duration = returnedGhostSettings.ghostDuration
+          ghostTarget = returnedGhostSettings.ghostTarget || node
+          duration = returnedGhostSettings.ghostDuration || duration
         }
       }
       ghostElement && ghostElement.dispose(duration, ghostTarget)

@@ -21,7 +21,13 @@
 
 	let disabled = false
 	let selectVisible = true
-	let selectValue: Photo
+	let selectValue: Photo = {
+		albumId: 1,
+		id: 18,
+		title: 'laboriosam odit nam necessitatibus et illum dolores reiciendis',
+		url: 'https://via.placeholder.com/600/1fe46f',
+		thumbnailUrl: 'https://via.placeholder.com/150/1fe46f'
+	}
 	let pototo = 0
 
 	function onSubmit() {
@@ -37,6 +43,7 @@
 		return value.url.endsWith('96') || 'La url debe terminar en 96!!'
 	}
 	let urlPreview = 'https://via.placeholder.com/150/d32776'
+	let title = 'natus doloribus necessitatibus ipsa'
 </script>
 
 <div class="card">
@@ -54,6 +61,16 @@
 				<p><strong>thumbnailUrl only bind</strong>: {urlPreview}</p>
 			</div>
 
+			<CSelect
+				items={photos}
+				let:item
+				rules={[required, validateSelect]}
+				filterBy="url"
+				placeholder="la patata"
+			>
+				{item.title}
+			</CSelect>
+
 			<!-- <CSelect
 				label="Seleccione una foto"
 				items={photos}
@@ -69,7 +86,7 @@
 			<!-- <CLabel label="Test rules" rules={[required]}>
 				<input bind:value={inputValue} />
 			</CLabel> -->
-			<h1>{urlPreview}</h1>
+			<!-- <h1>{urlPreview}</h1>
 			{#if selectVisible}
 				<CSelect
 					items={photos}
@@ -81,9 +98,9 @@
 				>
 					{item.url}
 				</CSelect>
-			{/if}
+			{/if} -->
 
-			<p>Con foto en el input y titulo en los items</p>
+			<!-- <p>Con foto en el input y titulo en los items</p>
 			<button class="btn" on:click={() => (urlPreview = 'https://via.placeholder.com/150/771796')}>
 				change thumnail
 			</button>
@@ -109,7 +126,7 @@
 					<img src="https://i.pravatar.cc/30?u={item.id}" alt={item.title} loading="lazy" />
 					{item.title}
 				{/if}
-			</CSelect>
+			</CSelect> -->
 
 			<button class="btn" type="submit"> submit </button>
 		</div>
