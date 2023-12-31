@@ -33,12 +33,17 @@ export default function (node: HTMLElement, params?: PannableParams) {
     const e = event instanceof MouseEvent ? event : event.touches[0]
     x = Math.round(e.clientX)
     y = Math.round(e.clientY)
-
-    if (params && params.onStart && params.onStart(event, { x, y }) !== false) {
+    const attachEvents = () => {
       window.addEventListener('mousemove', handleMove)
       window.addEventListener('mouseup', handleMouseup)
       window.addEventListener('touchmove', handleMove)
       window.addEventListener('touchend', handleMouseup)
+    }
+
+    if (params && params.onStart) {
+      if (params.onStart(event, { x, y }) !== false) attachEvents()
+    } else {
+      attachEvents()
     }
   }
 
