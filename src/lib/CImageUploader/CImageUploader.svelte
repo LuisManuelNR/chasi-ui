@@ -1,13 +1,14 @@
 <script lang="ts">
 	import CDialog from '../CDialog/CDialog.svelte'
 	import { pannable, zoomable } from '../Actions/index.js'
+	import { tick } from 'svelte'
 
 	export let uploadFunction: (file: File) => Promise<void>
 	export let aspectRatio: string | number = '4/3'
 	export let cropImage = false
 
 	let loading = false
-	let dialog: CDialog
+	let activeDialog = false
 	let fileInput: HTMLInputElement
 	let imgElement: HTMLImageElement
 	let cropElement: HTMLDivElement
@@ -44,7 +45,9 @@
 	let toy = 0.5
 	let iw = 0
 	let ih = 0
-	function showPreview(url: string) {
+	async function showPreview(url: string) {
+		activeDialog = true
+		await tick()
 		tx = ty = iw = ih = 0 // reset
 		const dialogElement = cropElement.closest('dialog')!
 		dialogElement.addEventListener(
@@ -71,7 +74,6 @@
 			},
 			{ once: true }
 		)
-		dialog.open()
 		imgElement.src = url
 	}
 
@@ -190,12 +192,12 @@
 					await uploadFunction(file)
 				}
 				loading = false
-				dialog.close()
+				activeDialog = false
 			}, 'image/jpeg')
 
 			buffer.remove()
 		} else {
-			dialog.close()
+			activeDialog = false
 		}
 	}
 
@@ -208,7 +210,7 @@
 
 <input type="file" hidden accept="image/*" bind:this={fileInput} on:change={onSelectFile} />
 
-<CDialog let:close bind:this={dialog}>
+<CDialog bind:active={activeDialog} persistent>
 	<slot name="action" slot="action" {selectImage}>
 		<button class="btn" on:click={selectImage}> Subir imagen </button>
 	</slot>
@@ -227,7 +229,7 @@
 			</div>
 		</div>
 		<div class="d-flex mt-4">
-			<button on:click={close} class="btn tonal"> Cancelar </button>
+			<button on:click={() => (activeDialog = false)} class="btn tonal"> Cancelar </button>
 			<button on:click={crop} class="btn brand ml-auto" class:loading> Confirmar </button>
 		</div>
 	</div>

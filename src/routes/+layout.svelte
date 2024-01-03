@@ -13,7 +13,8 @@
 		{ text: 'Draggable', url: '/draggable' },
 		{ text: 'Avatar', url: '/avatar' },
 		{ text: 'Actions', url: '/actions' },
-		{ text: 'Container', url: '/container' }
+		{ text: 'Container', url: '/container' },
+		{ text: 'Image uploader', url: '/image-uploader' }
 	]
 	let sidebar = true
 </script>
