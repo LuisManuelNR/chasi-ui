@@ -1,29 +1,4 @@
-import { BROWSER } from 'esm-env'
 import pannable from './pannable.js'
-
-if (BROWSER) {
-  if (!document.querySelector('#draggable-styles')) {
-    const style = document.createElement('style')
-    style.setAttribute('id', 'draggable-styles')
-    style.innerHTML = `
-      [data-draggable-item].ghost {
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        transition: none;
-        z-index: 9999;
-        box-shadow: var(--shadow-4);
-      }
-      :where([data-draggable-item].dragged) {
-        opacity: 0;
-        transition: none !important;
-        animation: none !important;
-        pointer-events: none;
-      }`
-    document.getElementsByTagName('head')[0].appendChild(style)
-  }
-}
 
 type ReturnTypeDrop = { ghostDuration?: number, ghostTarget?: HTMLElement } | void
 type Coord = { x: number, y: number }
@@ -74,14 +49,23 @@ export default function <T>(node: HTMLElement, { onStart, onMove, onEnd, handler
 function createGhost(node: HTMLElement) {
   const { width, height, left, top } = node.getBoundingClientRect()
   const clone = node.cloneNode(true) as HTMLElement
-  clone.classList.add('ghost')
+  clone.style.position = 'fixed'
+  clone.style.top = '0'
+  clone.style.left = '0'
+  clone.style.pointerEvents = 'none'
+  clone.style.transition = 'none'
+  clone.style.zIndex = '9999'
+  clone.style.boxShadow = 'var(--shadow-4)'
   clone.style.width = `${width}px`
   clone.style.height = `${height}px`
   let gx = left
   let gy = top
   clone.style.transform = `translate3d(${gx}px, ${gy}px, 0)`
   document.body.append(clone)
-  node.classList.add('dragged')
+  node.style.opacity = '0'
+  node.style.transition = 'none'
+  node.style.animation = 'none'
+  node.style.pointerEvents = 'none'
   return {
     update(dx: number, dy: number) {
       gx += dx
@@ -94,7 +78,10 @@ function createGhost(node: HTMLElement) {
       clone.style.transform = `translate3d(${left}px, ${top}px, 0)`
       setTimeout(() => {
         clone.remove()
-        node.classList.remove('dragged')
+        node.style.opacity = ''
+        node.style.transition = ''
+        node.style.animation = ''
+        node.style.pointerEvents = ''
       }, duration)
     }
   }
