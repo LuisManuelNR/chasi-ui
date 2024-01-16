@@ -31,15 +31,18 @@
 	let inputElement: HTMLInputElement
 	let virtualList = items
 
+	async function bubleValue(v: any) {
+		if (inputElement && rules && rules.length) {
+			await tick()
+			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: v }))
+		}
+	}
+
 	async function setValue(val?: T) {
 		value = val
 		dialog = false
 		if (value) {
 			onSelect(value)
-		}
-		if (inputElement && rules && rules.length) {
-			await tick()
-			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: value }))
 		}
 	}
 
@@ -107,6 +110,7 @@
 	}
 
 	$: BROWSER && fitlerValue && filterList()
+	$: BROWSER && bubleValue(value)
 </script>
 
 <div class="c-select">

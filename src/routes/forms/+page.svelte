@@ -7,8 +7,9 @@
 		CNotifier.info({ title: 'Form submit' })
 	}
 
-	const requiredCountry = (v: (typeof items)[number]) => {
-		return v.abbr === 'NY' || 'El pais debe ser Nueva York!!!'
+	const requiredCountry = (v: any) => {
+		console.log(v)
+		return !!v || 'Este campo es obligatorio'
 	}
 	const required = (v: any) => !!v || 'Este campo es requerido y es un error muy largo'
 	const validEmail = (v: string) =>
@@ -79,10 +80,6 @@
 		visibleCountry = !visibleCountry
 	}
 	let testAbbr: any
-	$: {
-		countryDefault
-		console.log('veces que cambio country')
-	}
 </script>
 
 <div class="card mb-4">
