@@ -14,7 +14,8 @@
 		{ text: 'Avatar', url: '/avatar' },
 		{ text: 'Actions', url: '/actions' },
 		{ text: 'Container', url: '/container' },
-		{ text: 'Image uploader', url: '/image-uploader' }
+		{ text: 'Image uploader', url: '/image-uploader' },
+		{ text: 'expand', url: '/expand' }
 	]
 	let sidebar = true
 </script>

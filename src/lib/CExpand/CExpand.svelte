@@ -4,6 +4,10 @@
 	import { mdiPlus } from '@mdi/js'
 
 	export let active = false
+	export let icon = mdiPlus
+	export let iconRotation = '-45deg'
+	let klass = ''
+	export { klass as class }
 
 	function toggle(e?: MouseEvent) {
 		if (e) e.stopPropagation()
@@ -12,23 +16,15 @@
 </script>
 
 <div>
-	<slot name="action" {toggle} isOpen={active}>
-		<button
-			class="btn d-flex align-center pa-2 gap-2"
-			class:active
-			on:click|stopPropagation={toggle}
-		>
-			<slot name="title">Panel header</slot>
-			<div class="action-icon ml-auto">
-				<slot name="icon">
-					<CIcon icon={mdiPlus} />
-				</slot>
-			</div>
-		</button>
-	</slot>
+	<button class="btn pa-2 ghost {klass}" class:active on:click|stopPropagation={toggle}>
+		<slot name="title">Panel header</slot>
+		<div class="action-icon ml-auto" style:--icon-rotation={iconRotation}>
+			<CIcon {icon} />
+		</div>
+	</button>
 	{#if active}
 		<div transition:slide|local={{ duration: 180 }}>
-			<slot />
+			<slot {active} />
 		</div>
 	{/if}
 </div>
@@ -47,7 +43,7 @@
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 		.action-icon {
-			rotate: -45deg;
+			rotate: var(--icon-rotation, -45deg);
 		}
 	}
 </style>
