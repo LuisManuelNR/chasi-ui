@@ -126,7 +126,7 @@
 						{value}
 					</slot>
 				{:else}
-					<span class="info-text">{placeholder}</span>
+					<span class="placeholder">{placeholder}</span>
 				{/if}
 			</button>
 			<input hidden bind:this={inputElement} />
@@ -186,7 +186,7 @@
 		white-space: normal;
 		text-align: left;
 	}
-	.info-text {
+	.placeholder {
 		opacity: 0.6;
 	}
 </style>
