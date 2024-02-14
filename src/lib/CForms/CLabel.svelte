@@ -5,6 +5,8 @@
 	export let label = ''
 	export let loading = false
 	export let rules: Array<Rule<any>> | undefined = undefined
+	let klass = ''
+	export { klass as class }
 
 	let hint = ''
 	let shake = false
@@ -55,7 +57,7 @@
 </script>
 
 <label
-	class="c-label"
+	class="c-label {klass}"
 	class:loading-inline={loading}
 	class:no-label={!label}
 	class:error-state={hint}
@@ -64,7 +66,9 @@
 	on:input={handleInputEvent}
 >
 	<div class="label-text">
-		{label}
+		<slot name="label">
+			{label}
+		</slot>
 	</div>
 	<div class="prepend">
 		<slot name="prepend" />
