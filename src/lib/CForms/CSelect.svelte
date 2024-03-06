@@ -3,7 +3,7 @@
 	import { CLabel, CIcon, CDialog } from '$lib'
 	import { mdiChevronDown, mdiMagnify } from '@mdi/js'
 	import { BROWSER } from 'esm-env'
-	import { tick } from 'svelte'
+	import { createEventDispatcher, tick } from 'svelte'
 
 	type T = $$Generic
 	type X = T extends Record<string, any> ? keyof T : undefined
@@ -30,6 +30,7 @@
 	let fitlerValue = ''
 	let inputElement: HTMLInputElement
 	let virtualList = items
+	const dispatch = createEventDispatcher<{ open: null }>()
 
 	async function bubleValue(v: any) {
 		if (inputElement && rules && rules.length) {
@@ -91,6 +92,7 @@
 		virtualList = items
 		dialog = true
 		focusElement(filterBy ? '#c-select-filter' : '.selected')
+		dispatch('open')
 	}
 
 	function normalizeItems(str: string) {
