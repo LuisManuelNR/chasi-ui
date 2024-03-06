@@ -47,14 +47,14 @@
 		}
 	}
 
-	function filterList() {
+	function filterList(val: string, list: T[]) {
 		cursor = -1
-		if (!filterBy) return (virtualList = items)
-		virtualList = items.filter((v) => {
+		if (!filterBy) return (virtualList = list)
+		virtualList = list.filter((v) => {
 			//@ts-ignore
 			const value = `${v[filterBy] || v}`
 			const a = normalizeItems(value)
-			const b = normalizeItems(fitlerValue)
+			const b = normalizeItems(val)
 			return a.includes(b)
 		})
 	}
@@ -111,7 +111,7 @@
 		if (currentBtn) currentBtn.focus()
 	}
 
-	$: BROWSER && fitlerValue && filterList()
+	$: BROWSER && filterList(fitlerValue, items)
 	$: BROWSER && bubleValue(value)
 </script>
 
