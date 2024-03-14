@@ -10,17 +10,13 @@
 
 	let hint = ''
 	let shake = false
-	let value = ''
+	let inputCtrlElement: HTMLDivElement
 
 	const formValidator = getContext<Set<() => void> | undefined>('validators')
 
-	function handleInputEvent(e: any) {
+	function handleInputEvent() {
 		if (!rules?.length) return
-		if (e instanceof CustomEvent) value = e.detail
-		else if (e.target instanceof HTMLInputElement) {
-			if (e.target.type === 'checkbox' || e.target.type === 'radio') value = e.target.checked
-			else value = e.target.value
-		}
+		const value = getInputValue()
 		validate(value)
 	}
 
@@ -38,7 +34,17 @@
 		}
 	}
 
+	function getInputValue() {
+		const input = inputCtrlElement.querySelector<HTMLInputElement>(
+			'input, textarea, c-select-value'
+		)
+		if (!input) return ''
+		if (input.type === 'checkbox' || input.type === 'radio') input.checked
+		return input.value
+	}
+
 	function toValidaror() {
+		const value = getInputValue()
 		validate(value)
 		if (hint) shake = true
 		return hint
@@ -73,7 +79,7 @@
 	<div class="prepend">
 		<slot name="prepend" />
 	</div>
-	<div class="input-ctrl">
+	<div class="input-ctrl" bind:this={inputCtrlElement}>
 		<slot />
 	</div>
 	<div class="append">

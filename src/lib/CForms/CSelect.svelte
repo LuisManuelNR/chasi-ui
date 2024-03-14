@@ -35,7 +35,9 @@
 	async function bubleValue(v: any) {
 		if (inputElement && rules && rules.length) {
 			await tick()
-			inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: v }))
+			//@ts-ignore
+			inputElement.value = v
+			inputElement.dispatchEvent(new InputEvent('input', { bubbles: true }))
 		}
 	}
 
@@ -131,7 +133,7 @@
 					<span class="placeholder">{placeholder}</span>
 				{/if}
 			</button>
-			<input hidden bind:this={inputElement} />
+			<c-select-value bind:this={inputElement} />
 			<svelte:fragment slot="append">
 				<CIcon icon={mdiChevronDown} />
 			</svelte:fragment>
@@ -190,5 +192,8 @@
 	}
 	.placeholder {
 		opacity: 0.6;
+	}
+	c-select-value {
+		display: none;
 	}
 </style>

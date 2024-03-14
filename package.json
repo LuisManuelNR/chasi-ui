@@ -32,27 +32,27 @@
 		"svelte": "^4.0.0"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.2",
-		"@sveltejs/package": "^2.2.3",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@types/node": "^20.10.5",
-		"prettier": "^3.1.1",
-		"prettier-plugin-svelte": "^3.1.2",
-		"publint": "^0.2.6",
-		"svelte": "^4.2.8",
-		"svelte-check": "^3.6.2",
+		"@sveltejs/adapter-auto": "^3.1.1",
+		"@sveltejs/kit": "^2.5.4",
+		"@sveltejs/package": "^2.3.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.2",
+		"@types/node": "^20.11.27",
+		"prettier": "^3.2.5",
+		"prettier-plugin-svelte": "^3.2.2",
+		"publint": "^0.2.7",
+		"svelte": "^4.2.12",
+		"svelte-check": "^3.6.7",
 		"tslib": "^2.6.2",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.10",
-		"vitest": "^1.0.4"
+		"typescript": "^5.4.2",
+		"vite": "^5.1.6",
+		"vitest": "^1.3.1"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"@mdi/js": "^7.3.67",
+		"@mdi/js": "^7.4.47",
 		"esm-env": "^1.0.0",
-		"sass": "^1.69.5"
+		"sass": "^1.72.0"
 	}
 }

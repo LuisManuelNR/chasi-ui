@@ -58,7 +58,9 @@
 	}
 
 	let countryDefault: (typeof items)[number]
-	let testEmail: string = ''
+	let text1 = ''
+	let text2 = 'Random text'
+	let testEmail = ''
 	let fakeCountry = false
 	function changeCountry() {
 		if (fakeCountry) {
@@ -116,6 +118,12 @@
 				country field was hidden
 			{/if}
 			<div class="d-flex gap-2 align-center mb-4">
+				<CLabel label="Text1" rules={[required]}>
+					<input bind:value={text1} />
+				</CLabel>
+				<CLabel label="Text2" rules={[required]}>
+					<input bind:value={text2} />
+				</CLabel>
 				<CLabel label="Email" rules={[required, validEmail]}>
 					<input type="email" autocomplete="email" bind:value={testEmail} />
 				</CLabel>
