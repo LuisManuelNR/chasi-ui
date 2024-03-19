@@ -85,6 +85,10 @@
 </script>
 
 <div class="card mb-4">
+	<CLabel>
+		<div class="brand-text" slot="label"><h1>ALGO POR AQUI</h1></div>
+		<input type="checkbox" bind:value={text1} />
+	</CLabel>
 	<CForm on:submit={handleSubmit}>
 		<div class="d-grid gap-3">
 			<!-- <CSelect

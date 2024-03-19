@@ -65,7 +65,7 @@
 <label
 	class="c-label {klass}"
 	class:loading-inline={loading}
-	class:no-label={!label}
+	class:no-label={!label && !$$slots.label}
 	class:error-state={hint}
 	class:shake-animation={shake}
 	on:animationend={() => (shake = false)}
