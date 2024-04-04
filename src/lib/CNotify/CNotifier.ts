@@ -1,13 +1,15 @@
 import CNotify from './CNotify.svelte'
 import { BROWSER } from 'esm-env'
 
-type CNotifierParams = {
+type CNotifierParamsObj = {
 	title: string
 	text?: string
 	html?: string
 	timeout?: number
 	target?: string
 }
+
+type CNotifierParams = CNotifierParamsObj | string
 
 if (BROWSER) {
 	if (!document.querySelector('.notifications-holder')) {
@@ -19,7 +21,7 @@ if (BROWSER) {
 
 const DEFAULT_TIMEOUT = 4000
 
-function send({ title, text, html, timeout = DEFAULT_TIMEOUT, type, target = '.notifications-holder' }: CNotifierParams & { type: string }) {
+function send({ title, text, html, timeout = DEFAULT_TIMEOUT, type, target = '.notifications-holder' }: CNotifierParamsObj & { type: string }) {
 	const container = document.querySelector(target)
 	if (!container) throw 'Missing target element for Display notifications'
 	const noty = new CNotify({
@@ -48,15 +50,24 @@ function send({ title, text, html, timeout = DEFAULT_TIMEOUT, type, target = '.n
 }
 
 function error(opt: CNotifierParams): void {
-	send({ ...opt, type: 'error' })
+	send({ ...parseOpts(opt), type: 'error' })
 }
 
 function info(opt: CNotifierParams): void {
-	send({ ...opt, type: 'brand' })
+	send({ ...parseOpts(opt), type: 'brand' })
 }
 
 function success(opt: CNotifierParams): void {
-	send({ ...opt, type: 'success' })
+	send({ ...parseOpts(opt), type: 'success' })
+}
+
+function parseOpts(opt: CNotifierParams): CNotifierParamsObj {
+	if (typeof opt === 'string') {
+		return {
+			title: opt
+		}
+	}
+	return opt
 }
 
 export const CNotifier = {

@@ -122,6 +122,7 @@
 		<CLabel {label} {loading} {rules}>
 			<button
 				class="text-left full-width d-flex align-center gap-2"
+				type="button"
 				{disabled}
 				on:click={openSelect}
 			>
