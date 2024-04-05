@@ -152,7 +152,7 @@
 		left: calc(50% - 15px);
 		z-index: 2;
 		opacity: 1;
-		background-color: transparent;
+		background-color: inherit;
 	}
 
 	&::after {
@@ -162,6 +162,10 @@
 		background-color: inherit;
 		opacity: 1;
 		z-index: 1;
+	}
+
+	&.ghost::after {
+		background-color: var(--bg);
 	}
 
 	@keyframes spin {
