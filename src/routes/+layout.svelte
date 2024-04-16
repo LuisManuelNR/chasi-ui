@@ -16,7 +16,8 @@
 		{ text: 'Container', url: '/container' },
 		{ text: 'Image uploader', url: '/image-uploader' },
 		{ text: 'expand', url: '/expand' },
-		{ text: 'dialog', url: '/dialog' }
+		{ text: 'dialog', url: '/dialog' },
+		{ text: 'node-editor', url: '/node-editor' }
 	]
 	let sidebar = true
 </script>

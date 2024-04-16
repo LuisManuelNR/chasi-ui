@@ -1,0 +1,1 @@
+export type Connections = Record<string, string>
