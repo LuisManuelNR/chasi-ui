@@ -51,10 +51,6 @@ export function isInside(point: [number, number], polygonVertices: [number, numb
   return inside
 }
 
-export function randomNumber(min = 0, max = 1) {
-  return Math.random() * (max - min) + min
-}
-
 export function polyArea(vertices: [number, number][]) {
   let total = 0
   for (let i = 0, l = vertices.length; i < l; i++) {
@@ -96,6 +92,14 @@ export function zoom(point: number, z: number, centroid: number) {
   const t = point - centroid
   const zoom = z < 0 ? t * 0.9 : t * 1.1
   return zoom + centroid
+}
+
+export function randomString() {
+  return Math.random().toString(36).substring(2, 9)
+}
+
+export function randomNumber(min = 0, max = 1) {
+  return Math.random() * (max - min) + min
 }
 
 export function randomColor() {

@@ -18,7 +18,7 @@
 			}
 		})
 		const zoomAction = zoomable(node, {
-			onZoom(delta, center, isTouch) {
+			onZoom(delta, center) {
 				const canvasBound = node.getBoundingClientRect()
 				const amount = delta > 0 ? 0.9 : 1.1
 				scale *= amount

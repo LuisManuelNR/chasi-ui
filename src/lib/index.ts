@@ -10,8 +10,6 @@ export { default as CSelect } from './CForms/CSelect.svelte'
 export { default as CSidebar } from './CSidebar/CSidebar.svelte'
 export { default as CImageUploader } from './CImageUploader/CImageUploader.svelte'
 export { default as CAvatar } from './CAvatar/CAvatar.svelte'
-export { default as CNodeEditor } from './CNodeEditor/CNodeEditor.svelte'
-export * from './CGraph/index.js'
 
 export type { Rule } from './CForms/rules.js'
 export type { ThemeGeneratorConfig } from './theme.js'

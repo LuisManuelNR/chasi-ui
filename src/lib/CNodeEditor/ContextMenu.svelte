@@ -27,7 +27,7 @@
 <div role="presentation" use:setup>
 	{#if active}
 		<div class="contextmenu card" style="transform: translate({position[0]}px, {position[1]}px);">
-			<slot>context menu!</slot>
+			<slot {position}>context menu!</slot>
 		</div>
 	{/if}
 </div>
