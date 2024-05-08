@@ -2,7 +2,7 @@ import CNotify from './CNotify.svelte'
 import { BROWSER } from 'esm-env'
 
 type CNotifierParamsObj = {
-	title: string
+	title?: string
 	text?: string
 	html?: string
 	timeout?: number
