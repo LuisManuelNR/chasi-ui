@@ -39,7 +39,7 @@
 			'input, textarea, c-select-value'
 		)
 		if (!input) return ''
-		if (input.type === 'checkbox' || input.type === 'radio') input.checked
+		if (input.type === 'checkbox' || input.type === 'radio') return input.checked
 		return input.value
 	}
 

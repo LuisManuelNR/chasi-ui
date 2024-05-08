@@ -16,8 +16,6 @@
 		},
 		carne: {
 			inputs: {
-				pescado: '',
-				vaca: '',
 				cerdo: ''
 			},
 			outputs: {
