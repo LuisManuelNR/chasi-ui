@@ -1,6 +1,6 @@
 {
 	"name": "@chasi/ui",
-	"version": "0.2.93",
+	"version": "0.2.94",
 	"bin": {
 		"gen-theme": "./dist/bin/theme.js"
 	},
