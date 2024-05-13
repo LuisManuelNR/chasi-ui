@@ -3,43 +3,32 @@
 </script>
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte'
+	import { onMount } from 'svelte'
 
 	export let closeOnClick = false
 	export let visible = false
 
-	let menuElement: HTMLDivElement
-	let menuContent: HTMLElement
-
-	$: if (visible) {
-		resolveOrientation()
-	}
-
-	async function resolveOrientation() {
-		if (!visible) return
-		await tick()
-		const { left, top, width, height, bottom } = menuElement.getBoundingClientRect()
-		menuContent.style.minWidth = `${width}px`
-		const menuBound = menuContent.getBoundingClientRect()
-		const flipY = window.innerHeight - bottom < menuBound.height
-		const flipX = window.innerWidth - left < menuBound.width
-		menuContent.style.left = flipX ? `${left - menuBound.width + width}px` : `${left}px`
-		menuContent.style.top = flipY ? `${top - menuBound.height}px` : `${top + height}px`
-	}
+	let x = 0
+	let y = 0
 
 	function openMenu() {
 		menus.forEach((v) => v())
 		visible = true
 	}
+
 	function closeMenu() {
-		if (visible) {
-			visible = false
-		}
+		if (visible) visible = false
 	}
-	function toggle(e: MouseEvent | KeyboardEvent) {
+
+	function toggle(e: MouseEvent) {
 		e.stopPropagation()
+		console.log(e)
 		if (visible) closeMenu()
-		else openMenu()
+		else {
+			x = e.x
+			y = e.y
+			openMenu()
+		}
 	}
 	function onContentClick(e: MouseEvent) {
 		if (!closeOnClick) e.stopPropagation()
@@ -52,34 +41,34 @@
 	})
 </script>
 
-<svelte:window on:click={closeMenu} on:scroll={resolveOrientation} />
+<svelte:window on:click={closeMenu} />
 
-<div class="c-menu" bind:this={menuElement}>
-	<slot name="action" {toggle}>
-		<button class="btn" on:click={toggle}>open</button>
-	</slot>
-	{#if visible}
-		<div
-			bind:this={menuContent}
-			tabindex="-1"
-			class="c-menu-content"
-			on:click={onContentClick}
-			on:keydown
-			role="menu"
-		>
-			<slot {visible} />
-		</div>
-	{/if}
-</div>
+<slot name="action" {toggle}>
+	<button class="btn" on:click={toggle}>open</button>
+</slot>
+
+{#if visible}
+	<div
+		tabindex="-1"
+		class="c-menu-content"
+		style:translate="{x}px {y}px"
+		on:click={onContentClick}
+		on:keydown
+		role="menu"
+	>
+		<slot {visible} />
+	</div>
+{/if}
 
 <style lang="scss">
 	@layer ChasiMenu {
 		.c-menu-content {
 			position: fixed;
+			top: 0;
+			left: 0;
 			z-index: 99999;
 			box-shadow: var(--shadow-3);
-			border-bottom-left-radius: var(--size-1);
-			border-bottom-right-radius: var(--size-1);
+			border-radius: var(--size-1);
 		}
 	}
 </style>
