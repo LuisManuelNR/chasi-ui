@@ -6,23 +6,25 @@
 	import { onMount } from 'svelte'
 
 	export let closeOnClick = false
-	export let visible = false
 
+	let menuDialog: HTMLDialogElement
+	let visible = false
 	let x = 0
 	let y = 0
 
 	function openMenu() {
 		menus.forEach((v) => v())
+		menuDialog.showModal()
 		visible = true
 	}
 
 	function closeMenu() {
-		if (visible) visible = false
+		menuDialog.close()
+		visible = false
 	}
 
 	function toggle(e: MouseEvent) {
 		e.stopPropagation()
-		console.log(e)
 		if (visible) closeMenu()
 		else {
 			x = e.x
@@ -30,9 +32,7 @@
 			openMenu()
 		}
 	}
-	function onContentClick(e: MouseEvent) {
-		if (!closeOnClick) e.stopPropagation()
-	}
+
 	onMount(() => {
 		menus.add(closeMenu)
 		return () => {
@@ -47,28 +47,19 @@
 	<button class="btn" on:click={toggle}>open</button>
 </slot>
 
-{#if visible}
-	<div
-		tabindex="-1"
-		class="c-menu-content"
-		style:translate="{x}px {y}px"
-		on:click={onContentClick}
-		on:keydown
-		role="menu"
-	>
-		<slot {visible} />
-	</div>
-{/if}
+<dialog bind:this={menuDialog} class="c-menu-content" style:translate="{x}px {y}px">
+	<slot {visible} />
+</dialog>
 
 <style lang="scss">
 	@layer ChasiMenu {
 		.c-menu-content {
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: 99999;
 			box-shadow: var(--shadow-3);
 			border-radius: var(--size-1);
+			border: 0;
+			&::backdrop {
+				display: none;
+			}
 		}
 	}
 </style>
