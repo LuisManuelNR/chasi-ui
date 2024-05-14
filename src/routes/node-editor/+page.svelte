@@ -1,28 +1,16 @@
 <script lang="ts">
 	import CNodeEditor from '$lib/CNodeEditor/CNodeEditor.svelte'
+	import type { NodesMap } from '$lib/CNodeEditor/index.js'
+	import Carne from './Carne.svelte'
+	import Fruta from './Fruta.svelte'
 
 	let nodes = {}
-	const nodesMap = {
+	const nodesMap: NodesMap = {
 		fruta: {
-			inputs: {
-				banana: '',
-				platano: '',
-				mango: ''
-			},
-			outputs: {
-				batido: '',
-				durofrio: ''
-			}
+			component: Fruta
 		},
 		carne: {
-			inputs: {
-				pescado: '',
-				vaca: '',
-				cerdo: ''
-			},
-			outputs: {
-				filete: ''
-			}
+			component: Carne
 		}
 	}
 </script>

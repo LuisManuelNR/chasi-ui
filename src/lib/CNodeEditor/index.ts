@@ -4,14 +4,12 @@ export type NodesMap = {
   [key: string]: {
     inputs?: NodeSocket
     outputs?: NodeSocket
+    component?: any
   }
 }
 export type Nodes = {
-  [key: string]: {
+  [key: string]: NodesMap[string] & {
     id: string
-    name: string
     position: number[]
-    inputs?: NodeSocket
-    outputs?: NodeSocket
   }
 }

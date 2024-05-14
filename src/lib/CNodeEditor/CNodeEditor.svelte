@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { randomString } from '../utils.js'
 	import ContextMenu from './ContextMenu.svelte'
-	import Control from './Control.svelte'
 	import Edges from './Edges.svelte'
 	import GraphCanvas from './GraphCanvas.svelte'
 	import Node from './Node.svelte'
@@ -25,7 +24,6 @@
 			const id = `${name}-${randomString()}`
 			nodes[id] = {
 				id,
-				name,
 				position: nodeposition,
 				...nodesMap[name]
 			}
@@ -37,9 +35,9 @@
 	<GraphCanvas {height} bind:scale={canvasScale} bind:position={canvasPosition}>
 		{#each Object.entries(nodes) as [name, value]}
 			<Node scale={canvasScale} position={value.position}>
-				{value.name}
-				<Control id={value.id} bind:controls={nodes[name].inputs}></Control>
-				<Control id={value.id} bind:controls={nodes[name].outputs} outputs></Control>
+				{#if value.component}
+					<svelte:component this={value.component} />
+				{/if}
 			</Node>
 		{/each}
 		<Edges {connections} scale={canvasScale}></Edges>
