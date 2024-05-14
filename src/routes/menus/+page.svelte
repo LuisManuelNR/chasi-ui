@@ -58,6 +58,7 @@
 			<button class="list-item">click</button>
 		</div>
 	</CMenu>
+	<div class="cosa-grande"></div>
 </div>
 
 <style lang="scss">
@@ -71,5 +72,8 @@
 		.list-item {
 			width: 100%;
 		}
+	}
+	.cosa-grande {
+		min-height: 2000px;
 	}
 </style>

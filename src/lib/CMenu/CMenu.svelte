@@ -49,6 +49,8 @@
 	})
 </script>
 
+<svelte:window on:scroll={closeMenu} />
+
 <slot name="action" {toggle}>
 	<button class="btn" on:click={toggle}>open</button>
 </slot>
