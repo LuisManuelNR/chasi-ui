@@ -12,7 +12,7 @@
 			<li>four</li>
 		</ul>
 	</CMenu>
-	<CMenu closeOnClick>
+	<CMenu>
 		<button on:click={toggle} slot="action" let:toggle class="btn icon">
 			<CIcon icon={mdiDotsVertical} />
 		</button>
@@ -28,7 +28,7 @@
 	<CDialog let:close persistent>
 		<button class="btn" slot="action" let:open on:click={open}>incide a dialog</button>
 		<div class="d-flex gap-4">
-			<CMenu closeOnClick>
+			<CMenu>
 				<button on:click={toggle} let:toggle slot="action" class="btn icon">
 					<CIcon icon={mdiDotsVertical} />
 				</button>
@@ -45,7 +45,7 @@
 		</div>
 	</CDialog>
 	<span class="ml-auto" />
-	<CMenu closeOnClick>
+	<CMenu>
 		<button on:click={toggle} let:toggle slot="action" class="btn icon">
 			<CIcon icon={mdiDotsVertical} />
 		</button>
