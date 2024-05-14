@@ -29,12 +29,14 @@
 		popoverElement.showPopover()
 		visible = true
 		window.addEventListener('scroll', closeMenu)
+		window.addEventListener('click', closeMenu)
 	}
 
 	function closeMenu() {
 		popoverElement.hidePopover()
 		visible = false
 		window.removeEventListener('scroll', closeMenu)
+		window.removeEventListener('click', closeMenu)
 	}
 
 	function toggle(e: MouseEvent | KeyboardEvent) {
