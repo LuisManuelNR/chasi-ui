@@ -6,15 +6,15 @@
 	import { onMount, tick } from 'svelte'
 
 	let visible = false
-	let anchorElement: HTMLElement
-	let popoverElement: HTMLElement
+	let anchorElement: HTMLElement | undefined
+	let popoverElement: HTMLElement | undefined
 	let x = 0
 	let y = 0
 
 	$: visible && resolveOrientation()
 
 	async function resolveOrientation() {
-		if (!visible) return
+		if (!visible || !popoverElement || !anchorElement) return
 		await tick()
 		const { left, top, width, height, bottom } = anchorElement.getBoundingClientRect()
 		const menuBound = popoverElement.getBoundingClientRect()
@@ -27,7 +27,7 @@
 	function openMenu() {
 		menus.forEach((v) => v())
 		window.addEventListener('scroll', closeMenu)
-		popoverElement.showPopover()
+		popoverElement && popoverElement.showPopover()
 		visible = true
 		setTimeout(() => {
 			window.addEventListener('click', closeMenu)
@@ -35,7 +35,7 @@
 	}
 
 	function closeMenu() {
-		popoverElement.hidePopover()
+		popoverElement && popoverElement.hidePopover()
 		visible = false
 		window.removeEventListener('scroll', closeMenu)
 		window.removeEventListener('click', closeMenu)
