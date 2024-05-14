@@ -26,10 +26,12 @@
 
 	function openMenu() {
 		menus.forEach((v) => v())
+		window.addEventListener('scroll', closeMenu)
 		popoverElement.showPopover()
 		visible = true
-		window.addEventListener('scroll', closeMenu)
-		window.addEventListener('click', closeMenu)
+		setTimeout(() => {
+			window.addEventListener('click', closeMenu)
+		}, 0)
 	}
 
 	function closeMenu() {
@@ -59,8 +61,6 @@
 
 <div
 	bind:this={popoverElement}
-	on:click={closeMenu}
-	on:keypress
 	popover="manual"
 	tabindex="-1"
 	class="c-menu-content"
