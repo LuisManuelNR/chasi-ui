@@ -58,8 +58,8 @@
 			<button class="list-item">click</button>
 		</div>
 	</CMenu>
-	<div class="cosa-grande"></div>
 </div>
+<div class="cosa-grande"></div>
 
 <style lang="scss">
 	.menu-content {

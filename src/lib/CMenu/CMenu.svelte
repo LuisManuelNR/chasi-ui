@@ -28,11 +28,13 @@
 		menus.forEach((v) => v())
 		popoverElement.showPopover()
 		visible = true
+		window.addEventListener('scroll', closeMenu)
 	}
 
 	function closeMenu() {
 		popoverElement.hidePopover()
 		visible = false
+		window.removeEventListener('scroll', closeMenu)
 	}
 
 	function toggle(e: MouseEvent | KeyboardEvent) {
@@ -48,8 +50,6 @@
 		}
 	})
 </script>
-
-<svelte:window on:scroll={closeMenu} />
 
 <slot name="action" {toggle}>
 	<button class="btn" on:click={toggle}>open</button>
