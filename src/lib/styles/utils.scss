@@ -217,12 +217,15 @@
 	user-select: none;
 	filter: grayscale(1);
 	cursor: not-allowed;
-	pointer-events: none;
 
 	&:active {
 		scale: 1;
 		box-shadow: none;
 	}
+}
+
+.disabled {
+	pointer-events: none;
 }
 
 .hidden-xs {
