@@ -6,6 +6,8 @@ export interface ThemeGeneratorConfig {
 export interface ThemeConfig {
 	[key: string]: {
 		colorScheme: 'light' | 'dark'
+		lightColor: string,
+		darkColor: string,
 		colors: {
 			brand: string[]
 			error: string[]
@@ -16,9 +18,6 @@ export interface ThemeConfig {
 		}
 	}
 }
-
-const LIGHT_COLOR = '#d8dee3'
-const DARK_COLOR = '#212529'
 
 export function generateTheme(theme: ThemeConfig): string {
 	const useConf = theme
@@ -46,17 +45,18 @@ export function generateTheme(theme: ThemeConfig): string {
 function generateAllVars(useConf: ThemeConfig) {
 	let result = ':root {\n'
 	for (const theme in useConf) {
-		for (const colorName in useConf[theme].colors) {
-			const colors = useConf[theme].colors[colorName]
+		const currentTheme = useConf[theme]
+		for (const colorName in currentTheme.colors) {
+			const colors = currentTheme.colors[colorName]
 			if (colors) {
 				if (colors.length === 1) {
 					result += `\t--${colorName}-${theme}: ${colors[0]};\n`
-					result += `\t--on-${colorName}-${theme}: ${contrast(colors[0])};\n`
+					result += `\t--on-${colorName}-${theme}: ${contrast(colors[0], currentTheme.lightColor, currentTheme.darkColor)};\n`
 				} else {
 					for (let i = 1; i <= colors.length; i++) {
 						const color = colors[i - 1]
 						result += `\t--${colorName}-${theme}-${i}: ${color};\n`
-						result += `\t--on-${colorName}-${theme}-${i}: ${contrast(color)};\n`
+						result += `\t--on-${colorName}-${theme}-${i}: ${contrast(color, currentTheme.lightColor, currentTheme.darkColor)};\n`
 					}
 				}
 			}
@@ -104,11 +104,11 @@ function generateColorClasses(useConf: ThemeConfig) {
 	return result
 }
 
-function contrast(hexColor: string) {
+function contrast(hexColor: string, light: string, dark: string) {
 	const hex = hexColor.replace('#', '')
 	const R = parseInt(hex.substring(0, 2), 16)
 	const G = parseInt(hex.substring(2, 4), 16)
 	const B = parseInt(hex.substring(4, 6), 16)
 	const brightness = (Math.round(R * 299) + Math.round(G * 587) + Math.round(B * 114)) / 1000
-	return brightness >= 128 ? DARK_COLOR : LIGHT_COLOR
+	return brightness >= 128 ? dark : light
 }

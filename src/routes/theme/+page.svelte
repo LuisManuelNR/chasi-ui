@@ -7,6 +7,8 @@
 	const themes = writable<ThemeConfig>({
 		light: {
 			colorScheme: 'light',
+			lightColor: '#d8dee3',
+			darkColor: '#212529',
 			colors: {
 				brand: ['#c212f3'],
 				accent: ['#19acf5'],
@@ -18,6 +20,8 @@
 		},
 		dark: {
 			colorScheme: 'dark',
+			lightColor: '#d8dee3',
+			darkColor: '#212529',
 			colors: {
 				brand: ['#c212f3'],
 				accent: ['#19acf5'],
