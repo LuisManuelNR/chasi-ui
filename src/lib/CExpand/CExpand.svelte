@@ -5,6 +5,10 @@
 
 	export let active = false
 	export let icon = mdiPlus
+	/**
+	 * Rotación del icono en el botón.
+	 * @default '-45deg'
+	 */
 	export let iconRotation = '-45deg'
 	let klass = ''
 	export { klass as class }
@@ -15,7 +19,7 @@
 	}
 </script>
 
-<div>
+<div class="c-expand">
 	<button class="btn pa-2 ghost {klass}" class:active on:click|stopPropagation={toggle}>
 		<slot name="title">Panel header</slot>
 		<div class="action-icon ml-auto" style:--icon-rotation={iconRotation}>
@@ -23,7 +27,7 @@
 		</div>
 	</button>
 	{#if active}
-		<div transition:slide|local={{ duration: 180 }}>
+		<div transition:slide|local={{ duration: 200 }}>
 			<slot {active} />
 		</div>
 	{/if}
@@ -36,10 +40,10 @@
 	}
 	.action-icon {
 		rotate: 0deg;
-		transition: rotate 0.5s ease;
+		transition: rotate 200ms ease;
 	}
 	.active {
-		padding: 24px 1rem;
+		padding-block: 1rem;
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 		.action-icon {
