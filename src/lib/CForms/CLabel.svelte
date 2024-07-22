@@ -142,6 +142,7 @@
 				align-items: center;
 				padding-inline: 0;
 				min-height: auto;
+				height: auto;
 				.prepend:not(:empty) {
 					margin-right: var(--size-2);
 				}
