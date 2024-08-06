@@ -40,22 +40,22 @@
 			overflow: hidden;
 		}
 
-		* {
-			&::-webkit-scrollbar-track {
-				background-color: transparent;
-			}
+		// * {
+		// 	&::-webkit-scrollbar-track {
+		// 		background-color: transparent;
+		// 	}
 
-			&::-webkit-scrollbar {
-				width: 4px;
-				height: 4px;
-				background-color: transparent;
-			}
+		// 	&::-webkit-scrollbar {
+		// 		width: 4px;
+		// 		height: 4px;
+		// 		background-color: transparent;
+		// 	}
 
-			&::-webkit-scrollbar-thumb {
-				width: 4px;
-				height: 4px;
-				background-color: var(--on-s-6);
-			}
-		}
+		// 	&::-webkit-scrollbar-thumb {
+		// 		width: 4px;
+		// 		height: 4px;
+		// 		background-color: var(--on-s-6);
+		// 	}
+		// }
 	}
 }
