@@ -46,7 +46,7 @@
 	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 	<dialog class="card" bind:this={dialogElement} on:click={handleClick} on:keydown={handlekeydown}>
 		<slot name="header" />
-		<div class="body">
+		<div class="body pa-1">
 			<slot {close} {open} />
 		</div>
 		<slot name="footer" />
@@ -61,6 +61,8 @@
 			margin: auto;
 			animation: scale 0.1s ease;
 			box-shadow: var(--shadow-3);
+			height: auto;
+			max-height: fit-content;
 			&::backdrop {
 				background-color: #0000006e;
 				animation: fade 0.2s ease;
@@ -69,6 +71,7 @@
 		.body {
 			overflow-x: hidden;
 			overflow-y: auto;
+			height: fit-content;
 		}
 		.card {
 			display: grid;
