@@ -44,12 +44,14 @@
 
 {#if ssrRender || active}
 	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-	<dialog class="card" bind:this={dialogElement} on:click={handleClick} on:keydown={handlekeydown}>
-		<slot name="header" />
-		<div class="body pa-1">
-			<slot {close} {open} />
+	<dialog bind:this={dialogElement} on:click={handleClick} on:keydown={handlekeydown}>
+		<div class="card">
+			<slot name="header" />
+			<div class="body pa-1">
+				<slot {close} {open} />
+			</div>
+			<slot name="footer" />
 		</div>
-		<slot name="footer" />
 	</dialog>
 {/if}
 
@@ -61,8 +63,7 @@
 			margin: auto;
 			animation: scale 0.1s ease;
 			box-shadow: var(--shadow-3);
-			height: auto;
-			max-height: fit-content;
+			border: none;
 			&::backdrop {
 				background-color: #0000006e;
 				animation: fade 0.2s ease;
@@ -71,7 +72,6 @@
 		.body {
 			overflow-x: hidden;
 			overflow-y: auto;
-			height: fit-content;
 		}
 		.card {
 			display: grid;
