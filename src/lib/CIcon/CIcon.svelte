@@ -9,8 +9,7 @@
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 24 24"
 	aria-hidden="true"
-	style:width="{size}px"
-	style:height="{size}px"
+	style:--size="{size}px"
 	class="c-icon {klass}"
 >
 	<path d={icon} />
@@ -21,5 +20,9 @@
 		display: inline-block;
 		vertical-align: bottom;
 		fill: currentColor;
+		width: var(--size, 24px);
+		height: var(--size, 24px);
+		min-width: var(--size, 24px);
+		min-height: var(--size, 24px);
 	}
 </style>
