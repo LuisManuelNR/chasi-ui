@@ -7,7 +7,7 @@
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 {size} {size}"
+	viewBox="0 0 24 24"
 	aria-hidden="true"
 	style:width="{size}px"
 	style:height="{size}px"
@@ -18,6 +18,8 @@
 
 <style lang="scss">
 	.c-icon {
+		display: inline-block;
+		vertical-align: bottom;
 		fill: currentColor;
 	}
 </style>
