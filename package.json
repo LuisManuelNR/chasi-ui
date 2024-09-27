@@ -21,6 +21,7 @@
 		},
 		"./styles/*": "./dist/styles/*",
 		"./actions": "./dist/Actions/index.js",
+		"./graph": "./dist/CGraph/index.js",
 		"./utils": "./dist/utils.js"
 	},
 	"files": [
