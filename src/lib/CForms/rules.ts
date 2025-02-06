@@ -1,1 +1,0 @@
-export type Rule<T> = (v: T) => true | string
