@@ -1,0 +1,63 @@
+html {
+	--font-family-serif: 'Source Serif Pro', ui-serif, serif;
+	--font-family-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
+		sans-serif;
+	--font-size: 1rem;
+
+	--size-000: -0.5rem;
+	--size-00: -0.25rem;
+	--size-1: 0.25rem;
+	--size-2: 0.5rem;
+	--size-3: 1rem;
+	--size-4: 1.25rem;
+	--size-5: 1.5rem;
+	--size-6: 1.75rem;
+	--size-7: 2rem;
+	--size-8: 3rem;
+	--size-9: 4rem;
+	--size-10: 5rem;
+	--size-11: 7.5rem;
+	--size-12: 10rem;
+	--size-13: 15rem;
+
+	--fluid-size-0: clamp(0.25rem, 0.2256rem + 0.122vi, 0.3125rem);
+	--fluid-size-1: clamp(0.5rem, 0.4268rem + 0.3659vi, 0.6875rem);
+	--fluid-size-2: clamp(0.75rem, 0.6524rem + 0.4878vi, 1rem);
+	--fluid-size-3: clamp(1rem, 0.878rem + 0.6098vi, 1.3125rem);
+	--fluid-size-4: clamp(1.5rem, 1.3049rem + 0.9756vi, 2rem);
+	--fluid-size-5: clamp(2rem, 1.7561rem + 1.2195vi, 2.625rem);
+	--fluid-size-6: clamp(3rem, 2.6341rem + 1.8293vi, 3.9375rem);
+	--fluid-size-7: clamp(4rem, 3.5122rem + 2.439vi, 5.25rem);
+	--fluid-size-8: clamp(6rem, 5.2683rem + 3.6585vi, 7.875rem);
+
+	--shadow-color: 220 40% 2%;
+	--shadow-strength: 9%;
+
+	--shadow-1: 0 1px 2px -1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+	--shadow-2: 0 3px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 7px 14px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%));
+	--shadow-3: 0 -1px 3px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+		0 1px 2px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+		0 2px 5px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+		0 4px 12px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+		0 12px 15px -5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+	--shadow-4: 0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+		0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+		0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+		0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
+	--shadow-5: 0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+		0 2px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 10px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+		0 20px 20px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+		0 40px 40px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+	--shadow-6: 0 -1px 2px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
+		0 3px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 7px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+		0 12px 10px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+		0 22px 18px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+		0 41px 33px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%)),
+		0 100px 80px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%));
+}

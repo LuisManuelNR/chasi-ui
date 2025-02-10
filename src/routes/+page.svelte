@@ -1,3 +1,18 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import { CLayout } from '$lib/index.js'
+</script>
+
+<CLayout>
+	<div class="box border-r3 s-4 shadow-4"></div>
+	<div class="box s-4"></div>
+	<div class="box s-4"></div>
+	<div class="box s-4"></div>
+	<div class="box s-4"></div>
+	<div class="box s-4"></div>
+</CLayout>
+
+<style>
+	.box {
+		height: 200px;
+	}
+</style>

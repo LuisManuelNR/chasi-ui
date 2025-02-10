@@ -1,0 +1,298 @@
+@use './container.scss' as container;
+
+@for $i from 0 through 6 {
+	.mb-#{$i} {
+		margin-bottom: var(--size-#{$i});
+	}
+
+	.ml-#{$i} {
+		margin-left: var(--size-#{$i});
+	}
+
+	.mr-#{$i} {
+		margin-right: var(--size-#{$i});
+	}
+
+	.mt-#{$i} {
+		margin-top: var(--size-#{$i});
+	}
+
+	.ma-#{$i} {
+		margin: var(--size-#{$i});
+	}
+
+	.mx-#{$i} {
+		margin-left: var(--size-#{$i});
+		margin-right: var(--size-#{$i});
+	}
+
+	.my-#{$i} {
+		margin-top: var(--size-#{$i});
+		margin-bottom: var(--size-#{$i});
+	}
+}
+
+@for $i from 1 through 6 {
+	.mb-n#{$i} {
+		margin-bottom: calc(var(--size-#{$i}) * -1);
+	}
+
+	.ml-n#{$i} {
+		margin-left: calc(var(--size-#{$i}) * -1);
+	}
+
+	.mr-n#{$i} {
+		margin-right: calc(var(--size-#{$i}) * -1);
+	}
+
+	.mt-n#{$i} {
+		margin-top: calc(var(--size-#{$i}) * -1);
+	}
+
+	.ma-n#{$i} {
+		margin: calc(var(--size-#{$i}) * -1);
+	}
+
+	.mx-n#{$i} {
+		margin-left: calc(var(--size-#{$i}) * -1);
+		margin-right: calc(var(--size-#{$i}) * -1);
+	}
+
+	.my-n#{$i} {
+		margin-top: calc(var(--size-#{$i}) * -1);
+		margin-bottom: calc(var(--size-#{$i}) * -1);
+	}
+}
+
+.ml-auto {
+	margin-left: auto;
+}
+
+.mt-auto {
+	margin-top: auto;
+}
+
+.mr-auto {
+	margin-right: auto;
+}
+
+.mb-auto {
+	margin-bottom: auto;
+}
+
+.mx-auto {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.my-auto {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+@for $i from 0 through 6 {
+	.pb-#{$i} {
+		padding-bottom: var(--size-#{$i});
+	}
+
+	.pl-#{$i} {
+		padding-left: var(--size-#{$i});
+	}
+
+	.pr-#{$i} {
+		padding-right: var(--size-#{$i});
+	}
+
+	.pt-#{$i} {
+		padding-top: var(--size-#{$i});
+	}
+
+	.pa-#{$i} {
+		padding: var(--size-#{$i});
+	}
+
+	.px-#{$i} {
+		padding-left: var(--size-#{$i});
+		padding-right: var(--size-#{$i});
+	}
+
+	.py-#{$i} {
+		padding-top: var(--size-#{$i});
+		padding-bottom: var(--size-#{$i});
+	}
+}
+
+.border {
+	border: 1px solid var(--s-4);
+}
+
+.border-r {
+	border-right: 1px solid var(--s-4);
+}
+
+.border-l {
+	border-left: 1px solid var(--s-4);
+}
+
+.border-b {
+	border-bottom: 1px solid var(--s-4);
+}
+
+.border-t {
+	border-top: 1px solid var(--s-4);
+}
+
+.border-r0 {
+	border-radius: 0px;
+}
+
+.border-r1 {
+	border-radius: var(--size-1);
+}
+
+.border-r2 {
+	border-radius: var(--size-2);
+}
+.border-r3 {
+	border-radius: var(--size-3);
+}
+
+.full-width {
+	width: 100%;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.loading {
+	position: relative;
+	pointer-events: none;
+	user-select: none;
+	box-shadow: none;
+
+	&::before {
+		position: absolute;
+		content: '';
+		border: 3px solid #00000000;
+		border-radius: 50%;
+		border-top: 3px solid currentColor;
+		width: 30px;
+		height: 30px;
+		animation: spin 0.6s linear infinite;
+		top: calc(50% - 15px);
+		left: calc(50% - 15px);
+		z-index: 2;
+		opacity: 1;
+		background-color: inherit;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-color: inherit;
+		opacity: 1;
+		z-index: 1;
+	}
+
+	&.ghost::after {
+		background-color: var(--bg);
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+}
+
+.loading-inline {
+	position: relative;
+	user-select: none;
+	box-shadow: none;
+	overflow: hidden;
+
+	&::before {
+		position: absolute;
+		content: '';
+		width: 60%;
+		height: 3px;
+		top: 0;
+		background-color: currentColor;
+		animation: incrementmove 2s linear infinite;
+		z-index: 2;
+	}
+
+	@keyframes incrementmove {
+		0% {
+			transform: translate(-100%) scaleX(1);
+		}
+
+		50% {
+			transform: translate(50%) scaleX(1.5);
+		}
+
+		100% {
+			transform: translate(200%) scaleX(0);
+		}
+	}
+}
+
+.disabled,
+[disabled] {
+	box-shadow: none;
+	user-select: none;
+	pointer-events: none;
+	filter: grayscale(1);
+	cursor: not-allowed;
+
+	&:active {
+		scale: 1;
+		box-shadow: none;
+	}
+}
+
+.hidden-xs {
+	@include container.xs {
+		display: none;
+	}
+}
+
+.hidden-sm {
+	@include container.sm {
+		display: none;
+	}
+}
+
+.hidden-md {
+	@include container.md {
+		display: none;
+	}
+}
+
+.hidden-lg {
+	@include container.lg {
+		display: none;
+	}
+}
+
+.shadow-1 {
+	box-shadow: var(--shadow-1);
+}
+
+.shadow-2 {
+	box-shadow: var(--shadow-2);
+}
+
+.shadow-3 {
+	box-shadow: var(--shadow-3);
+}
+
+.shadow-4 {
+	box-shadow: var(--shadow-4);
+}

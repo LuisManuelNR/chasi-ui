@@ -1,0 +1,202 @@
+/* ESTE ERCHIVO ES AUTOGENERADO */
+:root {
+	--brand-light: #c212f3;
+	--on-brand-light: #d8dee3;
+	--accent-light: #19acf5;
+	--on-accent-light: #212529;
+	--error-light: #d72638;
+	--on-error-light: #d8dee3;
+	--success-light: #169873;
+	--on-success-light: #d8dee3;
+	--bg-light: #c4c9d4;
+	--on-bg-light: #212529;
+	--s-light-1: #f7f8f9;
+	--on-s-light-1: #212529;
+	--s-light-2: #e9ebef;
+	--on-s-light-2: #212529;
+	--s-light-3: #dcdfe6;
+	--on-s-light-3: #212529;
+	--s-light-4: #d0d4dd;
+	--on-s-light-4: #212529;
+	--s-light-5: #c4c9d4;
+	--on-s-light-5: #212529;
+	--s-light-6: #b8becb;
+	--on-s-light-6: #212529;
+
+	--brand-dark: #c212f3;
+	--on-brand-dark: #d8dee3;
+	--accent-dark: #19acf5;
+	--on-accent-dark: #212529;
+	--error-dark: #d72638;
+	--on-error-dark: #d8dee3;
+	--success-dark: #169873;
+	--on-success-dark: #d8dee3;
+	--bg-dark: #2c303d;
+	--on-bg-dark: #d8dee3;
+	--s-dark-1: #747f9c;
+	--on-s-dark-1: #d8dee3;
+	--s-dark-2: #59637e;
+	--on-s-dark-2: #d8dee3;
+	--s-dark-3: #464e63;
+	--on-s-dark-3: #d8dee3;
+	--s-dark-4: #373d4e;
+	--on-s-dark-4: #d8dee3;
+	--s-dark-5: #2c303d;
+	--on-s-dark-5: #d8dee3;
+	--s-dark-6: #222630;
+	--on-s-dark-6: #d8dee3;
+}
+
+:root {
+	--brand: light-dark(var(--brand-light), var(--brand-dark));
+	--on-brand: light-dark(var(--on-brand-light), var(--on-brand-dark));
+	--accent: light-dark(var(--accent-light), var(--accent-dark));
+	--on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
+	--error: light-dark(var(--error-light), var(--error-dark));
+	--on-error: light-dark(var(--on-error-light), var(--on-error-dark));
+	--success: light-dark(var(--success-light), var(--success-dark));
+	--on-success: light-dark(var(--on-success-light), var(--on-success-dark));
+	--bg: light-dark(var(--bg-light), var(--bg-dark));
+	--on-bg: light-dark(var(--on-bg-light), var(--on-bg-dark));
+	--s-1: light-dark(var(--s-light-1), var(--s-dark-1));
+	--on-s-1: light-dark(var(--on-s-light-1), var(--on-s-dark-1));
+	--s-2: light-dark(var(--s-light-2), var(--s-dark-2));
+	--on-s-2: light-dark(var(--on-s-light-2), var(--on-s-dark-2));
+	--s-3: light-dark(var(--s-light-3), var(--s-dark-3));
+	--on-s-3: light-dark(var(--on-s-light-3), var(--on-s-dark-3));
+	--s-4: light-dark(var(--s-light-4), var(--s-dark-4));
+	--on-s-4: light-dark(var(--on-s-light-4), var(--on-s-dark-4));
+	--s-5: light-dark(var(--s-light-5), var(--s-dark-5));
+	--on-s-5: light-dark(var(--on-s-light-5), var(--on-s-dark-5));
+	--s-6: light-dark(var(--s-light-6), var(--s-dark-6));
+	--on-s-6: light-dark(var(--on-s-light-6), var(--on-s-dark-6));
+}
+
+.light-theme {
+	color-scheme: light;
+}
+
+.dark-theme {
+	color-scheme: dark;
+}
+
+.brand {
+	background-color: var(--brand);
+	outline-color: var(--brand);
+	border-color: var(--brand);
+	color: var(--on-brand);
+}
+
+.brand-text {
+	color: var(--brand);
+}
+
+.accent {
+	background-color: var(--accent);
+	outline-color: var(--accent);
+	border-color: var(--accent);
+	color: var(--on-accent);
+}
+
+.accent-text {
+	color: var(--accent);
+}
+
+.error {
+	background-color: var(--error);
+	outline-color: var(--error);
+	border-color: var(--error);
+	color: var(--on-error);
+}
+
+.error-text {
+	color: var(--error);
+}
+
+.success {
+	background-color: var(--success);
+	outline-color: var(--success);
+	border-color: var(--success);
+	color: var(--on-success);
+}
+
+.success-text {
+	color: var(--success);
+}
+
+.bg {
+	background-color: var(--bg);
+	outline-color: var(--bg);
+	border-color: var(--bg);
+	color: var(--on-bg);
+}
+
+.bg-text {
+	color: var(--bg);
+}
+
+.s-1 {
+	background-color: var(--s-1);
+	outline-color: var(--s-1);
+	border-color: var(--s-1);
+	color: var(--on-s-1);
+}
+
+.s-1-text {
+	color: var(--s-1);
+}
+
+.s-2 {
+	background-color: var(--s-2);
+	outline-color: var(--s-2);
+	border-color: var(--s-2);
+	color: var(--on-s-2);
+}
+
+.s-2-text {
+	color: var(--s-2);
+}
+
+.s-3 {
+	background-color: var(--s-3);
+	outline-color: var(--s-3);
+	border-color: var(--s-3);
+	color: var(--on-s-3);
+}
+
+.s-3-text {
+	color: var(--s-3);
+}
+
+.s-4 {
+	background-color: var(--s-4);
+	outline-color: var(--s-4);
+	border-color: var(--s-4);
+	color: var(--on-s-4);
+}
+
+.s-4-text {
+	color: var(--s-4);
+}
+
+.s-5 {
+	background-color: var(--s-5);
+	outline-color: var(--s-5);
+	border-color: var(--s-5);
+	color: var(--on-s-5);
+}
+
+.s-5-text {
+	color: var(--s-5);
+}
+
+.s-6 {
+	background-color: var(--s-6);
+	outline-color: var(--s-6);
+	border-color: var(--s-6);
+	color: var(--on-s-6);
+}
+
+.s-6-text {
+	color: var(--s-6);
+}

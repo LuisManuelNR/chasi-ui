@@ -1,0 +1,40 @@
+@use './reset.scss';
+@use './variables.scss';
+@use './defaultTheme.scss';
+@use './typography.scss';
+
+@use './layouts.scss';
+@use './animations.scss';
+@use './buttons.scss';
+
+@use './utils.scss';
+
+@layer ChasiRoot {
+	:root {
+		container-type: inline-size;
+		color-scheme: light dark;
+		accent-color: var(--accent);
+		background-color: var(--bg);
+		color: var(--on-bg);
+		block-size: 100%;
+		min-height: 100dvh;
+		scrollbar-gutter: stable;
+		overflow-x: hidden;
+
+		line-height: 1.5;
+		font-size: 100%;
+		/*16px*/
+		-webkit-text-size-adjust: 100%;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+
+		& {
+			*,
+			*::after,
+			*::before {
+				box-sizing: border-box;
+			}
+		}
+	}
+}
