@@ -2,13 +2,12 @@
 	import { slide } from 'svelte/transition'
 	import CIcon from '../CIcon/CIcon.svelte'
 	import { mdiClose } from '@mdi/js'
-	import type { ClassValue } from 'svelte/elements'
 
 	type Props = {
 		title?: string
 		text?: string
 		html?: string
-		class?: ClassValue
+		class?: string
 		dissmiss?: () => void
 	}
 
@@ -32,14 +31,12 @@
 </div>
 
 <style>
-	@layer ChasiNotify {
-		.c-notify {
-			width: 100%;
-			margin-bottom: 16px;
-			border-radius: var(--size-1);
-			position: relative;
-			overflow: hidden;
-		}
+	.c-notify {
+		width: 100%;
+		margin-bottom: 16px;
+		border-radius: var(--size-1);
+		position: relative;
+		overflow: hidden;
 	}
 	:global(.notifications-holder) {
 		position: fixed;

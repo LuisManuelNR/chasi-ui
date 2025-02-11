@@ -7,10 +7,11 @@
 		children?: Snippet
 		footer?: Snippet
 		class?: string
+		width?: number
 		active?: boolean
 	}
 
-	let { active = $bindable(false), ...p }: Props = $props()
+	let { width = 250, active = $bindable(false), ...p }: Props = $props()
 
 	let dialogElement: HTMLDialogElement
 
@@ -34,7 +35,7 @@
 	})
 </script>
 
-<dialog class="c-sidebar shadow-3 bg {p.class}" bind:this={dialogElement}>
+<dialog class="c-sidebar shadow-3 {p.class}" style:width="{width}px" bind:this={dialogElement}>
 	<nav class="d-grid full-height">
 		{@render p.head?.()}
 		<div>
@@ -47,7 +48,6 @@
 <style>
 	.c-sidebar {
 		border: none;
-		width: var(--width, 250px);
 		min-height: 100dvh;
 	}
 	nav {
@@ -99,8 +99,5 @@ because the nesting selector cannot represent pseudo-elements. */
 		.c-sidebar:open::backdrop {
 			background-color: rgb(0 0 0 / 0%);
 		}
-	}
-	.hideOverlay:open::backdrop {
-		display: none;
 	}
 </style>
