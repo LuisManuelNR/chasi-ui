@@ -35,35 +35,23 @@
 	})
 </script>
 
-<dialog class="c-sidebar shadow-3 {p.class}" style:width="{width}px" bind:this={dialogElement}>
-	<nav class="d-grid full-height">
-		{@render p.head?.()}
-		<div>
-			{@render p.children?.()}
-		</div>
-		{@render p.footer?.()}
-	</nav>
+<dialog class="c-dialog shadow-3 {p.class}" style:width="{width}px" bind:this={dialogElement}>
+	{@render p.children?.()}
 </dialog>
 
 <style>
-	.c-sidebar {
+	.c-dialog {
 		border: none;
-		min-height: 100dvh;
-	}
-	nav {
-		grid-template-rows: auto 1fr auto;
-		overflow-x: hidden;
-		overflow-y: auto;
 	}
 
 	/* Open state of the dialog  */
-	.c-sidebar:open {
-		transform: translateX(0);
+	.c-dialog:open {
+		transform: scale(1);
 	}
 
 	/* Closed state of the dialog   */
-	.c-sidebar {
-		transform: translateX(-100%);
+	.c-dialog {
+		transform: scale(0.7);
 		transition:
 			transform 150ms ease-out,
 			overlay 150ms ease-out allow-discrete,
@@ -74,21 +62,21 @@
 	/* Needs to be after the previous dialog:open rule to take effect,
     as the specificity is the same */
 	@starting-style {
-		.c-sidebar:open {
-			transform: translateX(-100%);
+		.c-dialog:open {
+			transform: scale(0.7);
 		}
 	}
 
 	/* Transition the :backdrop when the dialog modal is promoted to the top layer */
-	.c-sidebar::backdrop {
+	.c-dialog::backdrop {
 		background-color: rgb(0 0 0 / 0%);
 		transition:
-			display 300ms allow-discrete,
-			overlay 300ms allow-discrete,
-			background-color 300ms;
+			display 500ms allow-discrete,
+			overlay 500ms allow-discrete,
+			background-color 500ms;
 	}
 
-	.c-sidebar:open::backdrop {
+	.c-dialog:open::backdrop {
 		background-color: rgb(0 0 0 / 25%);
 	}
 
@@ -96,7 +84,7 @@
 because the nesting selector cannot represent pseudo-elements. */
 
 	@starting-style {
-		.c-sidebar:open::backdrop {
+		.c-dialog:open::backdrop {
 			background-color: rgb(0 0 0 / 0%);
 		}
 	}

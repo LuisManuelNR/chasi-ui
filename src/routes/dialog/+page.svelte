@@ -4,6 +4,8 @@
 	let active = $state(false)
 </script>
 
+<button class="btn" onclick={() => (active = !active)}> open dialog </button>
+
 <CDialog bind:active>
 	<p class="s-size-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit</p>
 	<p>

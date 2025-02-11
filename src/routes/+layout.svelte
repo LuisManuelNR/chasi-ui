@@ -11,27 +11,29 @@
 	const links = ['dialog']
 </script>
 
+<button
+	class="btn icon fab bottom hidden-sm hidden-md hidden-lg"
+	onclick={() => (sidebar = !sidebar)}
+>
+	<CIcon icon={mdiMenu}></CIcon>
+</button>
+
+<CSidebar bind:active={sidebar} class="bg layout-sidebar">
+	<p class="pa-2 f-w-6">Components</p>
+	<hr class="s-2" />
+	<div class="pa-2">
+		{#each links as link}
+			<a
+				href="/{link}"
+				class="list-item rows full-width"
+				class:selected={`/${link}` === page.url.pathname}>{link}</a
+			>
+		{/each}
+	</div>
+</CSidebar>
+
 <main>
-	<CSidebar bind:active={sidebar} class="bg">
-		<p class="pa-2 f-w-6">Components</p>
-		<hr class="s-2" />
-		<div class="pa-2">
-			{#each links as link}
-				<a
-					href="/{link}"
-					class="list-item rows full-width"
-					class:selected={`/${link}` === page.url.pathname}>{link}</a
-				>
-			{/each}
-		</div>
-	</CSidebar>
-	<button
-		class="btn icon fab bottom hidden-sm hidden-md hidden-lg"
-		onclick={() => (sidebar = !sidebar)}
-	>
-		<CIcon icon={mdiMenu}></CIcon>
-	</button>
-	<div class="px-2">
+	<div class="px-4">
 		{@render children?.()}
 	</div>
 </main>
@@ -41,6 +43,7 @@
 
 	main {
 		--width: 250px;
+		padding: 5rem;
 		padding-left: var(--width);
 		min-height: 100dvh;
 	}
@@ -55,7 +58,7 @@
 	}
 	@include container.sm-up {
 		:global {
-			main > .c-sidebar {
+			.layout-sidebar {
 				display: block !important;
 				transform: translateX(0) !important;
 				&::backdrop {
