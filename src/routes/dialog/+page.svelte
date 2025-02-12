@@ -6,7 +6,7 @@
 
 <button class="btn" onclick={() => (active = !active)}> open dialog </button>
 
-<CDialog bind:active>
+<CDialog bind:active class="bg pa-4">
 	<p class="s-size-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit</p>
 	<p>
 		Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, doloribus. Ducimus, esse fuga

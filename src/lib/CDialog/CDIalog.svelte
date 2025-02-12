@@ -7,11 +7,10 @@
 		children?: Snippet
 		footer?: Snippet
 		class?: string
-		width?: number
 		active?: boolean
 	}
 
-	let { width = 250, active = $bindable(false), ...p }: Props = $props()
+	let { active = $bindable(false), ...p }: Props = $props()
 
 	let dialogElement: HTMLDialogElement
 
@@ -35,13 +34,16 @@
 	})
 </script>
 
-<dialog class="c-dialog shadow-3 {p.class}" style:width="{width}px" bind:this={dialogElement}>
+<dialog class="c-dialog shadow-3 {p.class}" bind:this={dialogElement}>
 	{@render p.children?.()}
 </dialog>
 
 <style>
 	.c-dialog {
+		max-width: 75ch;
+		width: 100%;
 		border: none;
+		margin: auto;
 	}
 
 	/* Open state of the dialog  */
@@ -51,7 +53,7 @@
 
 	/* Closed state of the dialog   */
 	.c-dialog {
-		transform: scale(0.7);
+		transform: scale(0.9);
 		transition:
 			transform 150ms ease-out,
 			overlay 150ms ease-out allow-discrete,
@@ -63,7 +65,7 @@
     as the specificity is the same */
 	@starting-style {
 		.c-dialog:open {
-			transform: scale(0.7);
+			transform: scale(0.9);
 		}
 	}
 

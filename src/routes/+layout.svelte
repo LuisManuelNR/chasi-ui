@@ -8,7 +8,7 @@
 
 	let sidebar = $state(false)
 
-	const links = ['dialog']
+	const links = ['dialog', 'expand']
 </script>
 
 <button
