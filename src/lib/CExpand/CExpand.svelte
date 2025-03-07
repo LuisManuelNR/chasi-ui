@@ -5,29 +5,54 @@
 
 	type Props = {
 		children?: Snippet
-		title?: string
+		title?: string | Snippet
 		class?: string
+		selected?: boolean
+		loading?: boolean
+		onselect?: (active: boolean) => void
 	}
-	let p: Props = $props()
+	let {
+		selected,
+		loading,
+		title,
+		children,
+		onselect = (active) => (selected = active),
+		...p
+	}: Props = $props()
 </script>
 
-<details class="full-width {p.class}">
-	<summary class="btn tonal full-width justify-start">
-		<CIcon icon={mdiPlus} class="marker f-size-4"></CIcon>
-		{p.title}
+<details
+	class="full-width {p.class}"
+	class:selected
+	class:loading-inline={loading}
+	class:disabled={loading}
+>
+	<summary class="btn tonal full-width justify-start" onclick={() => onselect(!selected)}>
+		<CIcon icon={mdiPlus} class="marker"></CIcon>
+		{#if title}
+			{#if typeof title === 'string'}
+				{title}
+			{:else}
+				{@render title()}
+			{/if}
+		{/if}
 	</summary>
-	{@render p.children?.()}
+	{@render children?.()}
 </details>
 
 <style>
 	summary {
 		transition: padding 200ms ease;
 	}
+	summary:active {
+		scale: 1;
+	}
 	details[open] summary {
 		max-height: auto;
 		padding-block: 1.8rem;
 	}
 	details::details-content {
+		padding-inline: 1rem;
 		display: block;
 		block-size: 0;
 		overflow: hidden;
@@ -38,7 +63,6 @@
 	}
 
 	details[open]::details-content {
-		padding: 1rem;
 		block-size: auto;
 		block-size: calc-size(auto, size);
 	}

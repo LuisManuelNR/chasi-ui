@@ -16,7 +16,7 @@
 		display: inline-block;
 		vertical-align: middle;
 		fill: currentColor;
-		width: 1em;
-		height: 1em;
+		width: 1.2em;
+		height: 1.2em;
 	}
 </style>

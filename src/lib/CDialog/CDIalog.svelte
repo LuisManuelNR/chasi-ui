@@ -3,22 +3,28 @@
 	import { on } from 'svelte/events'
 
 	type Props = {
-		head?: Snippet
-		children?: Snippet
-		footer?: Snippet
+		children?: Snippet<[typeof close]>
+		action?: Snippet<[typeof open]>
 		class?: string
 		active?: boolean
+		persistent?: boolean
 	}
 
 	let { active = $bindable(false), ...p }: Props = $props()
 
 	let dialogElement: HTMLDialogElement
 
+	function open() {
+		active = true
+	}
+	function close() {
+		active = false
+	}
+
 	onMount(() => {
-		const onclose = on(dialogElement, 'close', () => {
-			active = false
-		})
+		const onclose = on(dialogElement, 'close', close)
 		const onclickoutside = on(window, 'click', (e) => {
+			if (p.persistent) return
 			if (e.target === dialogElement) {
 				active = false
 			}
@@ -28,14 +34,17 @@
 			onclickoutside()
 		}
 	})
+
 	$effect(() => {
 		if (active) dialogElement.showModal()
 		else dialogElement.close()
 	})
 </script>
 
+{@render p.action?.(open)}
+
 <dialog class="c-dialog shadow-3 {p.class}" bind:this={dialogElement}>
-	{@render p.children?.()}
+	{@render p.children?.(close)}
 </dialog>
 
 <style>

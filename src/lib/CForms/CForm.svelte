@@ -1,9 +1,14 @@
 <script lang="ts">
-	import { setContext, tick } from 'svelte'
+	import { setContext, tick, type Snippet } from 'svelte'
+	import type { InputRuleValidator, ValidatorInput } from './types.js'
 
-	let { children } = $props()
+	type Props = {
+		children?: Snippet
+		onsubmit?: (e: SubmitEvent) => void
+	}
+	let p: Props = $props()
 
-	const validator = new Set<() => string | Promise<string>>()
+	const validator = new Set<InputRuleValidator>()
 	setContext('validators', validator)
 
 	let form: HTMLFormElement
@@ -22,20 +27,12 @@
 			if (firstInvalid) {
 				firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' })
 			}
+		} else {
+			p.onsubmit?.(e)
 		}
-		// keep with normal submit event
 	}
-
-	// function setup (form: HTMLFormElement): ActionReturn {
-	//   form.addEventListener('submit', handleSubmit)
-	//   return {
-	//     destroy() {
-	//       form.removeEventListener('submit', handleSubmit)
-	//     },
-	//   }
-	// }
 </script>
 
 <form novalidate bind:this={form} onsubmit={handleSubmit}>
-	{@render children?.()}
+	{@render p.children?.()}
 </form>
