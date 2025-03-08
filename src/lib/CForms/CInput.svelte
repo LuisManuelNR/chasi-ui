@@ -23,18 +23,22 @@
 		...rest
 	}: Props = $props()
 
-	let hint = $state('')
+	let error = $state('')
 
 	const validator = getContext<Set<InputRuleValidator>>('validators')
 
 	const setup: Action<HTMLInputElement> = (input) => {
 		async function validate() {
-			if (!rules.length) return hint
+			if (!rules.length) return error
+			error = ''
 			for (const rule of rules) {
-				hint = await rule(input)
-				if (hint) break
+				const msg = await rule(input)
+				if (typeof msg === 'string') {
+					error = msg
+					break
+				}
 			}
-			return hint
+			return error
 		}
 		if (validator) validator.add(validate)
 		const inputHandler = updateValue(input, validate)
@@ -58,18 +62,48 @@
 	}
 </script>
 
-<label class="c-label" class:loading-inline={loading}>
-	{label}
+<label class="c-input" class:error-state={!!error} class:loading-inline={loading}>
+	{#if label || error}
+		<span class="f-size-00">
+			{label}
+			{#if error}
+				<span class="error-text">{error}</span>
+			{/if}
+		</span>
+	{/if}
 	<input {value} {checked} {...rest} use:setup />
 </label>
-<p class="error-text">{hint}</p>
 
 <style>
-	.c-label {
-		display: inline-block;
-		gap: 1rem;
-		background-color: color(from var(--bg) srgb calc(r * 0.8) calc(g * 0.8) calc(b * 0.8));
-		padding: 0.5rem;
-		border-radius: 0.3rem;
+	.c-input {
+		--accent-color: transparent;
+		display: inline-grid;
+		vertical-align: middle;
+		position: relative;
+		height: 47px;
+		background-color: var(--s-6);
+		padding-block: 0.1rem;
+		padding-inline: 0.5rem;
+		border-radius: var(--size-1);
+		border-bottom: 2px solid var(--accent-color);
+		transition-property: border, background;
+		transition-duration: 150ms;
+		&:focus-within {
+			--accent-color: var(--accent);
+		}
+	}
+	.error-state {
+		--accent-color: color-mix(in srgb, var(--error) 90%, transparent) !important;
+	}
+	.hint {
+		position: absolute;
+		top: 0;
+		translate: 0.5rem -50%;
+		z-index: 1;
+		font-weight: 500;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		max-width: calc(100% - 1rem);
 	}
 </style>

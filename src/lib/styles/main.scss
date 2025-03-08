@@ -1,3 +1,4 @@
+@use './fonts.scss';
 @use './reset.scss';
 @use './variables.scss';
 @use './defaultTheme.scss';
@@ -5,7 +6,7 @@
 
 @use './layouts.scss';
 @use './animations.scss';
-@use './buttons.scss';
+@use './components/buttons.scss';
 
 @use './utils.scss';
 
@@ -31,7 +32,6 @@
 		-moz-osx-font-smoothing: grayscale;
 
 		& {
-
 			*,
 			*::after,
 			*::before {
