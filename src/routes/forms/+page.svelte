@@ -30,6 +30,7 @@
 	<CInput
 		type="text"
 		name="name"
+		label="Nombre"
 		rules={[(el) => (el.value.startsWith('p') ? 'No puedes empezar por p' : '')]}
 	/>
 	<CInput type="text" name="email" bind:value={email} />

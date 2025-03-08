@@ -1,23 +1,25 @@
 <script lang="ts">
 	import { getContext } from 'svelte'
 	import type { HTMLInputAttributes } from 'svelte/elements'
-	import type { InputRule, InputRuleValidator, ValidatorInput } from './types.js'
+	import type { InputRule, InputRuleValidator } from './types.js'
 	import type { Action } from 'svelte/action'
 
 	type Props = {
-		name: string
 		valueAsDate?: Date | null
 		valueAsNumber?: number
 		rules?: InputRule[]
+		loading?: boolean
+		label?: string
 	} & HTMLInputAttributes
 
 	let {
-		name,
 		value = $bindable(null),
 		checked = $bindable(false),
 		rules = [],
 		valueAsDate,
 		valueAsNumber,
+		loading = false,
+		label,
 		...rest
 	}: Props = $props()
 
@@ -56,11 +58,18 @@
 	}
 </script>
 
-<input {name} {value} {checked} {...rest} use:setup />
+<label class="c-label" class:loading-inline={loading}>
+	{label}
+	<input {value} {checked} {...rest} use:setup />
+</label>
 <p class="error-text">{hint}</p>
 
 <style>
-	input {
-		background-color: var(--s-1);
+	.c-label {
+		display: inline-block;
+		gap: 1rem;
+		background-color: color(from var(--bg) srgb calc(r * 0.8) calc(g * 0.8) calc(b * 0.8));
+		padding: 0.5rem;
+		border-radius: 0.3rem;
 	}
 </style>
