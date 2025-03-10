@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { setContext, tick, type Snippet } from 'svelte'
-	import type { InputRuleValidator } from './types.js'
+	import type { InputRuleValidator } from './index.js'
 
 	type Props = {
 		children?: Snippet
