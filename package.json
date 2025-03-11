@@ -1,6 +1,6 @@
 {
-	"name": "chasi-ui",
-	"version": "0.0.1",
+	"name": "@chasi/ui",
+	"version": "0.3.0-next",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
@@ -13,7 +13,8 @@
 		"lint": "prettier --check .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"release": "npm run check && npm version patch && npm run package && npm publish --access public"
 	},
 	"files": [
 		"dist",
@@ -30,10 +31,13 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
-		}
+		},
+		"./styles/*": "./dist/styles/*",
+		"./actions": "./dist/actions/index.js",
+		"./utils": "./dist/utils.js"
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0"
+		"svelte": "^5.22.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.51.0",
@@ -43,7 +47,7 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.3.3",
-		"publint": "^0.3.8",
+		"publint": "^0.3.9",
 		"sass-embedded": "^1.85.1",
 		"svelte": "^5.22.6",
 		"svelte-check": "^4.1.5",

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte'
-	import type { HTMLDialogAttributes } from 'svelte/elements'
 	import { on } from 'svelte/events'
 
 	type Props = {
@@ -9,16 +8,9 @@
 		class?: string
 		active?: boolean
 		persistent?: boolean
-	} & HTMLDialogAttributes
+	}
 
-	let {
-		active = $bindable(false),
-		action,
-		children,
-		class: klass,
-		persistent,
-		...rest
-	}: Props = $props()
+	let { active = $bindable(false), action, children, class: klass, persistent }: Props = $props()
 
 	let dialogElement: HTMLDialogElement
 
@@ -51,7 +43,7 @@
 
 {@render action?.(open)}
 
-<dialog class="c-dialog shadow-3 {klass}" {...rest} bind:this={dialogElement}>
+<dialog class="c-dialog shadow-3 {klass}" bind:this={dialogElement}>
 	{@render children?.(close)}
 </dialog>
 
