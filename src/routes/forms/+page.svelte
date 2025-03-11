@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CCheckbox from '$lib/CForms/CCheckbox.svelte'
+	import CLabel from '$lib/CForms/CLabel.svelte'
 	import CSelect from '$lib/CForms/CSelect.svelte'
 	import type { InputRule } from '$lib/CForms/index.js'
 	import CIcon from '$lib/CIcon/CIcon.svelte'
@@ -129,6 +130,14 @@
 			</button>
 		</CText>
 		<hr />
+		<CLabel>
+			<input type="checkbox" />
+			<p class="f-size-0 append">
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque, incidunt a est dolor
+				ducimus asperiores. <a href="/">Lorem ipsum dolor sit amet.</a> Lorem ipsum dolor sit amet consectetur,
+				adipisicing elit. Laborum iste asperiores earum!
+			</p>
+		</CLabel>
 		<CCheckbox>
 			<p class="f-size-0">
 				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque, incidunt a est dolor
@@ -137,18 +146,13 @@
 			</p>
 		</CCheckbox>
 
-		<!-- <CCheckbox label="mango" name="frutas" value="mango" bind:group={selecciongroup}></CCheckbox>
+		<CCheckbox label="mango" name="frutas" value="mango" bind:group={selecciongroup}></CCheckbox>
 		<CCheckbox label="platano" name="frutas" value="platano" bind:group={selecciongroup}
 		></CCheckbox>
 		<CCheckbox label="manzana" name="frutas" value="manzana" bind:group={selecciongroup}
 		></CCheckbox>
 		<CCheckbox label="oregano" name="frutas" value="oregano" bind:group={selecciongroup}
-		></CCheckbox> -->
-
-		<input type="checkbox" name="frutas" value="mango" bind:group={selecciongroup} />
-		<input type="checkbox" name="frutas" value="platano" bind:group={selecciongroup} />
-		<input type="checkbox" name="frutas" value="manzana" bind:group={selecciongroup} />
-		<input type="checkbox" name="frutas" value="oregano" bind:group={selecciongroup} />
+		></CCheckbox>
 		<pre>{JSON.stringify(selecciongroup, null, 2)}</pre>
 		<!-- <CText rules={[required]}>
 			<input type="checkbox" name="frutas" value="platano" />

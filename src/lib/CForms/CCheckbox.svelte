@@ -12,12 +12,14 @@
 		group = $bindable([]),
 		children,
 		class: klass,
+		value,
 		...rest
 	}: Props & { group?: any[] } = $props()
 </script>
 
 <CLabel {rules} {loading} class={klass}>
-	<input type="checkbox" hidden bind:checked bind:group {...rest} />
+	<input type="checkbox" {value} bind:checked bind:group {...rest} />
+	<!-- <input type="checkbox" hidden {value} bind:checked onchange="{handleChange}" {...rest} />
 	<span class="content">
 		{#if checked}
 			<CIcon icon={mdiCheckboxOutline} class="f-size-3"></CIcon>
@@ -25,7 +27,7 @@
 			<CIcon icon={mdiCheckboxBlankOutline} class="f-size-3"></CIcon>
 		{/if}
 		{label}
-	</span>
+	</span> -->
 	<span class="append">
 		{@render children?.()}
 	</span>

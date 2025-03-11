@@ -102,7 +102,9 @@
 			grid-area: P;
 			align-self: center;
 		}
-		.c-label > .content {
+		.c-label > .content,
+		input,
+		textarea {
 			grid-area: C;
 		}
 		.c-label > .append {
