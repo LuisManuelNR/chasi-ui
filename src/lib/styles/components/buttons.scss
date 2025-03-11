@@ -180,7 +180,8 @@
 	}
 
 	&:hover,
-	&:focus-visible {
+	&:focus-visible,
+	&:focus-within {
 		--item-opacity: 0.05;
 	}
 

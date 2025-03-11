@@ -8,9 +8,10 @@
 		rules?: InputRule[]
 		loading?: boolean
 		children?: Snippet
+		class?: string
 	}
 
-	let { text, rules = [], loading = false, children }: Props = $props()
+	let { text, rules = [], loading = false, children, class: klass }: Props = $props()
 
 	let error = $state('')
 
@@ -42,9 +43,9 @@
 	}
 </script>
 
-<label class="c-label" class:error-state={!!error} class:loading-inline={loading} use:setup>
-	<small class="text">{text}</small>
+<label class="c-label {klass}" class:error-state={!!error} class:loading-inline={loading} use:setup>
 	{@render children?.()}
+	<small class="text">{text}</small>
 	<small class="hint">{error}</small>
 </label>
 
@@ -66,7 +67,7 @@
 		transition-duration: 150ms;
 
 		grid-template-columns: auto auto 1fr auto;
-		grid-template-areas: 'P L H A' 'P I I A';
+		grid-template-areas: 'P L H A' 'P C C A';
 
 		&:focus-within {
 			--accent-color: var(--accent);
@@ -84,14 +85,11 @@
 				color: var(--s-4);
 			}
 			&:has(input[type='radio'], input[type='checkbox']) {
-				justify-items: start;
-				justify-content: start;
+				grid-template-columns: auto auto 1fr auto;
+				grid-template-areas: 'P C L A' 'H H H H';
 				align-items: center;
-				/* grid-template-columns: auto auto 1fr auto; */
-				grid-auto-flow: column;
-				/* grid-template-areas: 'P I L A' 'P H H A'; */
-				/* display: inline-flex; */
-				/* align-items: center; */
+				/* display: inline-flex;
+				align-items: center; */
 			}
 			input[type='radio'],
 			input[type='checkbox'] {
@@ -100,14 +98,14 @@
 				min-width: var(--size-3);
 			}
 		}
-		.c-label > :has(+ input) {
+		.c-label > .preppend {
 			grid-area: P;
 			align-self: center;
 		}
-		.c-label > input {
-			grid-area: I;
+		.c-label > .content {
+			grid-area: C;
 		}
-		.c-label > input + * {
+		.c-label > .append {
 			grid-area: A;
 			align-self: center;
 		}

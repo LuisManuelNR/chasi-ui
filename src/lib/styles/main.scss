@@ -32,12 +32,16 @@
 		-moz-osx-font-smoothing: grayscale;
 
 		& {
-
 			*,
 			*::after,
 			*::before {
 				box-sizing: border-box;
 			}
+		}
+
+		&:has(.c-dialog[open]) {
+			/* prevent scroll when dialog is open */
+			overflow: hidden;
 		}
 	}
 }
