@@ -14,7 +14,7 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"release": "npm run check && npm version patch && npm run package && npm publish --access public"
+		"release": "npm run check && npm version patch && npm run build && npm publish --access public"
 	},
 	"files": [
 		"dist",
