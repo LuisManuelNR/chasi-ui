@@ -43,8 +43,9 @@
 </script>
 
 <label class="c-label" class:error-state={!!error} class:loading-inline={loading} use:setup>
-	<small>{text} <span class="hint">{error}</span></small>
+	<small class="text">{text}</small>
 	{@render children?.()}
+	<small class="hint">{error}</small>
 </label>
 
 <style>
@@ -64,37 +65,61 @@
 		transition-property: border, background;
 		transition-duration: 150ms;
 
-		grid-template-columns: auto 1fr auto;
-		grid-template-areas: 'pre label post' 'pre input post';
+		grid-template-columns: auto auto 1fr auto;
+		grid-template-areas: 'P L H A' 'P I I A';
 
 		&:focus-within {
 			--accent-color: var(--accent);
 		}
-	}
 
-	.error-state {
-		--accent-color: var(--error);
+		&.error-state {
+			--accent-color: var(--error);
+		}
 	}
 
 	:global {
+		.c-label {
+			&:has([disabled]) {
+				cursor: not-allowed;
+				color: var(--s-4);
+			}
+			&:has(input[type='radio'], input[type='checkbox']) {
+				justify-items: start;
+				justify-content: start;
+				align-items: center;
+				/* grid-template-columns: auto auto 1fr auto; */
+				grid-auto-flow: column;
+				/* grid-template-areas: 'P I L A' 'P H H A'; */
+				/* display: inline-flex; */
+				/* align-items: center; */
+			}
+			input[type='radio'],
+			input[type='checkbox'] {
+				width: var(--size-3);
+				height: var(--size-3);
+				min-width: var(--size-3);
+			}
+		}
 		.c-label > :has(+ input) {
-			grid-area: pre;
+			grid-area: P;
 			align-self: center;
 		}
 		.c-label > input {
-			grid-area: input;
+			grid-area: I;
 		}
 		.c-label > input + * {
-			grid-area: post;
+			grid-area: A;
 			align-self: center;
 		}
 	}
 
-	small {
-		grid-area: label;
+	.text {
+		grid-area: L;
+		user-select: none;
 	}
 
 	.hint {
+		grid-area: H;
 		font-weight: 500;
 		white-space: nowrap;
 		text-overflow: ellipsis;

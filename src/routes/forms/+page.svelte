@@ -36,7 +36,7 @@
 
 <CForm onsubmit={handleSubmit}>
 	<div class="d-grid gap-3">
-		<CLabel text="Nombre" rules={[required]}><input /></CLabel>
+		<CLabel text="Nombre" rules={[required]}><input disabled /></CLabel>
 		<CLabel text="Apellidos" rules={[required]}><input /></CLabel>
 		<CLabel text="Direccion" rules={[required]}><input /></CLabel>
 		<CLabel text="Pais" rules={[required]}><input /></CLabel>
@@ -83,7 +83,15 @@
 		<hr />
 		<CLabel rules={[required]}>
 			<input type="checkbox" name="frutas" value="platano" />
-			<span>platano</span>
+			<p class="f-size-0">
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque, incidunt a est dolor
+				ducimus asperiores. <a href="/">Lorem ipsum dolor sit amet.</a> Lorem ipsum dolor sit amet consectetur,
+				adipisicing elit. Laborum iste asperiores earum!
+			</p>
+		</CLabel>
+		<CLabel rules={[required]}>
+			<input type="checkbox" name="frutas" value="mango" />
+			<p>mango</p>
 		</CLabel>
 		<CLabel rules={[required]}>
 			<input type="checkbox" name="frutas" value="mango" />
