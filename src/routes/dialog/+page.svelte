@@ -4,7 +4,7 @@
 
 <CDialog class="bg pa-4" persistent>
 	{#snippet action(open)}
-		<button class="btn" onclick={open}> open dialog </button>
+		<button class="btn tonal brand-text" onclick={open}> open dialog </button>
 	{/snippet}
 
 	{#snippet children(close)}

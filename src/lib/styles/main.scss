@@ -1,12 +1,10 @@
-@use './fonts.scss';
 @use './reset.scss';
+@use './fonts.scss';
 @use './variables.scss';
-@use './defaultTheme.scss';
-@use './typography.scss';
-
-@use './layouts.scss';
-@use './animations.scss';
 @use './components/buttons.scss';
+@use './typography.scss';
+@use './animations.scss';
+@use './layouts.scss';
 
 @use './utils.scss';
 
