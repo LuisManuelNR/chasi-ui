@@ -57,7 +57,7 @@
 		column-gap: 0.5rem;
 		vertical-align: middle;
 		position: relative;
-		min-height: 42px;
+		min-height: 50px;
 		background-color: var(--s-6);
 		padding-block: 0.1rem;
 		padding-inline: 0.5rem;

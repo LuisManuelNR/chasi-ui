@@ -28,24 +28,8 @@
 		outline-color: inherit;
 	}
 
-	&.fab {
-		position: fixed;
-		bottom: var(--size-3);
-		left: var(--size-3);
-		z-index: 4;
-
-		&.rigth {
-			right: var(--size-3);
-			left: auto;
-		}
-
-		&.top {
-			top: var(--size-3);
-			bottom: auto;
-		}
-	}
-
 	&.icon {
+		font-size: 1.2rem;
 		--default-size: var(--icon-size, 42px);
 		border-radius: 50%;
 		width: var(--default-size);
