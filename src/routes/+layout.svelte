@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '$lib/styles/main.scss'
+	import '$lib/styles/defaultTheme.scss'
 	import { page } from '$app/state'
 	import { CIcon, CSidebar } from '$lib/index.js'
 	import { mdiMenu } from '@mdi/js'

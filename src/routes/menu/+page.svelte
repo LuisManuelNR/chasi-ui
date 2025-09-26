@@ -4,22 +4,28 @@
 	import { mdiDotsVertical } from '@mdi/js'
 </script>
 
-{#snippet action()}
-	<CIcon icon={mdiDotsVertical}></CIcon>
-{/snippet}
+<CMenu closeonclick={false} direction="right">
+	<button class="btn icon ghost">
+		<CIcon icon={mdiDotsVertical}></CIcon>
+	</button>
+	{#snippet content()}
+		<div class="pa-4 s-2">
+			<button class="list-item rows full-width">Lorem, ipsum.</button>
+			<button class="list-item rows full-width">Lorem ipsum dolor sit.</button>
+			<button class="list-item rows full-width">Lorem.</button>
 
-<CMenu class="btn icon ghost" {action}>
-	<div class="pa-4 s-2">
-		<button class="list-item rows full-width">Lorem, ipsum.</button>
-		<button class="list-item rows full-width">Lorem ipsum dolor sit.</button>
-		<button class="list-item rows full-width">Lorem.</button>
-
-		<CMenu text="abrete plis" class="list-item rows full-width" x-axis="right" y-axis="top">
-			<div class="pa-4 s-2">
-				<button class="list-item rows full-width">Lorem, ipsum.</button>
-				<button class="list-item rows full-width">Lorem ipsum dolor sit.</button>
-				<button class="list-item rows full-width">Lorem.</button>
-			</div>
-		</CMenu>
-	</div>
+			<CMenu direction="right">
+				<button class="list-item rows full-width">
+					<CIcon icon={mdiDotsVertical}></CIcon>
+				</button>
+				{#snippet content()}
+					<div class="pa-4 s-2">
+						<button class="list-item rows full-width">Lorem, ipsum.</button>
+						<button class="list-item rows full-width">Lorem ipsum dolor sit.</button>
+						<button class="list-item rows full-width">Lorem.</button>
+					</div>
+				{/snippet}
+			</CMenu>
+		</div>
+	{/snippet}
 </CMenu>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { randomStr } from '$lib/utils'
+	import { randomString } from '$lib/utils.js'
 	import { type Snippet } from 'svelte'
 
 	type Props = {
@@ -11,7 +11,7 @@
 
 	let { direction = 'left', children, content, closeonclick = true }: Props = $props()
 
-	const id = randomStr()
+	const id = randomString()
 
 	function setup(node: HTMLDivElement) {
 		const btn = node.firstChild as HTMLButtonElement
