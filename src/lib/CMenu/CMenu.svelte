@@ -1,53 +1,80 @@
-<script module>
-	let menuInstances = 0
-</script>
-
 <script lang="ts">
-	import type { Snippet } from 'svelte'
+	import { randomStr } from '$lib/utils'
+	import { type Snippet } from 'svelte'
 
 	type Props = {
-		action?: Snippet
+		content?: Snippet
 		children?: Snippet
-		class?: string
-		text?: string
-		'x-axis'?: 'left' | 'center' | 'right'
-		'y-axis'?: 'top' | 'center' | 'bottom'
+		direction?: 'left' | 'right'
+		closeonclick?: boolean
 	}
-	let p: Props = $props()
-	const id = menuInstances++
+
+	let { direction = 'left', children, content, closeonclick = true }: Props = $props()
+
+	const id = randomStr()
+
+	function setup(node: HTMLDivElement) {
+		const btn = node.firstChild as HTMLButtonElement
+		if (!btn) {
+			console.warn(
+				'Missing trigger element on menu, should be the first element inside menu component'
+			)
+			return
+		}
+		btn.setAttribute('popovertarget', id)
+	}
+
+	function onclick(e: Event) {
+		if (!closeonclick) return
+		const t = e.currentTarget as HTMLDialogElement
+		t.hidePopover()
+	}
 </script>
 
-<button popovertarget="menu-dialog-{id}" class={p.class}>
-	{#if p.action}
-		{@render p.action()}
-	{:else}
-		{p.text}
-	{/if}
-</button>
+<div class="menu {direction}" use:setup>
+	{@render children?.()}
 
-<dialog
-	popover="auto"
-	id="menu-dialog-{id}"
-	class="shadow-4 bg border-r1"
-	style:--x={p['x-axis']}
-	style:--y={p['y-axis']}
->
-	{@render p.children?.()}
-</dialog>
+	<dialog {id} popover class="popover border-r1 shadow-4 {direction}" {onclick}>
+		{@render content?.()}
+	</dialog>
+</div>
 
 <style>
-	button {
-		anchor-name: --activator;
+	.menu {
+		width: fit-content;
+		position: relative;
+		anchor-name: --menu-button;
 	}
-	dialog {
-		border: none;
-		position-anchor: --activator;
-		left: anchor(var(--x, center));
-		top: anchor(var(--y, center));
-		position-try-fallbacks: --left;
-	}
+	.popover {
+		display: none;
 
-	@position-try --left {
-		right: anchor(right);
+		position-anchor: --menu-button;
+		position: absolute;
+		inset: auto;
+		margin: 0;
+		inset: auto;
+		transition-behavior: allow-discrete;
+		border: none;
+		top: anchor(bottom);
+		transition:
+			display 150ms,
+			scale 150ms;
+		&:popover-open {
+			display: block;
+			scale: 1;
+
+			@starting-style {
+				display: block;
+				scale: 0.7;
+			}
+		}
+		&.left {
+			right: anchor(right);
+			transform-origin: right top;
+		}
+		&.right {
+			left: anchor(left);
+			transform-origin: left top;
+		}
 	}
 </style>
