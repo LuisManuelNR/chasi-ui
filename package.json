@@ -3,7 +3,7 @@
 	"version": "0.3.6",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npm run prepack",
+		"build": "svelte-package && publint",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"prepack": "svelte-kit sync && svelte-package && publint",
@@ -46,7 +46,6 @@
 		"prettier-plugin-svelte": "^3.4.0",
 		"publint": "^0.3.13",
 		"sass-embedded": "^1.93.2",
-		"svelte": "^5.39.6",
 		"svelte-check": "^4.3.2",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
@@ -54,6 +53,7 @@
 	},
 	"dependencies": {
 		"@mdi/js": "^7.4.47",
-		"esm-env": "^1.2.2"
+		"esm-env": "^1.2.2",
+		"svelte": "^5.39.6"
 	}
 }
