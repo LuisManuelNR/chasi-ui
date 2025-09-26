@@ -41,7 +41,6 @@
 		{onclick}
 		style="anchor-name: --{id};"
 	>
-		{id}
 		{@render content?.()}
 	</dialog>
 </div>
