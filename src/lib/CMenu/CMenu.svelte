@@ -9,7 +9,7 @@
 		closeonclick?: boolean
 	}
 
-	let { direction = 'left', children, content, closeonclick = true }: Props = $props()
+	let { direction = 'right', children, content, closeonclick = true }: Props = $props()
 
 	const id = randomString()
 
@@ -31,10 +31,17 @@
 	}
 </script>
 
-<div class="menu {direction}" use:setup>
+<div class="menu {direction}" use:setup style="anchor-name: --{id};">
 	{@render children?.()}
 
-	<dialog {id} popover class="popover border-r1 shadow-4 {direction}" {onclick}>
+	<dialog
+		{id}
+		popover
+		class="popover border-r1 shadow-4 {direction}"
+		{onclick}
+		style="anchor-name: --{id};"
+	>
+		{id}
 		{@render content?.()}
 	</dialog>
 </div>
@@ -43,12 +50,9 @@
 	.menu {
 		width: fit-content;
 		position: relative;
-		anchor-name: --menu-button;
 	}
 	.popover {
 		display: none;
-
-		position-anchor: --menu-button;
 		position: absolute;
 		inset: auto;
 		margin: 0;
