@@ -8,7 +8,7 @@ type Coord = {
 type MoveCoords = Coord & { dx: number; dy: number }
 
 export type PannableParams = {
-	onStart?: (e: MouseEvent | TouchEvent, coords: Coord) => void | false
+	onStart?: (e: MouseEvent | TouchEvent, coords: Coord) => void | boolean
 	onMove?: (e: MouseEvent | TouchEvent, coords: MoveCoords) => void
 	onEnd?: (e: MouseEvent | TouchEvent, coords: Coord) => void
 }
