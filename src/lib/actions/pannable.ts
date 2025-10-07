@@ -19,6 +19,7 @@ export default function (node: HTMLElement, params?: PannableParams): ActionRetu
 
 	function handleMove(event: MouseEvent | TouchEvent) {
 		if (!params || !params.onMove) return
+		node.setAttribute('is-panning', '')
 		const e = event instanceof MouseEvent ? event : event.touches[0]
 		const evX = e.clientX
 		const evY = e.clientY
@@ -48,6 +49,7 @@ export default function (node: HTMLElement, params?: PannableParams): ActionRetu
 	}
 
 	function handleMouseup(event: MouseEvent | TouchEvent) {
+		node.removeAttribute('is-panning')
 		const e = event instanceof MouseEvent ? event : event.changedTouches[0]
 		x = e.clientX
 		y = e.clientY
